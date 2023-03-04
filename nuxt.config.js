@@ -18,7 +18,7 @@ export default {
       { hid: 'robots', name: 'robots', content: 'noindex' }
     ],
     link: [
-      { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }
+      { rel: 'icon', type: 'image/svg+xml', href: '/favicon.svg' }
     ]
   },
 
@@ -59,8 +59,54 @@ export default {
 
   pwa: {
     manifest: {
-      lang: 'ja'
-    }
+      lang: 'ja',
+      theme_color: 'indigo',
+      icons: [
+        {
+          src: '/favicon.svg',
+          sizes: '64x64',
+          type: 'image/svg+xml',
+          purpose: 'any'
+        },
+        {
+          src: '/favicon.svg',
+          sizes: '120x120',
+          type: 'image/svg+xml',
+          purpose: 'any'
+        },
+        {
+          src: '/favicon.svg',
+          sizes: '144x144',
+          type: 'image/svg+xml',
+          purpose: 'any'
+        },
+        {
+          src: '/favicon.svg',
+          sizes: '152x152',
+          type: 'image/svg+xml',
+          purpose: 'any'
+        },
+        {
+          src: '/favicon.svg',
+          sizes: '192x192',
+          type: 'image/svg+xml',
+          purpose: 'any'
+        },
+        {
+          src: '/favicon.svg',
+          sizes: '384x384',
+          type: 'image/svg+xml',
+          purpose: 'any'
+        },
+        {
+          src: '/favicon.svg',
+          sizes: '512x512',
+          type: 'image/svg+xml',
+          purpose: 'any'
+        }
+      ]
+    },
+    icon: false // disables the icon module
   },
 
   build: {
