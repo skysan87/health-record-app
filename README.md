@@ -67,7 +67,7 @@ Updated: default (作成したサイトのID)
 * デプロイ
 
 ```bash
-$ npx firebase deploy --only hosting:secondary
+$ npx firebase deploy --only hosting:default
 ```
 
 
