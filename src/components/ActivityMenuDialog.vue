@@ -12,7 +12,7 @@
               <input
                 v-model="a.value"
                 type="number"
-                step="0.1"
+                inputmode="decimal"
                 class="flex-1 mr-1 activity-input"
                 placeholder="消費カロリー"
               >

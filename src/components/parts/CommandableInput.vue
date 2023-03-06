@@ -7,6 +7,7 @@
         class="flex-1 border p-1 bg-gray-200"
         :class="{ 'btn-disabled': disabled }"
         :disabled="disabled"
+        :inputmode="inputmode"
       >
       <button
         class="p-1 ml-2"
@@ -50,6 +51,11 @@ export default {
       type: String,
       require: false,
       default: 'btn btn-regular'
+    },
+    inputmode: {
+      type: String,
+      require: false,
+      default: null
     }
   },
   data () {

@@ -29,6 +29,7 @@
           input-type="number"
           :value="latestData?.weight"
           :update="recordWeight"
+          inputmode="decimal"
         />
       </div>
       <div class="pb-1 flex items-start">
@@ -37,6 +38,7 @@
           input-type="number"
           :value="latestData?.height"
           :update="recordHeight"
+          inputmode="decimal"
         />
       </div>
     </div>
@@ -78,8 +80,8 @@
           <input
             v-model="valueUnit"
             type="number"
+            inputmode="decimal"
             class="input-text"
-            step="1"
             placeholder="実装した回数を追加"
             @input="calcKcal"
           >
