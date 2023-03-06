@@ -133,7 +133,7 @@ export default {
     return {
       menu,
       healthType,
-      selectedMenu: null,
+      selectedMenu: menu.Activity,
       activityOther,
       selectedActivity: null,
       valueKcal: null,
