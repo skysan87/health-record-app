@@ -31,7 +31,8 @@ export default {
 
   plugins: [
     { src: '@/plugins/fontawesome', ssr: false },
-    { src: '@/plugins/v-calendar', ssr: false }
+    { src: '@/plugins/v-calendar', ssr: false },
+    { src: '@/plugins/vue-apexcharts', ssr: false }
   ],
 
   buildModules: [
