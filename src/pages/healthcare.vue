@@ -98,8 +98,6 @@
         </div>
       </div>
     </div>
-
-    <!-- TODO: 記録の表示・編集 -->
   </div>
 </template>
 
