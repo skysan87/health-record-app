@@ -1,4 +1,4 @@
-import { collection, getDoc, setDoc, doc, serverTimestamp, updateDoc, arrayUnion } from 'firebase/firestore/lite'
+import { collection, getDoc, setDoc, doc, serverTimestamp, updateDoc, arrayUnion } from 'firebase/firestore'
 import { firestore } from '@/plugins/firebase'
 import { Activity } from '@/model/Activity'
 import { Activitylist } from '@/model/Activitylist'

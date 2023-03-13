@@ -1,4 +1,4 @@
-import { collection, getDoc, setDoc, doc, runTransaction, serverTimestamp } from 'firebase/firestore/lite'
+import { collection, getDoc, setDoc, doc, runTransaction, serverTimestamp, query, orderBy, limit, getDocs } from 'firebase/firestore'
 import { firestore } from '@/plugins/firebase'
 import { Health } from '@/model/Health'
 import { Healthlist } from '@/model/Healthlist'
@@ -49,5 +49,42 @@ export class HealthDao extends HealthDaoBase {
     })
 
     return latest
+  }
+
+  /**
+   * レコードを取得
+   * @param {String} userId
+   * @returns {{ Date: Number }}
+   */
+  async getRecords (userId) {
+    // NOTE: where句がある場合、indexが必要になるため全て取得する
+    const q = query(collection(firestore, 'health', userId, 'records')
+      , orderBy('createdAt', 'desc')
+      , limit(100)
+    )
+
+    const querySnapshot = await getDocs(q)
+    const result = {}
+    querySnapshot.docs.forEach((doc) => {
+      const health = HealthDao.convertToHealth(doc)
+      if (health.type === Health.TYPE_WEIGHT) {
+        result[health.createdAt] = health.value
+      }
+    })
+
+    return result
+  }
+
+  /**
+   * @param {firestore.DocumentData} doc
+   * @returns {Health}
+   */
+  static convertToHealth (doc) {
+    const data = doc.data()
+    const health = new Health(doc.id, data)
+    // timestampをDateに変換
+    health.createdAt = data.createdAt ? data.createdAt.toDate() : ''
+    health.updatedAt = data.updatedAt ? data.updatedAt.toDate() : ''
+    return health
   }
 }

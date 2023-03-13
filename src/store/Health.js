@@ -4,7 +4,8 @@ import { Health } from '@/model/Health'
 const dao = CreateHealthDao()
 
 export const state = () => ({
-  latest: {}
+  latest: {},
+  records: null
 })
 
 export const getters = {
@@ -16,12 +17,17 @@ export const getters = {
       return ''
     }
     return (weight / Math.pow(height / 100, 2)).toFixed(2)
-  }
+  },
+  getRecords: state => state.records
 }
 
 export const mutations = {
   updateLatest (state, latest) {
     state.latest = latest
+  },
+
+  setRecords (state, list) {
+    state.records = list
   }
 }
 
@@ -43,5 +49,10 @@ export const actions = {
     const latest = await dao.addAndUpdateLatest(params, userId)
 
     commit('updateLatest', latest)
+  },
+
+  async loadRecords ({ commit, rootGetters }) {
+    const userId = rootGetters['User/userId']
+    commit('setRecords', await dao.getRecords(userId))
   }
 }
