@@ -76,6 +76,7 @@ $ npx firebase deploy --only hosting:default
 * health
   * id = userId
   * latest: { weight: number, height: number }
+  * goal: { weight: number, activity: number }
   * createdAt: Date
   * updatedAt: Date
   * コレクション(records)

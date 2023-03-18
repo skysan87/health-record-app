@@ -19,6 +19,8 @@ export class HealthDaoBase {
     return list.latest
   }
 
+  async updateGoal(goal, userId) {}
+
   async getRecords (userId) {
     const dummyTotal = 70
     const result = {}

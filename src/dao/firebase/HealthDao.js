@@ -1,4 +1,4 @@
-import { collection, getDoc, setDoc, doc, runTransaction, serverTimestamp, query, orderBy, limit, getDocs } from 'firebase/firestore'
+import { collection, getDoc, setDoc, updateDoc, doc, runTransaction, serverTimestamp, query, orderBy, limit, getDocs } from 'firebase/firestore'
 import { firestore } from '@/plugins/firebase'
 import { Health } from '@/model/Health'
 import { Healthlist } from '@/model/Healthlist'
@@ -49,6 +49,13 @@ export class HealthDao extends HealthDaoBase {
     })
 
     return latest
+  }
+
+  async updateGoal (goal, userId) {
+    await updateDoc(doc(healthRef, userId), {
+      goal,
+      updatedAt: serverTimestamp()
+    })
   }
 
   /**

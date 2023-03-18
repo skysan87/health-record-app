@@ -36,13 +36,16 @@ export default {
       selectedRange: DEFAULT_PER_PAGE,
       range: [
         { label: '2週', value: 14 },
-        { label: '月', value: 30 },
-        { label: '2月', value: 60 },
-        { label: '3月', value: 90 },
-        { label: '6月', value: 180 }
+        { label: '1ヶ月', value: 30 },
+        { label: '2ヶ月', value: 60 },
+        { label: '3ヶ月', value: 90 },
+        { label: '6ヶ月', value: 180 }
       ],
       chartOptions: {
         chart: {
+          animations: {
+            enabled: false
+          },
           type: 'line',
           zoom: {
             enabled: false
@@ -66,12 +69,16 @@ export default {
           curve: 'straight',
           width: 1
         },
+        title: {
+          text: '体重',
+          align: 'center'
+        },
         markers: {
           size: 2
         },
         xaxis: {
           type: 'datetime',
-          categories: [],
+          categories: [], // X軸データ
           labels: {
             format: 'MM/dd',
             showDuplicates: false,
@@ -108,7 +115,7 @@ export default {
       },
       series: [{
         name: '',
-        data: []
+        data: [] // Y軸データ
       }],
       currentPage: 0
     }
@@ -119,6 +126,10 @@ export default {
       get () {
         return this.$store.getters['View/isMenuExpanded']
       }
+    },
+
+    goal () {
+      return this.$store.getters['Health/getGoal']
     }
   },
 
@@ -170,6 +181,12 @@ export default {
         ...{
           xaxis: {
             categories: Object.keys(records)
+          },
+          annotations: {
+            yaxis: [{
+              y: this.goal.weight ?? null, // 目標値
+              borderColor: 'red'
+            }]
           }
         }
       }

@@ -5,11 +5,13 @@ const dao = CreateHealthDao()
 
 export const state = () => ({
   latest: {},
+  goal: {},
   records: null
 })
 
 export const getters = {
   getLatest: state => state.latest,
+  getGoal: state => state.goal,
   calcBMI: (state) => {
     const weight = state.latest[Health.TYPE_WEIGHT] // kg
     const height = state.latest[Health.TYPE_HEIGHT] // cm
@@ -26,6 +28,12 @@ export const mutations = {
     state.latest = latest
   },
 
+  updateGoal (state, goal) {
+    if (goal) {
+      state.goal = goal
+    }
+  },
+
   setRecords (state, list) {
     state.records = list
   }
@@ -40,6 +48,7 @@ export const actions = {
       list = await dao.createList(userId)
     }
     commit('updateLatest', list.latest)
+    commit('updateGoal', list.goal)
 
     console.log('health init')
   },
@@ -49,6 +58,15 @@ export const actions = {
     const latest = await dao.addAndUpdateLatest(params, userId)
 
     commit('updateLatest', latest)
+  },
+
+  async updateGoal ({ commit, rootGetters, state }, params) {
+    const userId = rootGetters['User/userId']
+    const goal = { ...state.goal }
+    goal[params.type] = params.value
+    await dao.updateGoal(goal, userId)
+
+    commit('updateGoal', goal)
   },
 
   async loadRecords ({ commit, rootGetters }) {

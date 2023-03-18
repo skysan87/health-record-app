@@ -6,7 +6,7 @@
           <fa :icon="['fas', 'sync-alt']" size="lg" />
         </button>
       </span>
-      <span class="ml-2">●運動 {{ totalCalorie }}kcal</span>
+      <span class="ml-2">●運動 <span :class="{'text-red-500': notAchievedGoal}">{{ totalCalorie }}kcal</span></span>
       <span class="ml-2">●体重 {{ latestData?.weight }}kg</span>
       <span class="ml-2">●BMI {{ BMI }}</span>
     </div>
@@ -22,19 +22,21 @@
     <div class="border-b pt-2" />
 
     <!-- 健康記録 -->
-    <div v-if="selectedMenu === menu.Health" class="pt-2 px-2">
-      <div class="pb-1 flex items-start">
-        <span class="p-2">体重</span>
+    <div v-show="selectedMenu === menu.Health" class="pt-2 px-2">
+      <div class="pb-1 flex items-center">
+        <span class="p-2 w-1/4">体重(kg)</span>
         <commandable-input
+          id="hoge1"
           input-type="number"
           :value="latestData?.weight"
           :update="recordWeight"
           inputmode="decimal"
         />
       </div>
-      <div class="pb-1 flex items-start">
-        <span class="p-2">身長</span>
+      <div class="pb-1 flex items-center">
+        <span class="p-2 w-1/4">身長(cm)</span>
         <commandable-input
+          id="hoge2"
           input-type="number"
           :value="latestData?.height"
           :update="recordHeight"
@@ -43,8 +45,33 @@
       </div>
     </div>
 
+    <!-- 目標設定 -->
+    <div v-show="selectedMenu === menu.Goal" class="pt-2 px-2">
+      <div class="pb-1 flex items-center">
+        <span class="p-2 w-1/4">運動量(kcal)</span>
+        <span>{{ goal?.activity }}</span>
+        <commandable-input
+          id="hoge3"
+          input-type="number"
+          :value="goal?.activity"
+          :update="setGoalActivity"
+          inputmode="decimal"
+        />
+      </div>
+      <div class="pb-1 flex items-center">
+        <span class="p-2 w-1/4">体重(kg)</span>
+        <commandable-input
+          id="hoge4"
+          input-type="number"
+          :value="goal?.weight"
+          :update="setGoalWeight"
+          inputmode="decimal"
+        />
+      </div>
+    </div>
+
     <!-- 運動記録 -->
-    <div v-if="selectedMenu === menu.Activity" class="pt-2 px-2">
+    <div v-show="selectedMenu === menu.Activity" class="pt-2 px-2">
       <div class="flex flex-row">
         <div class="flex-1">
           <span>運動メニュー</span>
@@ -105,6 +132,7 @@
 import Vue from 'vue'
 import ActivityMenuDialog from '@/components/ActivityMenuDialog'
 import { Health } from '@/model/Health'
+import { Healthlist } from '@/model/Healthlist'
 import { fixFloat } from '@/util/NumberUtil'
 import CommandableInput from '@/components/parts/CommandableInput'
 
@@ -112,7 +140,8 @@ const DialogController = Vue.extend(ActivityMenuDialog)
 
 const menu = {
   Activity: { label: '運動', value: 'activity' },
-  Health: { label: '健康', value: 'health' }
+  Health: { label: '測定値', value: 'health' },
+  Goal: { label: '目標値', value: 'goal' }
 }
 
 const healthType = { weight: Health.TYPE_WEIGHT, height: Health.TYPE_HEIGHT }
@@ -157,6 +186,16 @@ export default {
     totalCalorie () {
       const cal = this.$store.getters['Activity/getTotal']
       return parseFloat(cal.toFixed(2))
+    },
+
+    goal () {
+      return this.$store.getters['Health/getGoal']
+    },
+
+    notAchievedGoal () {
+      const latest = this.$store.getters['Activity/getTotal'] ?? 0
+      const goal = this.$store.getters['Health/getGoal'][Healthlist.GOAL_ACTIVITY] ?? 0
+      return latest < goal
     }
   },
 
@@ -244,6 +283,42 @@ export default {
       try {
         await this.$store.dispatch('Health/add', {
           type: Health.TYPE_HEIGHT,
+          value: fixFloat(inputValue)
+        })
+      } catch (error) {
+        console.log(error)
+        this.$toast.error('登録に失敗しました')
+        return false
+      }
+      return true
+    },
+
+    // コールバック処理
+    async setGoalActivity (inputValue) {
+      if (!inputValue) {
+        return true
+      }
+      try {
+        await this.$store.dispatch('Health/updateGoal', {
+          type: Healthlist.GOAL_ACTIVITY,
+          value: fixFloat(inputValue)
+        })
+      } catch (error) {
+        console.log(error)
+        this.$toast.error('登録に失敗しました')
+        return false
+      }
+      return true
+    },
+
+    // コールバック処理
+    async setGoalWeight (inputValue) {
+      if (!inputValue) {
+        return true
+      }
+      try {
+        await this.$store.dispatch('Health/updateGoal', {
+          type: Healthlist.GOAL_WEIGHT,
           value: fixFloat(inputValue)
         })
       } catch (error) {
