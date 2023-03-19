@@ -44,6 +44,14 @@
                   # ヘルスケア
                 </div>
               </nuxt-link>
+
+              <nuxt-link to="/dashboard">
+                <div
+                  class="py-1 px-5 cursor-pointer hover:bg-blue-700 hover:opacity-75"
+                >
+                  # ダッシュボード
+                </div>
+              </nuxt-link>
             </div>
           </div>
         </div>

@@ -2,7 +2,8 @@ import Vue from 'vue'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import { config, library } from '@fortawesome/fontawesome-svg-core'
 import {
-  faTrashCan, faCircleNotch, faFloppyDisk, faCaretDown, faSignOutAlt, faSyncAlt, faEdit
+  faTrashCan, faCircleNotch, faFloppyDisk, faCaretDown, faSignOutAlt, faSyncAlt, faEdit,
+  faArrowLeft, faArrowRight, faHouse
 } from '@fortawesome/free-solid-svg-icons'
 
 import { faGoogle } from '@fortawesome/free-brands-svg-icons'
@@ -12,7 +13,8 @@ config.autoAddCss = true
 
 // 利用するアイコンを配列に追加
 const solidIcons = [
-  faTrashCan, faCircleNotch, faFloppyDisk, faCaretDown, faSignOutAlt, faSyncAlt, faEdit
+  faTrashCan, faCircleNotch, faFloppyDisk, faCaretDown, faSignOutAlt, faSyncAlt, faEdit,
+  faArrowLeft, faArrowRight, faHouse
 ]
 const bransIcons = [faGoogle]
 

@@ -1,5 +1,7 @@
 import { getApps, getApp, initializeApp } from 'firebase/app'
-import { getFirestore, connectFirestoreEmulator } from 'firebase/firestore/lite'
+import {
+  getFirestore, connectFirestoreEmulator, enableIndexedDbPersistence
+} from 'firebase/firestore'
 
 const config = {
   apiKey: process.env.FIREBASE_API_KEY,
@@ -14,6 +16,18 @@ const config = {
 export const firebaseApp = !getApps().length ? initializeApp(config) : getApp()
 
 export const firestore = getFirestore(firebaseApp)
+
+// オフラインデータ利用有効化(複数タブ無効)
+enableIndexedDbPersistence(firestore, { forceOwnership: true })
+  .catch((err) => {
+    if (err.code === 'failed-precondition') {
+      console.error('複数タブ表示によるエラー')
+    } else if (err.code === 'unimplemented') {
+      console.error('未サポートブラウザ')
+    } else {
+      console.error(err)
+    }
+  })
 
 if (process.env.NODE_ENV !== 'production' &&
   process.env.DATABASE_MODE === 'emulator') {

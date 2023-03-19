@@ -76,9 +76,10 @@ $ npx firebase deploy --only hosting:default
 * health
   * id = userId
   * latest: { weight: number, height: number }
+  * goal: { weight: number, activity: number }
   * createdAt: Date
   * updatedAt: Date
-  * コレクション
+  * コレクション(records)
     * id: ランダム生成
     * year: number
     * month: number
@@ -93,7 +94,7 @@ $ npx firebase deploy --only hosting:default
   * menu: [{ label: string, value: number, unit: string }]
   * createdAt: Date
   * updatedAt: Date
-  * コレクション
+  * コレクション(records)
     * id = YYYYMMDD
     * total: number
     * records: [{ timestamp, name: string, value: number }]

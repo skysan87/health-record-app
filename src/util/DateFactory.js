@@ -95,6 +95,9 @@ class Wrapper {
     return this.instance.get(unit)
   }
 
+  /**
+   * @returns {Date}
+   */
   toDate () {
     return this.instance.toDate()
   }
