@@ -14,7 +14,7 @@
             <input v-model="selectedActivity" type="radio" :value="activityOther" @change="onChangeActivity">
             <span>{{ activityOther.label }}</span>
           </label>
-          <input type="text" class="ml-2 input-text" style="width: fit-content;">
+          <!-- <input type="text" class="ml-2 input-text" style="width: fit-content;"> -->
         </div>
       </div>
       <div class="flex-none">
@@ -57,18 +57,37 @@
         </button>
       </div>
     </div>
+
+    <div class="border-b pt-2" />
+
+    <expand-panel right class="pt-2">
+      <template #title>
+        <span>今日の実績</span>
+      </template>
+      <template #component>
+        <div v-for="r in records" :key="r.timestamp">
+          {{ r.timestamp }} - {{ r.name }} : {{ r.value }}
+        </div>
+      </template>
+    </expand-panel>
   </div>
 </template>
 
 <script>
 import Vue from 'vue'
 import ActivityMenuDialog from '@/components/ActivityMenuDialog'
+import ExpandPanel from '@/components/parts/ExpandPanel'
+import { dateFactory } from '@/util/DateFactory'
 
 const DialogController = Vue.extend(ActivityMenuDialog)
 
 const activityOther = { label: 'その他', value: 1, unit: '' }
 
 export default {
+
+  components: {
+    ExpandPanel
+  },
 
   data () {
     return {
@@ -83,6 +102,18 @@ export default {
   computed: {
     activityMenu () {
       return this.$store.getters['Activity/getMenu']
+    },
+
+    records () {
+      const items = this.$store.getters['Activity/getRecords']
+      return items.map((item, index) => {
+        return {
+          id: index,
+          timestamp: dateFactory(item.timestamp).format('HH:mm'),
+          name: item.name,
+          value: item.value
+        }
+      })
     }
   },
 

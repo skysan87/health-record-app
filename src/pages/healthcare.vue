@@ -49,7 +49,6 @@
     <div v-show="selectedMenu === menu.Goal" class="pt-2 px-2">
       <div class="pb-1 flex items-center">
         <span class="p-2 w-1/4">運動量(kcal)</span>
-        <span>{{ goal?.activity }}</span>
         <commandable-input
           id="hoge3"
           input-type="number"

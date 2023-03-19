@@ -16,7 +16,13 @@ export class ActivityDaoBase {
   }
 
   async getActivity(userId, dateNumber) {
-    new Activity(dateNumber, {})
+    const item = new Activity(dateNumber, {})
+    item.addRecord({
+      timestamp: new Date(),
+      name: 'test',
+      value: 100
+    })
+    return item
   }
 
   async addRecord(params, userId, dateNumber) {
