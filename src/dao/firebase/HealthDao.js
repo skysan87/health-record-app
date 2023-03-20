@@ -73,7 +73,7 @@ export class HealthDao extends HealthDaoBase {
     const querySnapshot = await getDocs(q)
     const result = {}
     querySnapshot.docs.forEach((doc) => {
-      const health = HealthDao.convertToHealth(doc)
+      const health = HealthDao.convertToHealth(doc.data())
       if (health.type === Health.TYPE_WEIGHT) {
         result[health.createdAt] = health.value
       }
@@ -83,11 +83,10 @@ export class HealthDao extends HealthDaoBase {
   }
 
   /**
-   * @param {firestore.DocumentData} doc
+   * @param {firestore.DocumentData} data
    * @returns {Health}
    */
-  static convertToHealth (doc) {
-    const data = doc.data()
+  static convertToHealth (data) {
     const health = new Health(doc.id, data)
     // timestampをDateに変換
     health.createdAt = data.createdAt ? data.createdAt.toDate() : ''

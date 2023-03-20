@@ -65,7 +65,7 @@
         <span>今日の実績</span>
       </template>
       <template #component>
-        <div v-for="r in records" :key="r.timestamp">
+        <div v-for="r in records" :key="r.id">
           {{ r.timestamp }} - {{ r.name }} : {{ r.value }}
         </div>
       </template>
