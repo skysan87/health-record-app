@@ -22,11 +22,11 @@
     <div class="border-b pt-2" />
 
     <!-- 健康記録 -->
-    <div v-show="selectedMenu === menu.Health" class="pt-2 px-2">
+    <div v-if="selectedMenu === menu.Health" class="pt-2 px-2">
       <div class="pb-1 flex items-center">
         <span class="p-2 w-1/4">体重(kg)</span>
         <commandable-input
-          id="hoge1"
+          key="latest-waight"
           input-type="number"
           :value="latestData?.weight"
           :update="recordWeight"
@@ -36,7 +36,7 @@
       <div class="pb-1 flex items-center">
         <span class="p-2 w-1/4">身長(cm)</span>
         <commandable-input
-          id="hoge2"
+          key="latest-height"
           input-type="number"
           :value="latestData?.height"
           :update="recordHeight"
@@ -46,11 +46,11 @@
     </div>
 
     <!-- 目標設定 -->
-    <div v-show="selectedMenu === menu.Goal" class="pt-2 px-2">
+    <div v-else-if="selectedMenu === menu.Goal" class="pt-2 px-2">
       <div class="pb-1 flex items-center">
         <span class="p-2 w-1/4">運動量(kcal)</span>
         <commandable-input
-          id="hoge3"
+          key="goal-activity"
           input-type="number"
           :value="goal?.activity"
           :update="setGoalActivity"
@@ -60,7 +60,7 @@
       <div class="pb-1 flex items-center">
         <span class="p-2 w-1/4">体重(kg)</span>
         <commandable-input
-          id="hoge4"
+          key="goal-weight"
           input-type="number"
           :value="goal?.weight"
           :update="setGoalWeight"
@@ -70,7 +70,7 @@
     </div>
 
     <!-- 運動記録 -->
-    <activity-record v-show="selectedMenu === menu.Activity" class="pt-2 px-2" />
+    <activity-record v-else-if="selectedMenu === menu.Activity" class="pt-2 px-2" />
   </div>
 </template>
 
@@ -103,6 +103,10 @@ export default {
     }
   },
 
+  async fetch () {
+    await this.init()
+  },
+
   computed: {
     latestData () {
       return this.$store.getters['Health/getLatest']
@@ -126,10 +130,6 @@ export default {
       const goal = this.$store.getters['Health/getGoal'][Healthlist.GOAL_ACTIVITY] ?? 0
       return latest < goal
     }
-  },
-
-  mounted () {
-    this.init()
   },
 
   methods: {
