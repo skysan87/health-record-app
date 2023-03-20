@@ -35,7 +35,7 @@ export class ActivityDao extends ActivityDaoBase {
     const docRef = doc(activityRef, userId, 'records', dateString)
     const docSnapshot = await getDoc(docRef)
     if (docSnapshot.exists()) {
-      return new Activity(dateString, docSnapshot.data())
+      return ActivityDao.convertToActivity(dateString, docSnapshot.data())
     }
 
     const item = new Activity(dateString, {})
@@ -50,7 +50,7 @@ export class ActivityDao extends ActivityDaoBase {
   async addRecord (params, userId, dateString) {
     const docRef = doc(activityRef, userId, 'records', dateString)
     const docSnapshot = await getDoc(docRef)
-    const item = new Activity(dateString, docSnapshot.data())
+    const item = ActivityDao.convertToActivity(dateString, docSnapshot.data())
     item.addRecord(params)
 
     await updateDoc(docRef, {
@@ -60,5 +60,19 @@ export class ActivityDao extends ActivityDaoBase {
     })
 
     return item
+  }
+
+  /**
+   * @param {String} id
+   * @param {firestore.DocumentData} data
+   * @returns {Activity}
+   */
+  static convertToActivity (id, data) {
+    const activity = new Activity(id, data)
+    // timestampをDateに変換
+    activity.records.forEach((r) => {
+      r.timestamp = r.timestamp.toDate()
+    })
+    return activity
   }
 }
