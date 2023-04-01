@@ -18,12 +18,13 @@
         </select>
       </div>
     </header>
-    <apex-chart ref="chart" type="line" height="400" :options="chartOptions" :series="series" />
+
+    <!-- <apex-chart ref="chart" type="line" height="400" :options="chartOptions" :series="series" /> -->
   </div>
 </template>
 
 <script>
-import { dateFactory } from '@/util/DateFactory'
+// import { dateFactory } from '@/util/DateFactory'
 
 const DEFAULT_PER_PAGE = 60
 
@@ -158,21 +159,21 @@ export default {
 
     viewPreview () {
       this.currentPage--
-      const start = dateFactory().addDay((this.currentPage - 1) * DEFAULT_PER_PAGE).toDate()
-      const end = dateFactory().addDay(this.currentPage * DEFAULT_PER_PAGE).toDate()
-      this.$refs.chart.zoomX(start.getTime(), end.getTime())
+      // const start = dateFactory().addDay((this.currentPage - 1) * this.selectedRange).toDate()
+      // const end = dateFactory().addDay(this.currentPage * this.selectedRange).toDate()
+      // this.$refs.chart.zoomX(start.getTime(), end.getTime())
     },
 
     viewNext () {
       this.currentPage++
-      const start = dateFactory().addDay((this.currentPage - 1) * DEFAULT_PER_PAGE).toDate()
-      const end = dateFactory().addDay(this.currentPage * DEFAULT_PER_PAGE).toDate()
-      this.$refs.chart.zoomX(start.getTime(), end.getTime())
+      // const start = dateFactory().addDay((this.currentPage - 1) * this.selectedRange).toDate()
+      // const end = dateFactory().addDay(this.currentPage * this.selectedRange).toDate()
+      // this.$refs.chart.zoomX(start.getTime(), end.getTime())
     },
 
     viewReset () {
       this.currentPage = 0
-      this.$refs.chart.resetSeries()
+      // this.$refs.chart.resetSeries()
     },
 
     updateData (records) {
