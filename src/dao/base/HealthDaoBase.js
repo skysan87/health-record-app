@@ -23,11 +23,14 @@ export class HealthDaoBase {
 
   async getRecords (userId) {
     const dummyTotal = 70
-    const result = {}
+    const result = []
     Array.from({ length: 100 }, (_, index) => index)
       .forEach(index => {
-        result[dateFactory().subtract(index, 'day').toDate()] = dummyTotal + index * 0.1
+        result.push({
+          x: dateFactory().subtract(index, 'day').toDate(),
+          y: dummyTotal + index * 0.1
+        })
       })
-    return result
+    return result.reverse()
   }
 }
