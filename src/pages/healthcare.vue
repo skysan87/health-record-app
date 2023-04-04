@@ -8,7 +8,7 @@
       </span>
       <span class="ml-2">●運動 <span :class="{'text-red-500': notAchievedGoal}">{{ totalCalorie }}kcal</span></span>
       <span class="ml-2">●体重 {{ latestData?.weight }}kg</span>
-      <span class="ml-2">●BMI {{ BMI }}</span>
+      <span class="ml-2">●BMI <span :class="{'text-red-500': isOutOfLineBMI}">{{ BMI }}</span></span>
     </div>
 
     <!-- ラジオボタンで表示切り替え -->
@@ -129,6 +129,14 @@ export default {
       const latest = this.$store.getters['Activity/getTotal'] ?? 0
       const goal = this.$store.getters['Health/getGoal'][Healthlist.GOAL_ACTIVITY] ?? 0
       return latest < goal
+    },
+
+    isOutOfLineBMI () {
+      const bmi = this.$store.getters['Health/calcBMI']
+      if (!bmi) {
+        return false
+      }
+      return bmi <= 18.5 || bmi >= 25.0
     }
   },
 
