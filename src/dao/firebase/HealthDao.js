@@ -61,7 +61,7 @@ export class HealthDao extends HealthDaoBase {
   /**
    * レコードを取得
    * @param {String} userId
-   * @returns {{ Date: Number }}
+   * @returns {[{ x: Date, y: Number }]}
    */
   async getRecords (userId) {
     // NOTE: where句がある場合、indexが必要になるため全て取得する
@@ -71,15 +71,15 @@ export class HealthDao extends HealthDaoBase {
     )
 
     const querySnapshot = await getDocs(q)
-    const result = {}
+    const result = []
     querySnapshot.docs.forEach((doc) => {
       const health = HealthDao.convertToHealth(doc.data())
       if (health.type === Health.TYPE_WEIGHT) {
-        result[health.createdAt] = health.value
+        result.push({ x: health.createdAt, y: health.value })
       }
     })
 
-    return result
+    return result.reverse()
   }
 
   /**
