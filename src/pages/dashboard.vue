@@ -95,13 +95,11 @@ export default {
 
     viewPreview () {
       this.currentPage--
-      // TODO: 下限判定
       this.updateData()
     },
 
     viewNext () {
       this.currentPage++
-      // TODO: 上限判定
       this.updateData()
     },
 
@@ -114,9 +112,15 @@ export default {
       const start = dateFactory().addDay((this.currentPage - 1) * this.selectedRange).toDate()
       const end = dateFactory().addDay(this.currentPage * this.selectedRange).toDate()
       if (start && end) {
-        return this.records.filter((v) => {
+        const targets = this.records.filter((v) => {
           return v.x.getTime() > start.getTime() && v.x.getTime() < end.getTime()
         })
+        // NOTE:
+        //  データがないと、メモリが初期化される
+        //  また、表示範囲の日付のデータがないと、メモリが表示されない
+        targets.unshift({ x: start, y: null })
+        targets.push({ x: end, y: null })
+        return targets
       } else {
         return this.records
       }
