@@ -5,6 +5,7 @@
 <script>
 import 'chartist/dist/index.css'
 import { LineChart, FixedScaleAxis } from 'chartist'
+import { dateFactory } from '@/util/DateFactory'
 
 export default {
   name: 'TimelineChart',
@@ -30,11 +31,7 @@ export default {
             type: FixedScaleAxis,
             divisor: 5,
             labelInterpolationFnc: value =>
-              new Date(value).toLocaleString(undefined, {
-                year: '2-digit',
-                month: 'short',
-                day: 'numeric'
-              })
+              dateFactory(value).format('YY/MM/DD')
           }
         }
       )
