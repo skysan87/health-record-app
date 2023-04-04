@@ -4,7 +4,7 @@
 
 <script>
 import 'chartist/dist/index.css'
-import { LineChart, FixedScaleAxis } from 'chartist'
+import { LineChart, FixedScaleAxis, Interpolation } from 'chartist'
 import { dateFactory } from '@/util/DateFactory'
 
 export default {
@@ -21,6 +21,14 @@ export default {
 
   methods: {
     init (series) {
+      const serirsOptions = {}
+      series.forEach((s) => {
+        serirsOptions[`${s.name}`] = {
+          lineSmooth: Interpolation.cardinal({ tension: 0.1 }),
+          showPoint: false
+        }
+      })
+
       this.chart = new LineChart(
         '#chart',
         {
@@ -32,6 +40,9 @@ export default {
             divisor: 5,
             labelInterpolationFnc: value =>
               dateFactory(value).format('YY/MM/DD')
+          },
+          series: {
+            ...serirsOptions
           }
         }
       )

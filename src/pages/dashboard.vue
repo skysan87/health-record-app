@@ -27,7 +27,7 @@
 import { dateFactory } from '@/util/DateFactory'
 import TimelineChart from '@/components/charts/TimelineChart.vue'
 
-const DEFAULT_PER_PAGE = 60
+const DEFAULT_PER_PAGE = 30
 
 export default {
   components: {
@@ -79,8 +79,6 @@ export default {
       this.$store.dispatch('Health/loadRecords')
         .then(() => {
           this.records = this.$store.getters['Health/getRecords']
-          // TODO: 目標値の表示
-          // TODO: 線の太さ設定
           this.series = [{
             name: 'weight',
             data: this.getRangeData()
