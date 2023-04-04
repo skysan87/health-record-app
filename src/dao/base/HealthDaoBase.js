@@ -28,7 +28,7 @@ export class HealthDaoBase {
       .forEach(index => {
         result.push({
           x: dateFactory().subtract(index, 'day').toDate(),
-          y: dummyTotal + index * 0.1
+          y: dummyTotal + Math.random() + index * 0.1
         })
       })
     return result.reverse()
