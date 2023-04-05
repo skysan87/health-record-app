@@ -79,9 +79,18 @@ export default {
       this.$store.dispatch('Health/loadRecords')
         .then(() => {
           this.records = this.$store.getters['Health/getRecords']
+          const range = this.getPageRange()
+
           this.series = [{
             name: 'weight',
             data: this.getRangeData()
+          },
+          {
+            name: 'weight-goal', // 目標値
+            data: [
+              { x: range.start, y: this.goal.weight ?? null },
+              { x: range.end, y: this.goal.weight ?? null }
+            ]
           }]
           this.$refs.chart.init(this.series)
         })
@@ -106,22 +115,24 @@ export default {
       this.updateData()
     },
 
-    getRangeData () {
-      const start = dateFactory().addDay((this.currentPage - 1) * this.selectedRange).toDate()
-      const end = dateFactory().addDay(this.currentPage * this.selectedRange).toDate()
-      if (start && end) {
-        const targets = this.records.filter((v) => {
-          return v.x.getTime() > start.getTime() && v.x.getTime() < end.getTime()
-        })
-        // NOTE:
-        //  データがないと、メモリが初期化される
-        //  また、表示範囲の日付のデータがないと、メモリが表示されない
-        targets.unshift({ x: start, y: null })
-        targets.push({ x: end, y: null })
-        return targets
-      } else {
-        return this.records
+    getPageRange () {
+      return {
+        start: dateFactory().addDay((this.currentPage - 1) * this.selectedRange).toDate(),
+        end: dateFactory().addDay(this.currentPage * this.selectedRange).toDate()
       }
+    },
+
+    getRangeData () {
+      const { start, end } = this.getPageRange()
+      const targets = this.records.filter((v) => {
+        return v.x.getTime() > start.getTime() && v.x.getTime() < end.getTime()
+      })
+      // NOTE:
+      //  データがないと、メモリが初期化される
+      //  また、表示範囲の日付のデータがないと、メモリが表示されない
+      targets.unshift({ x: start, y: null })
+      targets.push({ x: end, y: null })
+      return targets
     },
 
     /**
