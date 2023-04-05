@@ -81,17 +81,19 @@ export default {
           this.records = this.$store.getters['Health/getRecords']
           const range = this.getPageRange()
 
-          this.series = [{
-            name: 'weight',
-            data: this.getRangeData()
-          },
-          {
-            name: 'weight-goal', // 目標値
-            data: [
-              { x: range.start, y: this.goal.weight ?? null },
-              { x: range.end, y: this.goal.weight ?? null }
-            ]
-          }]
+          this.series = [
+            {
+              name: 'weight',
+              data: this.getRangeData()
+            },
+            {
+              name: 'weight-goal', // 目標値
+              data: [
+                { x: range.start, y: this.goal.weight ?? null },
+                { x: range.end, y: this.goal.weight ?? null }
+              ]
+            }
+          ]
           this.$refs.chart.init(this.series)
         })
         .catch((error) => {
@@ -135,16 +137,21 @@ export default {
       return targets
     },
 
-    /**
-     * @param {Array} records
-     * @param {Date} start
-     * @param {Date} end
-     */
-    updateData (start = null, end = null) {
-      this.series = [{
-        name: 'weight',
-        data: this.getRangeData(start, end)
-      }]
+    updateData () {
+      const { start, end } = this.getPageRange()
+      this.series = [
+        {
+          name: 'weight',
+          data: this.getRangeData()
+        },
+        {
+          name: 'weight-goal', // 目標値
+          data: [
+            { x: start, y: this.goal.weight ?? null },
+            { x: end, y: this.goal.weight ?? null }
+          ]
+        }
+      ]
       this.$refs.chart.update(this.series)
     }
   }
