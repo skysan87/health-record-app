@@ -1,6 +1,6 @@
 <template>
-  <div>
-    <div class="pt-2 px-2 flex flex-wrap">
+  <div class="flex flex-col h-full">
+    <div class="flex-none pt-2 px-2 flex flex-wrap">
       <span class="ml-2">
         <button title="リロード" @click="init">
           <fa :icon="['fas', 'sync-alt']" size="lg" />
@@ -12,7 +12,7 @@
     </div>
 
     <!-- ラジオボタンで表示切り替え -->
-    <div class="flex-1 flex flex-row pt-2 px-2">
+    <div class="flex-none flex flex-row pt-2 px-2">
       <label v-for="m in menu" :key="m.value" class="ml-2 align-middle">
         <input v-model="selectedMenu" type="radio" :value="m">
         <span>{{ m.label }}</span>
@@ -21,56 +21,58 @@
 
     <div class="border-b pt-2" />
 
-    <!-- 健康記録 -->
-    <div v-if="selectedMenu === menu.Health" class="pt-2 px-2">
-      <div class="pb-1 flex items-center">
-        <span class="p-2 w-1/4">体重(kg)</span>
-        <commandable-input
-          key="latest-waight"
-          input-type="number"
-          :value="latestData?.weight"
-          :update="recordWeight"
-          inputmode="decimal"
-        />
+    <div class="flex-1 overflow-y-auto pb-6">
+      <!-- 健康記録 -->
+      <div v-if="selectedMenu === menu.Health" class="pt-2 px-2">
+        <div class="pb-1 flex items-center">
+          <span class="p-2 w-1/4">体重(kg)</span>
+          <commandable-input
+            key="latest-waight"
+            input-type="number"
+            :value="latestData?.weight"
+            :update="recordWeight"
+            inputmode="decimal"
+          />
+        </div>
+        <div class="pb-1 flex items-center">
+          <span class="p-2 w-1/4">身長(cm)</span>
+          <commandable-input
+            key="latest-height"
+            input-type="number"
+            :value="latestData?.height"
+            :update="recordHeight"
+            inputmode="decimal"
+          />
+        </div>
       </div>
-      <div class="pb-1 flex items-center">
-        <span class="p-2 w-1/4">身長(cm)</span>
-        <commandable-input
-          key="latest-height"
-          input-type="number"
-          :value="latestData?.height"
-          :update="recordHeight"
-          inputmode="decimal"
-        />
-      </div>
-    </div>
 
-    <!-- 目標設定 -->
-    <div v-else-if="selectedMenu === menu.Goal" class="pt-2 px-2">
-      <div class="pb-1 flex items-center">
-        <span class="p-2 w-1/4">運動量(kcal)</span>
-        <commandable-input
-          key="goal-activity"
-          input-type="number"
-          :value="goal?.activity"
-          :update="setGoalActivity"
-          inputmode="decimal"
-        />
+      <!-- 目標設定 -->
+      <div v-else-if="selectedMenu === menu.Goal" class="pt-2 px-2">
+        <div class="pb-1 flex items-center">
+          <span class="p-2 w-1/4">運動量(kcal)</span>
+          <commandable-input
+            key="goal-activity"
+            input-type="number"
+            :value="goal?.activity"
+            :update="setGoalActivity"
+            inputmode="decimal"
+          />
+        </div>
+        <div class="pb-1 flex items-center">
+          <span class="p-2 w-1/4">体重(kg)</span>
+          <commandable-input
+            key="goal-weight"
+            input-type="number"
+            :value="goal?.weight"
+            :update="setGoalWeight"
+            inputmode="decimal"
+          />
+        </div>
       </div>
-      <div class="pb-1 flex items-center">
-        <span class="p-2 w-1/4">体重(kg)</span>
-        <commandable-input
-          key="goal-weight"
-          input-type="number"
-          :value="goal?.weight"
-          :update="setGoalWeight"
-          inputmode="decimal"
-        />
-      </div>
-    </div>
 
-    <!-- 運動記録 -->
-    <activity-record v-else-if="selectedMenu === menu.Activity" class="pt-2 px-2" />
+      <!-- 運動記録 -->
+      <activity-record v-else-if="selectedMenu === menu.Activity" class="pt-2 px-2" />
+    </div>
   </div>
 </template>
 
