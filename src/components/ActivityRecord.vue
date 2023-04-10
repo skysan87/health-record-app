@@ -14,7 +14,7 @@
             <input v-model="selectedActivity" type="radio" :value="activityOther" @change="onChangeActivity">
             <span>{{ activityOther.label }}</span>
           </label>
-          <!-- <input type="text" class="ml-2 input-text" style="width: fit-content;"> -->
+          <input v-model="otherMenuLabel" type="text" class="ml-2 input-text" style="width: fit-content;">
         </div>
       </div>
       <div class="flex-none">
@@ -95,6 +95,7 @@ export default {
       selectedActivity: null,
       valueKcal: null,
       valueUnit: null,
+      otherMenuLabel: null,
       dialog: null
     }
   },
@@ -159,9 +160,14 @@ export default {
       if (!this.selectedActivity) {
         return
       }
+
+      const label = this.selectedActivity.label === activityOther.label
+        ? this.otherMenuLabel
+        : this.selectedActivity.label
+
       this.$store.dispatch('Activity/addRecord', {
         timestamp: new Date(),
-        name: this.selectedActivity.label,
+        name: label,
         value: this.valueKcal
       })
         .then(() => {
@@ -177,6 +183,7 @@ export default {
       this.selectedActivity = null
       this.valueKcal = null
       this.valueUnit = null
+      this.otherMenuLabel = null
     }
 
   }
