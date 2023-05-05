@@ -1,0 +1,19 @@
+{
+  "name": "@health-record/core",
+  "version": "1.0.0",
+  "description": "",
+  "private": true,
+  "main": "build/index.js",
+  "types":"build/index.d.ts",
+  "scripts": {
+    "clean": "rm -rf build tsconfig.tsbuildinfo",
+    "build": "tsc --incremental",
+    "start:dev": "tsc -w --incremental"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "typescript": "^5.0.4"
+  }
+}
