@@ -9,6 +9,9 @@
     "pnpm": ">=8",
     "npm": "please use pnpm"
   },
+  "scripts": {
+    "nuxt:dev": "pnpm --filter @health-record/web run dev"
+  },
   "keywords": [],
   "author": "",
   "license": "ISC"
