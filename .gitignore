@@ -96,3 +96,7 @@ config/
 .env
 
 emulator_data/
+
+build/
+
+tsconfig.tsbuildinfo
