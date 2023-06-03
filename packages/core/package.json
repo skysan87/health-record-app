@@ -3,17 +3,23 @@
   "version": "1.0.0",
   "description": "",
   "private": true,
+  "type": "module",
   "main": "build/index.js",
-  "types":"build/index.d.ts",
+  "types": "build/index.d.ts",
   "scripts": {
     "clean": "rm -rf build tsconfig.tsbuildinfo",
     "build": "tsc --incremental",
-    "start:dev": "tsc -w --incremental"
+    "start:dev": "tsc -w --incremental",
+    "test": "ts-node test/test.ts"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "devDependencies": {
+    "ts-node": "^10.9.1",
     "typescript": "^5.0.4"
+  },
+  "dependencies": {
+    "dayjs": "^1.11.7"
   }
 }
