@@ -3,7 +3,7 @@ import { UserId } from "../ValueObject";
 import { IRepositoryBase } from "./IRepositoryBase";
 
 export interface IHealthlistRepository extends IRepositoryBase {
-  get(userId: UserId): Promise<Healthlist>
+  get(userId: UserId): Promise<Healthlist | null>
   save(userId: UserId): Promise<Healthlist>
   update(params: {}, userId: UserId): Promise<Healthlist>
 }

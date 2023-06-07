@@ -1,7 +1,13 @@
-import { Health } from "../src/Domain/Model/Health"
+import { Activity } from "../src/Domain/Model/Activity"
 
 // Sample
-const health: Health = new Health(
-  '123', 2022, 12, 30
+const activity = new Activity(
+  '123'
 )
-console.log(health)
+console.log(activity)
+const updateParams = {
+  total: 1
+}
+
+const data = { ...activity, ...updateParams } as Activity
+console.log(data)

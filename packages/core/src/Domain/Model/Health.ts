@@ -2,7 +2,7 @@ import { HealthType } from "@/Domain/ValueObject"
 
 export class Health {
   constructor(
-    public id: string,
+    public id: string, // randam
     public year: number,
     public month: number,
     public date: number,

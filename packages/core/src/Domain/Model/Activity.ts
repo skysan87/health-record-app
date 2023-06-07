@@ -3,8 +3,8 @@ import { Record } from "@/Domain/ValueObject"
 export class Activity {
   constructor(
     public id: string,
-    public total: number,
-    public records: Record[],
+    public total: number = 0,
+    public records: Record[] = [],
     public createdAt?: Date,
     public updatedAt?: Date,
   ) { }

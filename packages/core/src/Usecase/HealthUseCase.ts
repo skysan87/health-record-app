@@ -27,18 +27,17 @@ export class HealthUseCase {
   }
 
   public async addRecord(helath: Health): Promise<Healthlist> {
-    let healthlist: Healthlist = {} as Healthlist
-    await this.transaction.run(async scope => { // TODO: scope
+    const result = await this.transaction.run(async scope => { // TODO: scope
       const user: User = await this.userRepo.get()
-      healthlist = await this.healthlistRepo.get(user.id)
+      const healthlist = await this.healthlistRepo.get(user.id)
       if (!healthlist) {
         throw new Error('health does not exist.')
       }
       healthlist.latest[helath.type as HealthType] = helath.value
-      this.healthlistRepo.update({ latest: healthlist.latest }, user.id)
-      this.healthRepo.save(helath, user.id)
+      await this.healthlistRepo.update({ latest: healthlist.latest }, user.id)
+      await this.healthRepo.save(helath, user.id)
     })
-    return healthlist
+    return result as Healthlist
   }
 
   public async updateGoal(type: HealthGoalType, value: number): Promise<Healthlist> {
@@ -48,7 +47,7 @@ export class HealthUseCase {
       throw new Error('health does not exist.')
     }
     list.goal[type] = value
-    this.healthlistRepo.update({ goal: list.goal }, user.id)
+    await this.healthlistRepo.update({ goal: list.goal }, user.id)
     return list
   }
 
