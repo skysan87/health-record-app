@@ -44,14 +44,18 @@ export class ActivityUseCase {
   }
 
   public async addRecord(record: Record): Promise<Activity> {
-    let activity: Activity = {} as Activity
-    await this.transaction.run(async scope => { // TODO: scope
+    const result = await this.transaction.run(async scope => { // TODO: scope
       const user: User = await this.userRepo.get()
       const dateNumber: DateNumber = new DateNumber(dateFactory().getDateNumber().toString())
-      activity = await this.activityRepo.get(user.id, dateNumber)
+      const activity = await this.activityRepo.get(user.id, dateNumber)
+      if (!activity) {
+        throw new Error('activity does not exist.')
+      }
       activity.addRecord(record)
-      await this.activityRepo.addRecord({ total: activity.total }, record, user.id, dateNumber)
+      await this.activityRepo.addRecord({ total: activity.total, records: activity.records }, record, user.id, dateNumber)
+
+      return activity
     })
-    return activity
+    return result as Activity
   }
 }
