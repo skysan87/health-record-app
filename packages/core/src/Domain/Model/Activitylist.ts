@@ -1,4 +1,4 @@
-import { Menu } from "@/Domain/ValueObject"
+import { Menu } from "../ValueObject"
 
 export class Activitylist {
   constructor(

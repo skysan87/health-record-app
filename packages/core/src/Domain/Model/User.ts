@@ -1,4 +1,4 @@
-import { DisplayName, UserId, Mail } from "@/Domain/ValueObject"
+import { DisplayName, UserId, Mail } from "../ValueObject"
 
 export class User {
   constructor(

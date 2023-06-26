@@ -1,4 +1,4 @@
-import { HealthType } from "@/Domain/ValueObject"
+import { HealthType } from "../ValueObject"
 
 export class Health {
   constructor(

@@ -1,4 +1,4 @@
-import { Record } from "@/Domain/ValueObject"
+import { Record } from "../ValueObject"
 
 export class Activity {
   constructor(
