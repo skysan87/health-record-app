@@ -2,6 +2,9 @@
   // https://nuxt.com/docs/guide/concepts/typescript
   "extends": "./.nuxt/tsconfig.json",
   "compilerOptions": {
-    "moduleResolution": "nodenext"
+    "moduleResolution": "nodenext",
+    "types": [
+      "@types/node"
+    ]
   }
 }
