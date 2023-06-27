@@ -14,7 +14,10 @@ export class DebugHealthRepository implements IHealthRepository {
 
   save(params: Health, userId: UserId): Promise<Health> {
     return new Promise(resolve => {
+      const timestamp = new Date()
       params.id = Date.now().toString()
+      params.createdAt = timestamp
+      params.updatedAt = timestamp
       resolve(params)
     })
   }
