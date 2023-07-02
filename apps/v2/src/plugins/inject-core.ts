@@ -1,4 +1,4 @@
-import { ActivityUseCase, HealthUseCase } from '@health-record/core/usecase'
+import { ActivityUseCase, HealthUseCase, AuthenticateUseCase } from '@health-record/core/usecase'
 import { DebugActivityRepository } from '@health-record/debug-infrastructure/repository/DebugActivityRepository'
 import { DebugActivitylistRepository } from '@health-record/debug-infrastructure/repository/DebugActivitylistRepository'
 import { DebugHealthRepository } from '@health-record/debug-infrastructure/repository/DebugHealthRepository'
@@ -11,6 +11,7 @@ declare module '#app' {
   interface NuxtApp {
     $activity(): ActivityUseCase,
     $health(): HealthUseCase
+    $auth(): AuthenticateUseCase
   }
 }
 
@@ -30,11 +31,13 @@ export default defineNuxtPlugin(() => {
     , userRepo
     , transaction
   )
+  const auth = new AuthenticateUseCase(userRepo)
 
   return {
     provide: {
       activity: () => activity,
-      health: () => health
+      health: () => health,
+      auth: () => auth
     }
   }
 })
