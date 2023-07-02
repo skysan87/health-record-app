@@ -4,7 +4,8 @@
   "compilerOptions": {
     "moduleResolution": "nodenext",
     "types": [
-      "@types/node"
+      "@types/node",
+      "@nuxt/types"
     ]
   }
 }

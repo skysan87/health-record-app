@@ -22,6 +22,7 @@ export default defineNuxtConfig({
   css: [
     '@/assets/css/tailwind.css',
     '@/assets/css/common.css',
+    '@/assets/css/dialog.css',
     '@fortawesome/fontawesome-svg-core/styles.css'
   ],
   typescript: {
