@@ -2,6 +2,7 @@
 import { useAuth } from '~/composables/useAuth'
 
 const { login, checkLogin } = useAuth()
+const config = useRuntimeConfig()
 
 const isMounted = ref(false)
 const isClicked = ref(false)
@@ -12,8 +13,7 @@ onMounted(async () => {
   const loginSucceeded = await checkLogin()
   if (loginSucceeded) {
     isLogin.value = true
-    // TODO: ROOT_PATH
-    navigateTo('')
+    navigateTo(config.public.rootPath)
   }
   isMounted.value = true
 })
@@ -22,8 +22,7 @@ const doLogin = async () => {
   isClicked.value = true
   await login((_user) => {
     isLogin.value = true
-    // TODO: ROOT_PATH
-    navigateTo('')
+    navigateTo(config.public.rootPath)
   }, (error) => {
     isLogin.value = false
     // TODO: エラーハンドリング
