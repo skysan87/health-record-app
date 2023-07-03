@@ -1,12 +1,18 @@
 <script setup lang="ts">
 import { dateFactory } from '@health-record/core/util/DateUtil';
+import { useAuth } from '~/composables/useAuth'
 
+const { logout, userName } = useAuth()
 // TODO:
-const userName: string = 'dymmy user'
-const logout = () => { }
 const appVersion = '0.0.1'
 
 const currentDate: string = dateFactory().format('YYYY/MM/DD')
+
+const handleLogout = async () => {
+  await logout(() => {
+    navigateTo('login')
+  })
+}
 </script>
 
 <template>
@@ -25,7 +31,7 @@ const currentDate: string = dateFactory().format('YYYY/MM/DD')
               <div class="flex-none">
                 <span class="block px-6 pt-1">Ver.{{ appVersion }}</span>
                 <span class="block px-6 pt-1">{{ userName }}</span>
-                <a class="block px-6 pt-1 hover:bg-blue-800 hover:opacity-75 cursor-pointer" @click.left="logout">
+                <a class="block px-6 pt-1 hover:bg-blue-800 hover:opacity-75 cursor-pointer" @click.left="handleLogout">
                   <fa :icon="['fas', 'sign-out-alt']" size="lg" />
                   <span class="pl-1">ログアウト</span>
                 </a>
