@@ -3,8 +3,9 @@ import { dateFactory } from '@health-record/core/util/DateUtil';
 import { useAuth } from '~/composables/useAuth'
 
 const { logout, userName } = useAuth()
-// TODO:
-const appVersion = '0.0.1'
+const config = useRuntimeConfig()
+
+const appVersion = config.public.appVersion
 
 const currentDate: string = dateFactory().format('YYYY/MM/DD')
 

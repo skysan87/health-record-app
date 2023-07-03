@@ -1,7 +1,16 @@
+import packageInfo from './package.json'
+
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
   srcDir: 'src',
   ssr: false,
+  // NOTE: .envで上書き可能
+  runtimeConfig:{
+    public: {
+      appVersion: packageInfo.version,
+      rootPath: 'healthcare'
+    }
+  },
   postcss: {
     plugins: {
       tailwindcss: {}
