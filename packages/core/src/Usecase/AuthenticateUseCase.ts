@@ -1,5 +1,5 @@
-import { User } from "@/Domain/Model";
-import { IUserRepository } from "@/Domain/Repository";
+import { User } from "../Domain/Model";
+import { IUserRepository } from "../Domain/Repository";
 
 export class AuthenticateUseCase {
 
