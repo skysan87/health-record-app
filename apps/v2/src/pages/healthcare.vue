@@ -3,7 +3,7 @@ import { useActivity } from '@/composables/useActivity'
 import { useHealth } from '@/composables/useHealth'
 
 const { initActivity, totalCalorie } = useActivity()
-const { latestData, isOutOfLineBMI, BMI, notAchievedGoal, initHealth, recordWeight, recordHeight, setGoalActivity, setGoalWeight } = useHealth()
+const { latestData, goal, isOutOfLineBMI, BMI, notAchievedGoal, initHealth, recordWeight, recordHeight, setGoalActivity, setGoalWeight } = useHealth()
 
 const menu = {
   Activity: { label: '運動', value: 'activity' },
