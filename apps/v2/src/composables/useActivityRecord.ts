@@ -1,25 +1,20 @@
 import type { Activity, Activitylist } from "@health-record/core/model"
 import type { ActivityUseCase } from "@health-record/core/usecase"
 import { Menu, Record } from "@health-record/core/value-object"
-
-type ActivityMenu = {
-  label: string
-  value: number
-  unit: string
-}
+import { useActivity, useActivitylist } from './states'
 
 type Input = {
-  selectedActivity: ActivityMenu
+  selectedActivity: Menu
   valueKcal: number
   valueUnit: number
   otherMenuLabel: string
 }
 
-export const useActivity = () => {
+export const useActivityRecord = () => {
   const { $activity } = useNuxtApp()
 
-  const activity = useState<Activity>('activity', () => null)
-  const activitylist = useState<Activitylist>('activitylist', () => null)
+  const activity = useActivity()
+  const activitylist = useActivitylist()
 
   const usecase: ActivityUseCase = $activity()
   const input = reactive<Input>({
@@ -30,7 +25,7 @@ export const useActivity = () => {
   })
   const _menulist = ref<Menu[]>([])
 
-  const activityOther = { label: 'その他', value: 1, unit: '' }
+  const activityOther: Menu = { label: 'その他', value: 1, unit: '' } as Menu
 
   const clearInput = () => {
     input.selectedActivity = null
@@ -40,17 +35,11 @@ export const useActivity = () => {
   }
 
   return {
-    activity: readonly(activity),
-    activitylist: readonly(activitylist),
     activityOther: readonly(activityOther),
     menulist: readonly(_menulist),
+    records: computed(() => activity.value?.records ?? []),
     input,
-    totalCalorie: computed(() => {
-      // TODO: 反映されない
-      const total = activity.value ? activity.value.total : 0
-      return parseFloat(total.toFixed(2))
-    }),
-    initActivity: async() => { // TODO: useAsyncData
+    initActivity: async () => { // TODO: useAsyncData
       const [firstActivitylist, firstActivity] = await usecase.init()
       activity.value = firstActivity
       activitylist.value = firstActivitylist
@@ -65,8 +54,8 @@ export const useActivity = () => {
         return
       }
       const label = input.selectedActivity.label === activityOther.label
-      ? input.otherMenuLabel
-      : input.selectedActivity.label
+        ? input.otherMenuLabel
+        : input.selectedActivity.label
 
       const record = new Record(new Date(), label, input.valueKcal)
       // TODO: バリデーションエラー
@@ -74,7 +63,6 @@ export const useActivity = () => {
       activity.value = await usecase.addRecord(record)
       // TODO: エラーハンドリング
       clearInput()
-      nextTick(() => {})
     },
     onChangeActivity: () => {
       if (!input.selectedActivity) {
