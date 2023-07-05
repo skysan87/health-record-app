@@ -42,7 +42,7 @@ export const useHealth = () => {
     BMI,
     isOutOfLineBMI,
     notAchievedGoal,
-    goal: computed(() => healthlist.value.goal),
+    goal: computed(() => healthlist.value?.goal),
     initHealth: async() => { //TODO: useAsyncData
       healthlist.value = await usecase.init()
     },
