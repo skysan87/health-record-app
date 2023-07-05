@@ -1,9 +1,11 @@
 <script setup lang="ts">
-import { useActivity } from '@/composables/useActivity'
-import { useHealth } from '@/composables/useHealth'
+import { useActivityRecord } from '@/composables/useActivityRecord'
+import { useHealthRecord } from '@/composables/useHealthRecord'
+import { useCurrentStatus } from '@/composables/useCurrentStatus'
 
-const { initActivity, totalCalorie } = useActivity()
-const { latestData, goal, isOutOfLineBMI, BMI, notAchievedGoal, initHealth, recordWeight, recordHeight, setGoalActivity, setGoalWeight } = useHealth()
+const { initActivity } = useActivityRecord()
+const { latestData, goal, initHealth, recordWeight, recordHeight, setGoalActivity, setGoalWeight } = useHealthRecord()
+const { isOutOfLineBMI, BMI, notAchievedGoal, totalCalorie } = useCurrentStatus()
 
 const menu = {
   Activity: { label: '運動', value: 'activity' },
@@ -30,9 +32,9 @@ onBeforeMount(async () => await init())
   <div class="flex flex-col h-full">
     <div class="flex-none pt-2 px-2 flex flex-wrap">
       <span class="ml-2">
-        <!-- <button title="リロード" @click="init">
+        <button title="リロード" @click="init">
           <fa :icon="['fas', 'sync-alt']" size="lg" />
-        </button> -->
+        </button>
       </span>
       <span class="ml-2">●運動 <span :class="{'text-red-500': notAchievedGoal}">{{ totalCalorie }}kcal</span></span>
       <span class="ml-2">●体重 {{ latestData?.weight }}kg</span>

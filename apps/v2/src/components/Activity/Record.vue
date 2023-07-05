@@ -1,10 +1,14 @@
 <script setup lang="ts">
 import MenuDialog from '@/components/Activity/MenuDialog.vue'
+import { useActivitylist } from '~/composables/states'
+import { useActivityRecord } from '~/composables/useActivityRecord'
 
 // TODO: composableの肥大化を回避したい
 // const { ... } = inject('useActivity') で実装(useStateをやめる)
-const { input, activity, activitylist, activityOther, menulist, onChangeActivity, calcKcal, recordActivity, updateMenu } = useActivity()
+const { input, activityOther, menulist, records, onChangeActivity, calcKcal, recordActivity, updateMenu } = useActivityRecord()
 const dialog = ref<InstanceType<typeof MenuDialog>>()
+
+const activitylist = useActivitylist()
 
 const open = async () => {
   const { isSuccess, data } = await dialog.value?.openAsync(activitylist.value.menu)
@@ -12,7 +16,6 @@ const open = async () => {
     await updateMenu(data)
   }
 }
-
 </script>
 
 <template>
@@ -76,7 +79,7 @@ const open = async () => {
       </template>
       <template #component>
         <!-- TODO: 反映されない -->
-        <div v-for="r in activity?.records" :key="r.timestamp.getTime()">
+        <div v-for="r in records" :key="r.timestamp.getTime()">
           {{ r.timestamp }} - {{ r.name }} : {{ r.value }}
         </div>
       </template>
