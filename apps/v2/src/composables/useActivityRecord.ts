@@ -1,4 +1,4 @@
-import type { Activity, Activitylist } from "@health-record/core/model"
+import { Activity, Activitylist } from "@health-record/core/model"
 import type { ActivityUseCase } from "@health-record/core/usecase"
 import { Menu, Record } from "@health-record/core/value-object"
 import { useActivity, useActivitylist } from './states'
@@ -10,11 +10,16 @@ type Input = {
   otherMenuLabel: string
 }
 
+export type ActivityStore = ReturnType<typeof useActivityRecord>
+
 export const useActivityRecord = () => {
   const { $activity } = useNuxtApp()
 
-  const activity = useActivity()
+  // const activity = useActivity()
+  const activity = ref<Activity>(null)
   const activitylist = useActivitylist()
+  const total = ref(0)
+  const records = ref([])
 
   const usecase: ActivityUseCase = $activity()
   const input = reactive<Input>({
@@ -34,10 +39,15 @@ export const useActivityRecord = () => {
     input.otherMenuLabel = null
   }
 
+  watch(activity, (newValue) => {
+    console.log('update activity', newValue)
+  }, {deep: true})
+
   return {
+    totalCalorie: readonly(total),
     activityOther: readonly(activityOther),
     menulist: readonly(_menulist),
-    records: computed(() => activity.value?.records ?? []),
+    records: readonly(records),
     input,
     initActivity: async () => { // TODO: useAsyncData
       const [firstActivitylist, firstActivity] = await usecase.init()
@@ -61,6 +71,8 @@ export const useActivityRecord = () => {
       // TODO: バリデーションエラー
       // record.validate()
       activity.value = await usecase.addRecord(record)
+      total.value = activity.value?.total ?? 0
+      records.value = [...activity.value?.records ?? []]
       // TODO: エラーハンドリング
       clearInput()
     },
