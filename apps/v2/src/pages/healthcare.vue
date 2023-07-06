@@ -1,11 +1,11 @@
 <script setup lang="ts">
-import { useActivityRecord } from '@/composables/useActivityRecord'
+import { ActivityStore, useActivityRecord } from '@/composables/useActivityRecord'
 import { useHealthRecord } from '@/composables/useHealthRecord'
 import { useCurrentStatus } from '@/composables/useCurrentStatus'
 
-const { initActivity } = useActivityRecord()
+const { initActivity, totalCalorie } = inject('activity') as ActivityStore
 const { latestData, goal, initHealth, recordWeight, recordHeight, setGoalActivity, setGoalWeight } = useHealthRecord()
-const { isOutOfLineBMI, BMI, notAchievedGoal, totalCalorie } = useCurrentStatus()
+const { isOutOfLineBMI, BMI, notAchievedGoal } = useCurrentStatus()
 
 const menu = {
   Activity: { label: '運動', value: 'activity' },
