@@ -1,20 +1,25 @@
 <script setup lang="ts">
-import { useActivityRecord } from '@/composables/useActivityRecord'
-import { useHealthRecord } from '@/composables/useHealthRecord'
-import { useCurrentStatus } from '@/composables/useCurrentStatus'
+import { ActivityStore } from '@/composables/useActivityStore'
+import { HealthStore } from '@/composables/useHealthStore'
+import { HealthGoalType } from "@health-record/core/value-object"
 
-const { initActivity } = useActivityRecord()
-const { latestData, goal, initHealth, recordWeight, recordHeight, setGoalActivity, setGoalWeight } = useHealthRecord()
-const { isOutOfLineBMI, BMI, notAchievedGoal, totalCalorie } = useCurrentStatus()
+const { initActivity, totalCalorie } = inject('activity') as ActivityStore
+const { healthlist, latestData, goal, initHealth, recordWeight, recordHeight, setGoalActivity, setGoalWeight } = inject('health') as HealthStore
 
 const menu = {
   Activity: { label: '運動', value: 'activity' },
   Health: { label: '測定値', value: 'health' },
   Goal: { label: '目標値', value: 'goal' }
 } as const
+
 type menu = typeof menu[keyof typeof menu]
 
 const selectedMenu = ref<menu>(menu.Activity)
+
+const notAchievedGoal = computed(() => {
+  const goal = healthlist.value?.goal[HealthGoalType.ACTIVITY] ?? 0
+  return totalCalorie.value < goal
+})
 
 // TODO: mobile対応
 definePageMeta({
@@ -36,9 +41,9 @@ onBeforeMount(async () => await init())
           <fa :icon="['fas', 'sync-alt']" size="lg" />
         </button>
       </span>
-      <span class="ml-2">●運動 <span :class="{'text-red-500': notAchievedGoal}">{{ totalCalorie }}kcal</span></span>
+      <span class="ml-2">●運動 <span :class="{'text-red-500': notAchievedGoal}">{{ totalCalorie.toFixed(2) }}kcal</span></span>
       <span class="ml-2">●体重 {{ latestData?.weight }}kg</span>
-      <span class="ml-2">●BMI <span :class="{'text-red-500': isOutOfLineBMI}">{{ BMI }}</span></span>
+      <span class="ml-2">●BMI <span :class="{'text-red-500': healthlist?.isOutOfLineBMI}">{{ healthlist?.BMI.toFixed(2) }}</span></span>
     </div>
 
     <!-- ラジオボタンで表示切り替え -->

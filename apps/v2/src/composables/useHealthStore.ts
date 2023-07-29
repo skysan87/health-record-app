@@ -2,14 +2,16 @@ import { Health, Healthlist } from "@health-record/core/model"
 import type { HealthUseCase } from "@health-record/core/usecase"
 import { dateFactory } from "@health-record/core/util/DateUtil"
 import { HealthGoalType, HealthType } from "@health-record/core/value-object"
-import { useHealthlist } from "./states"
 
-export const useHealthRecord = () => {
+export type HealthStore = ReturnType<typeof useHealthStore>
+
+export const useHealthStore = () => {
   const { $health } = useNuxtApp()
   const usecase: HealthUseCase = $health()
-  const healthlist = useHealthlist()
+  const healthlist = ref<Healthlist>(null)
 
   return {
+    healthlist: readonly(healthlist),
     latestData: computed(() => healthlist.value?.latest),
     goal: computed(() => healthlist.value?.goal),
     initHealth: async() => { //TODO: useAsyncData
