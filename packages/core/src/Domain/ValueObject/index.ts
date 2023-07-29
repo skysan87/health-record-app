@@ -1,3 +1,5 @@
+import { isEmpty } from "../../Util/StringUtil"
+
 interface ValueValidator {
   validate(): boolean
 }
@@ -11,6 +13,12 @@ export class Record implements ValueValidator {
   ) { }
 
   validate(): boolean {
+    if (isEmpty(this.name)) {
+      return false
+    }
+    if (!this.value || this.value < 0) {
+      return false
+    }
     return true
   }
 }

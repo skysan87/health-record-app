@@ -29,12 +29,12 @@ defineExpose({
   <dialog ref="dialog" @cancel.prevent class="p-0">
     <div class="flex flex-col py-4" style="height: 83vh;">
       <div class="flex-1 overflow-y-auto pl-4 pr-2">
-        <div v-for="(a, index) in list" :key="index" class="pb-2 flex items-center">
+        <div v-for="(menu, index) in list" :key="index" class="pb-2 flex items-center">
           <div class="flex-1 flex flex-wrap">
-            <input v-model="a.label" type="text" class="flex-1 mr-1 activity-input" placeholder="メニュー名">
-            <input v-model="a.value" type="number" inputmode="decimal" class="flex-1 mr-1 activity-input"
+            <input v-model.trim="menu.label" type="text" class="flex-1 mr-1 activity-input" placeholder="メニュー名">
+            <input v-model="menu.value" type="number" inputmode="decimal" class="flex-1 mr-1 activity-input"
               placeholder="消費カロリー">
-            <input v-model="a.unit" type="text" class="flex-1 mr-1 activity-input" placeholder="実施単位">
+            <input v-model.trim="menu.unit" type="text" class="flex-1 mr-1 activity-input" placeholder="実施単位">
           </div>
           <PartIconButton @click.stop.native="deleteRow(index)">
             <fa title="削除" :icon="['fas', 'trash-can']" size="xs" />
