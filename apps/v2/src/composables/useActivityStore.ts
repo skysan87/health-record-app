@@ -1,7 +1,6 @@
-import { Activity, Activitylist } from "@health-record/core/model"
+import type { Activity, Activitylist } from "@health-record/core/model"
 import type { ActivityUseCase } from "@health-record/core/usecase"
 import { Menu, Record } from "@health-record/core/value-object"
-import { useActivity, useActivitylist } from './states'
 
 type Input = {
   selectedActivity: Menu
@@ -10,14 +9,13 @@ type Input = {
   otherMenuLabel: string
 }
 
-export type ActivityStore = ReturnType<typeof useActivityRecord>
+export type ActivityStore = ReturnType<typeof useActivityStore>
 
-export const useActivityRecord = () => {
+export const useActivityStore = () => {
   const { $activity } = useNuxtApp()
 
-  // const activity = useActivity()
   const activity = ref<Activity>(null)
-  const activitylist = useActivitylist()
+  const activitylist = ref<Activitylist>(null)
   const total = ref(0)
   const records = ref([])
 
@@ -39,11 +37,9 @@ export const useActivityRecord = () => {
     input.otherMenuLabel = null
   }
 
-  watch(activity, (newValue) => {
-    console.log('update activity', newValue)
-  }, {deep: true})
-
   return {
+    activitylist: readonly(activitylist),
+    activity: readonly(activity),
     totalCalorie: readonly(total),
     activityOther: readonly(activityOther),
     menulist: readonly(_menulist),

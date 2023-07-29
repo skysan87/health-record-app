@@ -1,5 +1,6 @@
 <script setup lang="ts">
-provide('activity', useActivityRecord())
+provide('activity', useActivityStore())
+provide('health', useHealthStore())
 </script>
 
 <template>

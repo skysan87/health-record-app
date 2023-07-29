@@ -5,7 +5,7 @@ import { AuthenticateUseCase } from "@health-record/core/usecase"
 export const useAuth = () => {
   const { $auth } = useNuxtApp()
   const usecase: AuthenticateUseCase = $auth()
-  const userInfo = useState<User>('user_name', () => null)
+  const userInfo = ref<User>(null)
 
   return {
     login: async (onSuccess = (credential: User) => { }, onError = (error: NuxtError) => { }) => {

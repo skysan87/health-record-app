@@ -1,14 +1,9 @@
 <script setup lang="ts">
 import MenuDialog from '@/components/Activity/MenuDialog.vue'
-import { useActivitylist } from '~/composables/states'
-import { ActivityStore, useActivityRecord } from '~/composables/useActivityRecord'
+import { ActivityStore } from '~/composables/useActivityStore'
 
-// TODO: composableの肥大化を回避したい
-// const { ... } = inject('useActivity') で実装(useStateをやめる)
-const { input, activityOther, menulist, records, onChangeActivity, calcKcal, recordActivity, updateMenu } = inject('activity') as ActivityStore
+const { activitylist, input, activityOther, menulist, records, onChangeActivity, calcKcal, recordActivity, updateMenu } = inject('activity') as ActivityStore
 const dialog = ref<InstanceType<typeof MenuDialog>>()
-
-const activitylist = useActivitylist()
 
 const open = async () => {
   const { isSuccess, data } = await dialog.value?.openAsync(activitylist.value.menu)
