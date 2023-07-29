@@ -25,8 +25,7 @@ const doLogin = async () => {
     navigateTo(config.public.rootPath)
   }, (error) => {
     isLogin.value = false
-    // TODO: エラーハンドリング
-    console.error(error)
+    throw showError(error)
   })
 }
 </script>
