@@ -50,7 +50,7 @@ onBeforeMount(async () => await init())
     <div class="flex-none flex flex-row pt-2 px-2">
       <label v-for="m in menu" :key="m.value" class="ml-2 align-middle">
         <input v-model="selectedMenu" type="radio" :value="m">
-        <span>{{ m.label }}</span>
+        <span class="ml-1">{{ m.label }}</span>
       </label>
     </div>
 
