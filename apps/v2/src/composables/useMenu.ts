@@ -7,7 +7,13 @@ export const useMenu = () => {
   return {
     list: input,
     init: (value: readonly Menu[]): void => {
-      input.value = [...value] // copy
+      input.value = value.map(menu => {
+        return {
+          label: menu.label,
+          value: menu.value,
+          unit: menu.unit
+        } as Menu
+      })
     },
     updateRows: (): Menu[] => {
       return input.value

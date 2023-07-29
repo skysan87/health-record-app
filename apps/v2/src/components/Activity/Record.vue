@@ -2,13 +2,14 @@
 import MenuDialog from '@/components/Activity/MenuDialog.vue'
 import { ActivityStore } from '~/composables/useActivityStore'
 
-const { activitylist, input, activityOther, menulist, records, onChangeActivity, calcKcal, recordActivity, updateMenu } = inject('activity') as ActivityStore
+const { activitylist, input, activityOther, menulist, records, onChangeActivity, calcKcal, recordActivity, updateMenu, clearInput } = inject('activity') as ActivityStore
 const dialog = ref<InstanceType<typeof MenuDialog>>()
 
 const open = async () => {
   const { isSuccess, data } = await dialog.value?.openAsync(activitylist.value.menu)
   if (isSuccess) {
     await updateMenu(data)
+    clearInput()
   }
 }
 </script>
@@ -20,16 +21,16 @@ const open = async () => {
     <div class="flex flex-row">
       <div class="flex-1">
         <span>運動メニュー</span>
-        <div v-for="m in menulist" :key="m.label">
-          <label class="ml-2 align-middle">
+        <div v-for="m in menulist" :key="m.label" class="flex items-center">
+          <label class="ml-2">
             <input v-model="input.selectedActivity" type="radio" :value="m" @change="onChangeActivity">
-            <span>{{ m.label }}</span>
+            <span class="ml-2">{{ m.label }}</span>
           </label>
         </div>
         <div class="flex items-center">
-          <label class="ml-2 align-middle">
+          <label class="ml-2">
             <input v-model="input.selectedActivity" type="radio" :value="activityOther" @change="onChangeActivity">
-            <span>{{ activityOther.label }}</span>
+            <span class="ml-2">{{ activityOther.label }}</span>
           </label>
           <input v-model="input.otherMenuLabel" type="text" class="ml-2 input-text" style="width: fit-content;">
         </div>
@@ -73,9 +74,8 @@ const open = async () => {
         <span>今日の実績</span>
       </template>
       <template #component>
-        <!-- TODO: 反映されない -->
-        <div v-for="r in records" :key="r.timestamp.getTime()">
-          {{ r.timestamp }} - {{ r.name }} : {{ r.value }}
+        <div v-for="r in records" :key="r.id">
+          {{ r.time }} - {{ r.name }} : {{ r.value }}
         </div>
       </template>
     </PartExpandPanel>
