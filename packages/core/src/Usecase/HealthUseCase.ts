@@ -26,16 +26,16 @@ export class HealthUseCase {
     return list
   }
 
-  public async addRecord(helath: Health): Promise<Healthlist> {
+  public async addRecord(health: Health): Promise<Healthlist> {
     const result = await this.transaction.run(async scope => { // TODO: scope
       const user: User = await this.userRepo.get()
       const healthlist = await this.healthlistRepo.get(user.id)
       if (!healthlist) {
         throw new Error('health does not exist.')
       }
-      healthlist.latest[helath.type as HealthType] = helath.value
+      healthlist.updateLatest(health.type as HealthType, health.value ?? 0)
       const updatedList = await this.healthlistRepo.update({ latest: healthlist.latest }, user.id)
-      await this.healthRepo.save(helath, user.id)
+      await this.healthRepo.save(health, user.id)
       return updatedList
     })
     return result as Healthlist
