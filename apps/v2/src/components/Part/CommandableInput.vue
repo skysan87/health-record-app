@@ -1,17 +1,67 @@
+<script setup lang="ts">
+
+interface Props {
+  inputType: string
+  value: string | number | Date
+  update: Function
+  buttonClass?: string
+  inputmode?: 'none' | 'text' | 'tel' | 'url' | 'email' | 'numeric' | 'decimal' | 'search'
+}
+
+const props = withDefaults(defineProps<Props>(), {
+  inputType: 'text',
+  value: null,
+  update: () => {},
+  buttonClass: 'btn btn-regular',
+  inputmode: 'text'
+})
+
+const disabled = ref(false)
+const errorMessage = ref('')
+const newInputValue = ref(props.value)
+
+const clickHandler = async () => {
+  disabled.value = true
+  errorMessage.value = ''
+  let hasError = false
+
+  try {
+    if (props.update) {
+      // NOTE: バリデーションはcallbackで実行し、エラーの場合は例外を投げる
+      const result = await props.update(newInputValue.value)
+      // NOTE: callback内の非同期処理の例外はキャッチできないので、戻り値で判定
+      if (!result) {
+        console.info('callback action failed')
+        hasError = true
+      }
+    }
+  } catch (err) {
+    console.error(err)
+    hasError = true
+    errorMessage.value = err.message
+  } finally {
+    if (hasError) {
+      newInputValue.value = props.value
+    }
+    disabled.value = false
+  }
+}
+</script>
+
 <template>
   <div class="inline-block p-1">
     <div class="flex flex-row">
       <input
         v-model="newInputValue"
-        :type="inputType"
+        :type="props.inputType"
         class="flex-1 border p-1 bg-gray-200"
         :class="{ 'btn-disabled': disabled }"
         :disabled="disabled"
-        :inputmode="inputmode"
+        :inputmode="props.inputmode"
       >
       <button
         class="p-1 ml-2"
-        :class="[disabled ? 'btn-disabled' : '', buttonClass]"
+        :class="[disabled ? 'btn-disabled' : '', props.buttonClass]"
         :disabled="disabled"
         @click.stop="clickHandler"
       >
@@ -23,75 +73,3 @@
     </div>
   </div>
 </template>
-
-<script>
-export default {
-  name: 'CommandableInput',
-  props: {
-    // inputのtype: 想定はtext, date, number
-    inputType: {
-      type: String,
-      require: true,
-      default: 'text'
-    },
-    // 初期値
-    value: {
-      type: [String, Number, Date],
-      require: true,
-      default: null
-    },
-    // 更新処理をするコールバック
-    update: {
-      type: Function,
-      require: true,
-      default: null
-    },
-    // ボタンのstyle
-    buttonClass: {
-      type: String,
-      require: false,
-      default: 'btn btn-regular'
-    },
-    inputmode: {
-      type: String,
-      require: false,
-      default: null
-    }
-  },
-  data () {
-    return {
-      disabled: false,
-      errorMessage: '',
-      newInputValue: this.value
-    }
-  },
-  methods: {
-    async clickHandler () {
-      this.disabled = true
-      this.errorMessage = ''
-      let hasError = false
-
-      try {
-        if (this.update) {
-          // NOTE: バリデーションはcallbackで実行し、エラーの場合は例外を投げる
-          const result = await this.update(this.newInputValue)
-          // NOTE: callback内の非同期処理の例外はキャッチできないので、戻り値で判定
-          if (!result) {
-            console.info('callback action failed')
-            hasError = true
-          }
-        }
-      } catch (err) {
-        console.error(err)
-        hasError = true
-        this.errorMessage = err.message
-      } finally {
-        if (hasError) {
-          this.newInputValue = this.value
-        }
-        this.disabled = false
-      }
-    }
-  }
-}
-</script>
