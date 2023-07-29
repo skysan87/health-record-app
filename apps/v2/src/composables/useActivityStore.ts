@@ -1,5 +1,6 @@
 import type { Activity, Activitylist } from "@health-record/core/model"
 import type { ActivityUseCase } from "@health-record/core/usecase"
+import { dateFactory } from "@health-record/core/util/DateUtil"
 import { Menu, Record } from "@health-record/core/value-object"
 
 type Input = {
@@ -17,7 +18,7 @@ export const useActivityStore = () => {
   const activity = ref<Activity>(null)
   const activitylist = ref<Activitylist>(null)
   const total = ref(0)
-  const records = ref([])
+  const records = ref<Record[]>([])
 
   const usecase: ActivityUseCase = $activity()
   const input = reactive<Input>({
@@ -43,8 +44,16 @@ export const useActivityStore = () => {
     totalCalorie: readonly(total),
     activityOther: readonly(activityOther),
     menulist: readonly(_menulist),
-    records: readonly(records),
+    records: computed(() => records.value.map(r => {
+      return {
+        id: r.timestamp.getTime(),
+        time: dateFactory(r.timestamp).format('HH:mm'),
+        name: r.name,
+        value: r.value
+      }
+    })),
     input,
+    clearInput,
     initActivity: async () => { // TODO: useAsyncData
       const [firstActivitylist, firstActivity] = await usecase.init()
       activity.value = firstActivity
@@ -55,7 +64,7 @@ export const useActivityStore = () => {
       activitylist.value = await usecase.updateMenu(menulist)
       _menulist.value = menulist
     },
-    recordActivity: async () => {
+    recordActivity: async (): Promise<void> => {
       if (!input.selectedActivity) {
         return
       }
@@ -64,8 +73,9 @@ export const useActivityStore = () => {
         : input.selectedActivity.label
 
       const record = new Record(new Date(), label, input.valueKcal)
-      // TODO: バリデーションエラー
-      // record.validate()
+      if (!record.validate()) {
+        return
+      }
       activity.value = await usecase.addRecord(record)
       total.value = activity.value?.total ?? 0
       records.value = [...activity.value?.records ?? []]
