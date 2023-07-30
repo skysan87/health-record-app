@@ -8,7 +8,7 @@ export class DebugHealthRepository implements IHealthRepository {
 
   get(userId: UserId): Promise<Health[]> {
     return new Promise(resolve => {
-      resolve(this.memory)
+      resolve(structuredClone(this.memory))
     })
   }
 

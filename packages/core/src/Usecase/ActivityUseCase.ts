@@ -1,3 +1,4 @@
+import { ActivityService } from "../Domain/Logic/ActivityService";
 import { Activity } from "../Domain/Model/Activity";
 import { Activitylist } from "../Domain/Model/Activitylist";
 import { User } from "../Domain/Model/User";
@@ -51,7 +52,7 @@ export class ActivityUseCase {
       if (!activity) {
         throw new Error('activity does not exist.')
       }
-      activity.addRecord(record)
+      new ActivityService(activity).addRecord(record)
       await this.activityRepo.addRecord({ total: activity.total, records: activity.records }, record, user.id, dateNumber)
 
       return activity

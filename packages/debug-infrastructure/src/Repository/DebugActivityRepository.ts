@@ -11,7 +11,7 @@ export class DebugActivityRepository implements IActivityRepository {
   get(userId: UserId, dateNumber: DateNumber): Promise<Activity | null> {
     return new Promise(resolve => {
       const data = this.memory.get(dateNumber.value) ?? null
-      resolve(data)
+      resolve(structuredClone(data))
     })
   }
 
