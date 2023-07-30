@@ -1,5 +1,6 @@
 <script setup lang="ts">
-import { useChart } from '~/composables/useChart'
+import { useChart } from '@/composables/useChart'
+import { LayoutKey } from '~~/.nuxt/types/layouts'
 
 const { chart, selectedRange, init, viewReset, viewPreview, viewNext } = useChart()
 
@@ -11,20 +12,20 @@ const range: Array<{ label: string, value: number }> = [
   { label: '6ヶ月', value: 180 }
 ]
 
-// TODO: スマホ版メニュー表示中はグラフを非表示にする
-const isMenuExpanded = false
-
 watch(selectedRange, viewReset)
 
 onMounted(async () => await init())
 
 definePageMeta({
-  layout: 'board'
+  layout: computed<LayoutKey>(() => {
+    const { isMobile } = useDevice()
+    return isMobile ? 'board-mobile' : 'board'
+  })
 })
 </script>
 
 <template>
-  <div v-show="!isMenuExpanded">
+  <div>
     <header class="border-b flex">
       <div class="cursor-pointer py-2 pl-4 inline-block text-gray-600" @click="viewPreview">
         <fa :icon="['fas', 'arrow-left']" size="lg" ontouchend="" />

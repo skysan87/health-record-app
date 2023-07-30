@@ -2,6 +2,7 @@
 import { ActivityStore } from '@/composables/useActivityStore'
 import { HealthStore } from '@/composables/useHealthStore'
 import { HealthGoalType } from "@health-record/core/value-object"
+import { LayoutKey } from '~~/.nuxt/types/layouts'
 
 const { initActivity, totalCalorie } = inject('activity') as ActivityStore
 const { healthlist, latestData, goal, initHealth, recordWeight, recordHeight, setGoalActivity, setGoalWeight } = inject('health') as HealthStore
@@ -21,9 +22,11 @@ const notAchievedGoal = computed(() => {
   return totalCalorie.value < goal
 })
 
-// TODO: mobile対応
 definePageMeta({
-  layout: 'board'
+  layout: computed<LayoutKey>(() => {
+    const { isMobile } = useDevice()
+    return isMobile ? 'board-mobile' : 'board'
+  })
 })
 
 const init = async () => {
