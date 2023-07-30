@@ -31,6 +31,7 @@ export default defineNuxtConfig({
     }
   },
   modules: [
+    '@nuxtjs/device'
   ],
   dir: {
     layouts: "layouts",
