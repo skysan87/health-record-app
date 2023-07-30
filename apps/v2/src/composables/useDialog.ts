@@ -3,6 +3,7 @@ const CLOSE_REASON_CANCEL = 'cancel'
 
 export const useDialog = () => {
   const dialog = ref<HTMLDialogElement>()
+  const { isMobile } = useDevice()
 
   return {
     dialog,
@@ -10,8 +11,6 @@ export const useDialog = () => {
       if (!dialog.value) {
         throw new Error('dialog is empty')
       }
-      // TODO: mobile判定
-      const isMobile = false
       if (isMobile) {
         dialog.value.classList.add('--mobile')
       } else {
