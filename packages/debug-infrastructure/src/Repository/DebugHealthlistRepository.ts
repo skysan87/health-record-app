@@ -9,7 +9,7 @@ export class DebugHealthlistRepository implements IHealthlistRepository {
   get(userId: UserId): Promise<Healthlist | null> {
     return new Promise(resolve => {
       const data = this.memory.get(userId.value) ?? null
-      resolve(data)
+      resolve(structuredClone(data))
     })
   }
 
