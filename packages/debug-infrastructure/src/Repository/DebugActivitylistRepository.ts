@@ -9,7 +9,7 @@ export class DebugActivitylistRepository implements IActivitylistRepository {
   get(userId: UserId): Promise<Activitylist | null> {
     return new Promise(resolve => {
       const data = this.memory.get(userId.value) ?? null
-      resolve(data)
+      resolve(structuredClone(data))
     })
   }
 
