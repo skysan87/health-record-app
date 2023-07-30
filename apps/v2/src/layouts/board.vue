@@ -7,7 +7,7 @@ const config = useRuntimeConfig()
 
 const appVersion = config.public.appVersion
 
-const currentDate: string = dateFactory().format('YYYY/MM/DD')
+const currentDate: string = dateFactory().format('YYYY.M.D(ddd)')
 
 const handleLogout = async () => {
   await logout(() => {
