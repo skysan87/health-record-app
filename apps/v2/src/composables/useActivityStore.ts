@@ -13,7 +13,7 @@ type Input = {
 export type ActivityStore = ReturnType<typeof useActivityStore>
 
 export const useActivityStore = () => {
-  const { $activity } = useNuxtApp()
+  const { $activity, $toast } = useNuxtApp()
 
   const activity = ref<Activity>(null)
   const activitylist = ref<Activitylist>(null)
@@ -61,8 +61,13 @@ export const useActivityStore = () => {
       _menulist.value = firstActivitylist.menu
     },
     updateMenu: async (menulist: Menu[]) => {
-      activitylist.value = await usecase.updateMenu(menulist)
-      _menulist.value = menulist
+      try {
+        activitylist.value = await usecase.updateMenu(menulist)
+        _menulist.value = menulist
+      } catch (error) {
+        console.error(error)
+        $toast.error('更新に失敗しました')
+      }
     },
     recordActivity: async (): Promise<void> => {
       if (!input.selectedActivity) {
@@ -76,11 +81,15 @@ export const useActivityStore = () => {
       if (!record.validate()) {
         return
       }
-      activity.value = await usecase.addRecord(record)
-      total.value = activity.value?.total ?? 0
-      records.value = [...activity.value?.records ?? []]
-      // TODO: エラーハンドリング
-      clearInput()
+      try {
+        activity.value = await usecase.addRecord(record)
+        total.value = activity.value?.total ?? 0
+        records.value = [...activity.value?.records ?? []]
+        clearInput()
+      } catch (error) {
+        console.error(error)
+        $toast.error('登録に失敗しました')
+      }
     },
     onChangeActivity: () => {
       if (!input.selectedActivity) {

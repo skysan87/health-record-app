@@ -18,31 +18,25 @@ const props = withDefaults(defineProps<Props>(), {
 
 const disabled = ref(false)
 const errorMessage = ref('')
-const newInputValue = ref(props.value)
+const newInputValue = ref<string | number | Date>(props.value)
+
+const { $toast } = useNuxtApp()
 
 const clickHandler = async () => {
   disabled.value = true
   errorMessage.value = ''
-  let hasError = false
 
   try {
     if (props.update) {
       // NOTE: バリデーションはcallbackで実行し、エラーの場合は例外を投げる
-      const result = await props.update(newInputValue.value)
-      // NOTE: callback内の非同期処理の例外はキャッチできないので、戻り値で判定
-      if (!result) {
-        console.info('callback action failed')
-        hasError = true
-      }
+      await props.update(newInputValue.value)
     }
   } catch (err) {
     console.error(err)
-    hasError = true
+    $toast.error('コマンド実行に失敗しました')
+    newInputValue.value = props.value
     errorMessage.value = err.message
   } finally {
-    if (hasError) {
-      newInputValue.value = props.value
-    }
     disabled.value = false
   }
 }

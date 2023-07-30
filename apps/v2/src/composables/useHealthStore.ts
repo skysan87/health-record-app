@@ -14,12 +14,12 @@ export const useHealthStore = () => {
     healthlist: readonly(healthlist),
     latestData: computed(() => healthlist.value?.latest),
     goal: computed(() => healthlist.value?.goal),
-    initHealth: async() => { //TODO: useAsyncData
+    initHealth: async () => { //TODO: useAsyncData
       healthlist.value = await usecase.init()
     },
-    recordWeight: async (inputValue: number) => {
+    recordWeight: async (inputValue: number): Promise<void> => {
       if (!inputValue) {
-        return true
+        throw new Error('validation error')
       }
       const date = dateFactory()
       const health = new Health(''
@@ -27,12 +27,10 @@ export const useHealthStore = () => {
         , HealthType.WEIGHT, inputValue
       )
       healthlist.value = await usecase.addRecord(health)
-      // TODO: エラーハンドリング
-      return true
     },
-    recordHeight: async (inputValue: number) => {
+    recordHeight: async (inputValue: number): Promise<void> => {
       if (!inputValue) {
-        return true
+        throw new Error('validation error')
       }
       const date = dateFactory()
       const health = new Health(''
@@ -40,24 +38,18 @@ export const useHealthStore = () => {
         , HealthType.HEIGHT, inputValue
       )
       healthlist.value = await usecase.addRecord(health)
-      // TODO: エラーハンドリング
-      return true
     },
-    setGoalActivity: async (inputValue:number) => {
+    setGoalActivity: async (inputValue: number): Promise<void> => {
       if (!inputValue) {
-        return true
+        throw new Error('validation error')
       }
       healthlist.value = await usecase.updateGoal(HealthGoalType.ACTIVITY, inputValue)
-      // TODO: エラーハンドリング
-      return true
     },
-    setGoalWeight: async (inputValue:number) => {
+    setGoalWeight: async (inputValue: number): Promise<void> => {
       if (!inputValue) {
-        return true
+        throw new Error('validation error')
       }
       healthlist.value = await usecase.updateGoal(HealthGoalType.WEIGHT, inputValue)
-      // TODO: エラーハンドリング
-      return true
     }
   }
 }

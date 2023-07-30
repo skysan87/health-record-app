@@ -13,7 +13,7 @@ type Point = {
 const DEFAULT_PER_PAGE = 30
 
 export const useChart = () => {
-  const { $health } = useNuxtApp()
+  const { $health, $toast } = useNuxtApp()
   const usecase: HealthUseCase = $health()
   const records = ref<Point[]>([])
 
@@ -71,23 +71,27 @@ export const useChart = () => {
     chart,
     selectedRange,
     init: async () => {
-      await loadRecords()
-      const { start, end } = getPageRange()
-      const series: SeriesObject<SeriesPrimitiveValue>[] = [
-        {
-          name: 'weight',
-          data: getRangeData()
-        },
-        {
-          name: 'weight-goal', // 目標値
-          data: [
-            { x: start, y: goal.value.weight ?? null },
-            { x: end, y: goal.value.weight ?? null }
-          ]
-        }
-      ]
-      chart.value.init(series)
-      // TODO: エラーハンドリング
+      try {
+        await loadRecords()
+        const { start, end } = getPageRange()
+        const series: SeriesObject<SeriesPrimitiveValue>[] = [
+          {
+            name: 'weight',
+            data: getRangeData()
+          },
+          {
+            name: 'weight-goal', // 目標値
+            data: [
+              { x: start, y: goal.value.weight ?? null },
+              { x: end, y: goal.value.weight ?? null }
+            ]
+          }
+        ]
+        chart.value.init(series)
+      } catch(error) {
+        console.error(error)
+        $toast.error('読み込みに失敗しました')
+      }
     },
     viewPreview: () => {
       currentPage.value--
