@@ -6,6 +6,7 @@ import { IUserRepository } from "../Domain/Repository/IUserRepository";
 import { ITransaction } from "../Domain/Repository/ITransaction";
 import { HealthGoalType, HealthType } from "../Domain/ValueObject";
 import { Healthlist } from "../Domain/Model/Healthlist";
+import { HealthService } from "../Domain/Logic/HealthService";
 
 // NOTE: 小規模なソースコードなので、ドメイン知識単位にUseCaseをまとめる
 export class HealthUseCase {
@@ -33,7 +34,7 @@ export class HealthUseCase {
       if (!healthlist) {
         throw new Error('health does not exist.')
       }
-      healthlist.updateLatest(health.type as HealthType, health.value ?? 0)
+      new HealthService(healthlist).updateLatest(health.type as HealthType, health.value ?? 0)
       const updatedList = await this.healthlistRepo.update({ latest: healthlist.latest }, user.id)
       await this.healthRepo.save(health, user.id)
       return updatedList
