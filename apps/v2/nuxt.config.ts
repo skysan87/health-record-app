@@ -1,5 +1,12 @@
 import packageInfo from './package.json'
 
+console.log('ENV: ', process.env.NODE_ENV)
+
+const coreEnv = {
+  'development': '@/plugins/core/debug-infrastructure',
+  'production': '@/plugins/core/debug-infrastructure'
+}
+
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
   srcDir: 'src',
@@ -24,6 +31,10 @@ export default defineNuxtConfig({
       ]
     }
   },
+
+  plugins: [
+    { src: coreEnv[process.env.NODE_ENV], mode: 'client' }
+  ],
 
   postcss: {
     plugins: {

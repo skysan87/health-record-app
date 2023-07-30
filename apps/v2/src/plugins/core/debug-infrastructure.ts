@@ -15,8 +15,10 @@ declare module '#app' {
   }
 }
 
-// 使い方: https://nuxt.com/docs/guide/directory-structure/plugins#automatically-providing-helpers
 export default defineNuxtPlugin(() => {
+
+  console.log('install debug-infrastructure')
+
   const userRepo = new DebugUserRepository()
   const transaction = new DebugTransaction()
   const activity = new ActivityUseCase(
