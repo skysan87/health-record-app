@@ -12,6 +12,7 @@ module.exports = {
     `./src/Error.{vue,js,ts}`,
     `./src/error.{vue,js,ts}`,
     `./src/app.config.{js,ts}`,
+    'node_modules/tailvue/dist/tailvue.es.js'
   ],
   theme: {
     extend: {},
