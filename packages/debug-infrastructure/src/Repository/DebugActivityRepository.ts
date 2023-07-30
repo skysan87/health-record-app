@@ -30,6 +30,7 @@ export class DebugActivityRepository implements IActivityRepository {
         ...data,
         ...params // 更新された値
       } as Activity
+      this.memory.set(dateNumber.value, clone)
       resolve(clone)
     })
   }
@@ -41,6 +42,7 @@ export class DebugActivityRepository implements IActivityRepository {
         ...data,
         ...params // 更新された値
       } as Activity
+      this.memory.set(dateNumber.value, clone)
       resolve(clone)
     })
   }

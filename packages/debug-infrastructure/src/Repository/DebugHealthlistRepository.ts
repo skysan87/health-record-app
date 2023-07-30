@@ -36,6 +36,7 @@ export class DebugHealthlistRepository implements IHealthlistRepository {
         ...data,
         ...params // 更新された値
       } as Healthlist
+      this.memory.set(userId.value, clone)
       resolve(clone)
     })
   }
