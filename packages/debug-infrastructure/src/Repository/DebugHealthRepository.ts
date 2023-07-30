@@ -18,6 +18,7 @@ export class DebugHealthRepository implements IHealthRepository {
       params.id = Date.now().toString()
       params.createdAt = timestamp
       params.updatedAt = timestamp
+      this.memory.push(params)
       resolve(params)
     })
   }
