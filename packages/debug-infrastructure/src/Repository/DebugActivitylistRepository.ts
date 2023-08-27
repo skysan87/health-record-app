@@ -28,6 +28,7 @@ export class DebugActivitylistRepository implements IActivitylistRepository {
         ...data,
         ...params // 更新された値
       } as Activitylist
+      this.memory.set(userId.value, clone)
       resolve(clone)
     })
   }
