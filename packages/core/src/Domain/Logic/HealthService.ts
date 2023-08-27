@@ -5,9 +5,10 @@ export class HealthService {
 
   constructor(private _healthlist: Healthlist) { }
 
-  public updateLatest(type: HealthType, value: number): void {
+  public updateLatest(type: HealthType, value: number): Healthlist {
     this._healthlist.latest[type] = value
     this.calcBMI()
+    return this._healthlist
   }
 
   private calcBMI(): void {

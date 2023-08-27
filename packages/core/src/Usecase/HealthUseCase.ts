@@ -34,10 +34,10 @@ export class HealthUseCase {
       if (!healthlist) {
         throw new Error('health does not exist.')
       }
-      new HealthService(healthlist).updateLatest(health.type as HealthType, health.value ?? 0)
-      const updatedList = await this.healthlistRepo.update({ latest: healthlist.latest }, user.id)
+      const updateData = new HealthService(healthlist).updateLatest(health.type as HealthType, health.value ?? 0)
+      await await this.healthlistRepo.update({ latest: updateData.latest }, user.id)
       await this.healthRepo.save(health, user.id)
-      return updatedList
+      return updateData
     })
     return result as Healthlist
   }
