@@ -4,7 +4,8 @@
       <input
         v-model="newInputValue"
         :type="inputType"
-        class="flex-1 border p-1 bg-gray-200"
+        class="flex-1 border p-1 bg-gray-200 w-80"
+        style="width: 224px"
         :class="{ 'btn-disabled': disabled }"
         :disabled="disabled"
         :inputmode="inputmode"
