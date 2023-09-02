@@ -1,7 +1,7 @@
 import { collection, getDoc, setDoc, updateDoc, doc, runTransaction, serverTimestamp, query, orderBy, limit, getDocs } from 'firebase/firestore'
 import { firestore } from '@/plugins/firebase'
 import { Health } from '@/model/Health'
-import { Healthlist } from '@/model/Healthlist'
+import { GoalWeightRange, Healthlist } from '@/model/Healthlist'
 import { HealthDaoBase } from '@/dao/base/HealthDaoBase'
 
 const healthRef = collection(firestore, 'health')
@@ -56,6 +56,37 @@ export class HealthDao extends HealthDaoBase {
       goal,
       updatedAt: serverTimestamp()
     })
+  }
+
+  async updateGoalWeightRange ({ start, end }, userId) {
+    const rootDocRef = doc(healthRef, userId)
+    let data = new GoalWeightRange({})
+
+    await runTransaction(firestore, async (transaction) => {
+      const healthDoc = await transaction.get(rootDocRef)
+      if (!tmpHealthDoc.exists()) {
+        throw new Error('health does not exist.')
+      }
+
+      const healthlist = healthDoc.data()
+      if (!Object.hasOwn(healthlist.goal, Healthlist.GOAL_WEIGHT) ||
+        !Object.hasOwn(healthlist.latest, Health.TYPE_WEIGHT)) {
+        throw new Error('goal.weight and latest.weight must be set.')
+      }
+
+      data = new GoalWeightRange({
+        startWeight: healthlist.latest[Health.TYPE_WEIGHT] ?? 0,
+        endWeight: healthlist.goal[Healthlist.GOAL_WEIGHT] ?? 0,
+        startDate: start,
+        endDate: end
+      })
+
+      transaction.update(rootDocRef, {
+        goalWeightRange: data,
+        updatedAt: serverTimestamp()
+      })
+    })
+    return data
   }
 
   /**

@@ -68,6 +68,15 @@
             inputmode="decimal"
           />
         </div>
+        <div class="pb-1 flex items-center">
+          <span class="p-2 w-1/4">期間設定</span>
+          <!-- TODO: 現在の体重と目標体重を同時に更新するようにする -->
+          <commandable-date-range
+            key="goal-period"
+            :value="{ start: range.startDate, end: range.endDate }"
+            :update="setGoalWeightRange"
+          />
+        </div>
       </div>
 
       <!-- 運動記録 -->
@@ -80,7 +89,9 @@
 import { Health } from '@/model/Health'
 import { Healthlist } from '@/model/Healthlist'
 import { fixFloat } from '@/util/NumberUtil'
+import { dateFactory } from '@/util/DateFactory'
 import CommandableInput from '@/components/parts/CommandableInput'
+import CommandableDateRange from '@/components/parts/CommandableDateRange'
 import ActivityRecord from '@/components/ActivityRecord'
 
 const menu = {
@@ -93,6 +104,7 @@ export default {
 
   components: {
     CommandableInput,
+    CommandableDateRange,
     ActivityRecord
   },
 
@@ -125,6 +137,10 @@ export default {
 
     goal () {
       return this.$store.getters['Health/getGoal']
+    },
+
+    range () {
+      return this.$store.getters['Health/getGoalWeightRange']
     },
 
     notAchievedGoal () {
@@ -223,6 +239,37 @@ export default {
         return false
       }
       return true
+    },
+
+    // コールバック処理
+    async setGoalWeightRange (inputValue) {
+      let startDate, endDate
+
+      if (!inputValue) {
+        startDate = null
+        endDate = null
+      } else {
+        startDate = dateFactory(inputValue.start, 'YYYY/MM/DD').toDate()
+        endDate = dateFactory(inputValue.end, 'YYYY/MM/DD').toDate()
+      }
+
+      try {
+        await this.$store.dispatch('Health/updateGoalWeightRange', {
+          start: startDate,
+          end: endDate
+        })
+        return {
+          isSuccess: true,
+          message: ''
+        }
+      } catch (error) {
+        console.log(error)
+        this.$toast.error('登録に失敗しました')
+        return {
+          isSuccess: false,
+          message: error.message
+        }
+      }
     }
   }
 }

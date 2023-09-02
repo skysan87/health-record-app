@@ -6,6 +6,7 @@ const dao = CreateHealthDao()
 export const state = () => ({
   latest: {},
   goal: {},
+  goalWeightRange: {},
   records: null
 })
 
@@ -20,7 +21,8 @@ export const getters = {
     }
     return (weight / Math.pow(height / 100, 2)).toFixed(2)
   },
-  getRecords: state => state.records
+  getRecords: state => state.records,
+  getGoalWeightRange: state => state.goalWeightRange
 }
 
 export const mutations = {
@@ -32,6 +34,10 @@ export const mutations = {
     if (goal) {
       state.goal = goal
     }
+  },
+
+  updateGoalWeightRange (state, value) {
+    state.goalWeightRange = { ...value }
   },
 
   setRecords (state, list) {
@@ -49,6 +55,7 @@ export const actions = {
     }
     commit('updateLatest', list.latest)
     commit('updateGoal', list.goal)
+    commit('updateGoalWeightRange', list.goalWeightRange)
 
     console.log('health init')
   },
@@ -67,6 +74,14 @@ export const actions = {
     await dao.updateGoal(goal, userId)
 
     commit('updateGoal', goal)
+  },
+
+  async updateGoalWeightRange ({ commit, rootGetters }, { start, end }) {
+    const userId = rootGetters['User/userId']
+
+    const data = await dao.updateGoalWeightRange({ start, end }, userId)
+
+    commit('updateGoalWeightRange', data)
   },
 
   async loadRecords ({ commit, rootGetters }) {
