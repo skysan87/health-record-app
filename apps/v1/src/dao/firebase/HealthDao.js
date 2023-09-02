@@ -64,7 +64,7 @@ export class HealthDao extends HealthDaoBase {
 
     await runTransaction(firestore, async (transaction) => {
       const healthDoc = await transaction.get(rootDocRef)
-      if (!tmpHealthDoc.exists()) {
+      if (!healthDoc.exists()) {
         throw new Error('health does not exist.')
       }
 
@@ -82,7 +82,7 @@ export class HealthDao extends HealthDaoBase {
       })
 
       transaction.update(rootDocRef, {
-        goalWeightRange: data,
+        goalWeightRange: { ...data },
         updatedAt: serverTimestamp()
       })
     })
