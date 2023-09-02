@@ -42,10 +42,14 @@ export default {
       default: null
     },
     // 更新処理をするコールバック
+    // Function: Object => {isSuccess: boolean, message: string})
     update: {
       type: Function,
       require: true,
-      default: null
+      // eslint-disable-next-line
+      default: (inputValue) => {
+        return { isSuccess: true, message: '' }
+      }
     },
     // ボタンのstyle
     buttonClass: {
@@ -77,8 +81,9 @@ export default {
           // NOTE: バリデーションはcallbackで実行し、エラーの場合は例外を投げる
           const result = await this.update(this.newInputValue)
           // NOTE: callback内の非同期処理の例外はキャッチできないので、戻り値で判定
-          if (!result) {
+          if (!result.isSuccess) {
             console.info('callback action failed')
+            this.errorMessage = result.message
             hasError = true
           }
         }
