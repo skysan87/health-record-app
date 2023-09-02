@@ -46,7 +46,6 @@ export default {
         { label: '3ヶ月', value: 90 },
         { label: '6ヶ月', value: 180 }
       ],
-      series: [],
       records: [],
       currentPage: 0
     }
@@ -79,22 +78,7 @@ export default {
       this.$store.dispatch('Health/loadRecords')
         .then(() => {
           this.records = this.$store.getters['Health/getRecords']
-          const range = this.getPageRange()
-
-          this.series = [
-            {
-              name: 'weight',
-              data: this.getRangeData()
-            },
-            {
-              name: 'weight-goal', // 目標値
-              data: [
-                { x: range.start, y: this.goal.weight ?? null },
-                { x: range.end, y: this.goal.weight ?? null }
-              ]
-            }
-          ]
-          this.$refs.chart.init(this.series)
+          this.$refs.chart.init(this.calcSeries())
         })
         .catch((error) => {
           console.error(error)
@@ -124,35 +108,117 @@ export default {
       }
     },
 
-    getRangeData () {
+    getVisibleData () {
       const { start, end } = this.getPageRange()
       const targets = this.records.filter((v) => {
         return v.x.getTime() > start.getTime() && v.x.getTime() < end.getTime()
       })
+
+      // グラフの末端に表示範囲の前後のデータを表示する
+      let startWeight = null
+      let endWeight = null
+      if (targets.length >= 2) {
+        const firstIndex = this.records.findIndex(v => v.x === targets[0].x)
+        if (firstIndex > 0) {
+          startWeight = this.records[firstIndex - 1].y
+        }
+        const lastIndex = this.records.findIndex(v => v.x === targets[targets.length - 1].x)
+        if (lastIndex < targets.length - 1) {
+          endWeight = this.records[lastIndex + 1].y
+        }
+      }
+
       // NOTE:
       //  データがないと、メモリが初期化される
       //  また、表示範囲の日付のデータがないと、メモリが表示されない
-      targets.unshift({ x: start, y: null })
-      targets.push({ x: end, y: null })
+      targets.unshift({ x: start, y: startWeight })
+      targets.push({ x: end, y: endWeight })
       return targets
     },
 
-    updateData () {
-      const { start, end } = this.getPageRange()
-      this.series = [
+    /**
+     * 目標設定の値の表示
+     * @param {Date} visibleStart グラフの表示開始日
+     * @param {Date} visibleEnd グラフの表示終了日
+     */
+    calcGoalWeightSeries (visibleStart, visibleEnd) {
+      const result = {
+        startWeight: null,
+        endWeight: null,
+        startDate: null,
+        endDate: null
+      }
+
+      const { startDate, endDate, startWeight, endWeight } = this.$store.getters['Health/getGoalWeightRange']
+
+      // 未設定ならば、目標体重を設定
+      if (!startDate || !endDate) {
+        result.startWeight = this.goal.weight ?? null
+        result.endWeight = this.goal.weight ?? null
+        result.startDate = visibleStart
+        result.endDate = visibleEnd
+        return result
+      }
+
+      // 範囲外は表示しない
+      if (endDate.getTime() < visibleStart.getTime() || startDate.getTime() > visibleEnd.getTime()) {
+        result.startWeight = null
+        result.endWeight = null
+        result.startDate = visibleStart
+        result.endDate = visibleEnd
+        return result
+      }
+
+      // 期間が設定されている場合、目標値の値を計算して表示する
+      const startDateObj = dateFactory(startDate)
+      const endDateObj = dateFactory(endDate)
+
+      // 係数
+      const wpd = (startWeight - endWeight) / startDateObj.diff(endDateObj, 'day')
+
+      // 減量予想を表す一次関数式
+      const f = x => wpd * x + startWeight
+
+      // 正の値: 始点がグラフの表示範囲内
+      const startDiff = dateFactory(visibleStart).diff(startDateObj, 'day')
+      // 表示する最初の体重
+      result.startWeight = startDiff > 0 ? f(startDiff) : startWeight
+
+      // 正の値: 終点がグラフの表示範囲内
+      const endDiff = dateFactory(visibleEnd).diff(startDateObj, 'day')
+      // 表示する最後の体重
+      result.endWeight = endDiff > 0 ? f(endDiff) : endWeight
+
+      // グラフの表示範囲かチェックする
+      const withinRange = x => x.getTime() > visibleStart.getTime() && x.getTime() < visibleEnd.getTime()
+      result.startDate = withinRange(startDate) ? startDate : visibleStart
+      result.endDate = withinRange(endDate) ? endDate : visibleEnd
+
+      return result
+    },
+
+    calcSeries () {
+      const range = this.getPageRange()
+      const { startWeight, endWeight, startDate, endDate } = this.calcGoalWeightSeries(range.start, range.end)
+
+      return [
         {
           name: 'weight',
-          data: this.getRangeData()
+          data: this.getVisibleData()
         },
         {
-          name: 'weight-goal', // 目標値
+          // 目標値
+          name: 'weight-goal',
           data: [
-            { x: start, y: this.goal.weight ?? null },
-            { x: end, y: this.goal.weight ?? null }
+            { x: startDate, y: startWeight },
+            { x: endDate, y: endWeight }
           ]
         }
       ]
-      this.$refs.chart.update(this.series)
+    },
+
+    updateData () {
+      this.$refs.chart.update(this.calcSeries())
     }
   }
 }
