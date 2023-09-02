@@ -113,11 +113,26 @@ export default {
       const targets = this.records.filter((v) => {
         return v.x.getTime() > start.getTime() && v.x.getTime() < end.getTime()
       })
+
+      // グラフの末端に表示範囲の前後のデータを表示する
+      let startWeight = null
+      let endWeight = null
+      if (targets.length >= 2) {
+        const firstIndex = this.records.findIndex(v => v.x === targets[0].x)
+        if (firstIndex > 0) {
+          startWeight = this.records[firstIndex - 1].y
+        }
+        const lastIndex = this.records.findIndex(v => v.x === targets[targets.length - 1].x)
+        if (lastIndex < targets.length - 1) {
+          endWeight = this.records[lastIndex + 1].y
+        }
+      }
+
       // NOTE:
       //  データがないと、メモリが初期化される
       //  また、表示範囲の日付のデータがないと、メモリが表示されない
-      targets.unshift({ x: start, y: null })
-      targets.push({ x: end, y: null })
+      targets.unshift({ x: start, y: startWeight })
+      targets.push({ x: end, y: endWeight })
       return targets
     },
 
