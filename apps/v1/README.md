@@ -77,6 +77,7 @@ $ npx firebase deploy --only hosting:default
   * id = userId
   * latest: { weight: number, height: number }
   * goal: { weight: number, activity: number }
+  * goalWeightRange: { startWeight: number, endWeight: number, startDate: Date, endDate: Date }
   * createdAt: Date
   * updatedAt: Date
   * コレクション(records)
