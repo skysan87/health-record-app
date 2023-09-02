@@ -54,3 +54,18 @@ export default {
   }
 }
 </script>
+
+<style>
+/*
+ * - LineChartの上書き(a,b,c...と利用する線の分だけ設定が必要)
+ * - `scoped`を設定すると反映されない
+ * @see https://gionkunz.github.io/chartist-js/getting-started.html#customizing-the-default-css
+ */
+.ct-series-a .ct-line {
+  stroke: #00a79d;
+}
+
+.ct-series-b .ct-line {
+  stroke: #1c75bc;
+}
+</style>
