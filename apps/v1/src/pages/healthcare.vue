@@ -172,73 +172,85 @@ export default {
     // コールバック処理
     async recordWeight (inputValue) {
       if (!inputValue) {
-        return true
+        return { isSuccess: true, message: '' }
       }
       try {
         await this.$store.dispatch('Health/add', {
           type: Health.TYPE_WEIGHT,
           value: fixFloat(inputValue)
         })
+        return { isSuccess: true, message: '' }
       } catch (error) {
         console.log(error)
         this.$toast.error('登録に失敗しました')
-        return false
+        return {
+          isSuccess: false,
+          message: error.message
+        }
       }
-      return true
     },
 
     // コールバック処理
     async recordHeight (inputValue) {
       if (!inputValue) {
-        return true
+        return { isSuccess: true, message: '' }
       }
       try {
         await this.$store.dispatch('Health/add', {
           type: Health.TYPE_HEIGHT,
           value: fixFloat(inputValue)
         })
+        return { isSuccess: true, message: '' }
       } catch (error) {
         console.log(error)
         this.$toast.error('登録に失敗しました')
-        return false
+        return {
+          isSuccess: false,
+          message: error.message
+        }
       }
-      return true
     },
 
     // コールバック処理
     async setGoalActivity (inputValue) {
       if (!inputValue) {
-        return true
+        return { isSuccess: true, message: '' }
       }
       try {
         await this.$store.dispatch('Health/updateGoal', {
           type: Healthlist.GOAL_ACTIVITY,
           value: fixFloat(inputValue)
         })
+        return { isSuccess: true, message: '' }
       } catch (error) {
         console.log(error)
         this.$toast.error('登録に失敗しました')
-        return false
+        return {
+          isSuccess: false,
+          message: error.message
+        }
       }
-      return true
     },
 
     // コールバック処理
     async setGoalWeight (inputValue) {
       if (!inputValue) {
-        return true
+        return { isSuccess: true, message: '' }
       }
       try {
         await this.$store.dispatch('Health/updateGoal', {
           type: Healthlist.GOAL_WEIGHT,
           value: fixFloat(inputValue)
         })
+        return { isSuccess: true, message: '' }
       } catch (error) {
         console.log(error)
         this.$toast.error('登録に失敗しました')
-        return false
+        return {
+          isSuccess: false,
+          message: error.message
+        }
       }
-      return true
     },
 
     // コールバック処理
