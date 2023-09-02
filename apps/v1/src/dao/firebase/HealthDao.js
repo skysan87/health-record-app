@@ -10,7 +10,7 @@ export class HealthDao extends HealthDaoBase {
   async getList (userId) {
     const docSnapshot = await getDoc(doc(healthRef, userId))
     return docSnapshot.exists()
-      ? new Healthlist(userId, docSnapshot.data())
+      ? HealthDao.convertToHealthlist(userId, docSnapshot.data())
       : null
   }
 
@@ -123,5 +123,20 @@ export class HealthDao extends HealthDaoBase {
     health.createdAt = data.createdAt ? data.createdAt.toDate() : ''
     health.updatedAt = data.updatedAt ? data.updatedAt.toDate() : ''
     return health
+  }
+
+  /**
+   * @param {firestore.DocumentData} data
+   * @returns {Healthlist}
+   */
+  static convertToHealthlist (userId, data) {
+    const healthlist = new Healthlist(userId, data)
+    // timestampをDateに変換
+    healthlist.createdAt = data.createdAt?.toDate() ?? ''
+    healthlist.updatedAt = data.updatedAt?.toDate() ?? ''
+    // NOTE: Date型はtimestampに変換されている
+    healthlist.goalWeightRange.startDate = data.goalWeightRange?.startDate?.toDate() ?? null
+    healthlist.goalWeightRange.endDate = data.goalWeightRange?.endDate?.toDate() ?? null
+    return healthlist
   }
 }
