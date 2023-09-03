@@ -49,6 +49,7 @@ const clickHandler = async () => {
         v-model="newInputValue"
         :type="props.inputType"
         class="flex-1 border p-1 bg-gray-200"
+        style="width: 224px"
         :class="{ 'btn-disabled': disabled }"
         :disabled="disabled"
         :inputmode="props.inputmode"

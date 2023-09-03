@@ -5,7 +5,7 @@ import { HealthGoalType } from "@health-record/core/value-object"
 import { LayoutKey } from '~~/.nuxt/types/layouts'
 
 const { initActivity, totalCalorie } = inject('activity') as ActivityStore
-const { healthlist, latestData, goal, initHealth, recordWeight, recordHeight, setGoalActivity, setGoalWeight } = inject('health') as HealthStore
+const { healthlist, latestData, goal, range, initHealth, recordWeight, recordHeight, setGoalActivity, setGoalWeight, setGoalWeightRange } = inject('health') as HealthStore
 
 const menu = {
   Activity: { label: '運動', value: 'activity' },
@@ -103,6 +103,15 @@ onBeforeMount(async () => await init())
             :value="goal?.weight"
             :update="setGoalWeight"
             inputmode="decimal"
+          />
+        </div>
+        <div class="pb-1 flex items-center">
+          <span class="p-2 w-1/4">期間設定</span>
+          <!-- TODO: 現在の体重と目標体重を同時に更新するようにする -->
+          <PartCommandableDateRange
+            key="goal-period"
+            :value="{ start: range?.startDate, end: range?.endDate }"
+            :update="setGoalWeightRange"
           />
         </div>
       </div>

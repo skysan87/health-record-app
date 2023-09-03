@@ -14,6 +14,7 @@ export const useHealthStore = () => {
     healthlist: readonly(healthlist),
     latestData: computed(() => healthlist.value?.latest),
     goal: computed(() => healthlist.value?.goal),
+    range: computed(() => healthlist.value?.goalWeightRange),
     initHealth: async () => { //TODO: useAsyncData
       healthlist.value = await usecase.init()
     },
@@ -50,6 +51,11 @@ export const useHealthStore = () => {
         throw new Error('validation error')
       }
       healthlist.value = await usecase.updateGoal(HealthGoalType.WEIGHT, inputValue)
+    },
+    setGoalWeightRange: async (inputValue: any): Promise<void> => {
+      const start = inputValue?.start ?? null
+      const end = inputValue?.end ?? null
+      healthlist.value = await usecase.updateGoalWeightRange(start, end)
     }
   }
 }

@@ -11,6 +11,7 @@ pnpm install @fortawesome/vue-fontawesome@latest-3 -F @health-record/web
 pnpm install @fortawesome/fontawesome-svg-core -F @health-record/web
 pnpm install @fortawesome/free-solid-svg-icons @fortawesome/free-brands-svg-icons -F @health-record/web
 pnpm install -D @nuxt/types -F @health-record/web
+pnpm install v-calendar@next @popperjs/core -F @health-record/web
 
 # at this directory
 pnpm tailwindcss init tailwind.config.js
@@ -20,6 +21,12 @@ pnpm tailwindcss init tailwind.config.js
 
 ```bash
 pnpm nuxi typecheck
+```
+
+## Clear Cache
+
+```bash
+pnpm nuxi cleanup
 ```
 
 ## Setup
