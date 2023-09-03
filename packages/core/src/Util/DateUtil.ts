@@ -150,6 +150,12 @@ class Wrapper {
     return Math.ceil(this.instance.get('date') / 7)
   }
 
+  /**
+   * 日付の差分を算出
+   * @param wrapper 比較対象
+   * @param unit 単位(day, week, month, quarter, year, hour, minute, second, millisecond)
+   * @returns `比較対象`がこのインスタンスより過去の日付の場合、戻り値は正の数
+   */
   diff(wrapper: Wrapper, unit: string): number {
     return this.instance.diff(wrapper.instance, unit as dayjs.UnitType)
   }

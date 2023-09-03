@@ -87,3 +87,12 @@ export const HealthGoalType = {
 } as const
 
 export type HealthGoalType = typeof HealthGoalType[keyof typeof HealthGoalType]
+
+export class GoalWeightRange {
+  constructor(
+    public startWeight: number = 0,
+    public endWeight: number = 0,
+    public startDate: Date,
+    public endDate: Date
+  ) { }
+}
