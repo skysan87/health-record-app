@@ -1,4 +1,4 @@
-import { HealthType, HealthGoalType } from "../ValueObject"
+import { HealthType, HealthGoalType, GoalWeightRange } from "../ValueObject"
 
 export class Healthlist {
   constructor(
@@ -13,6 +13,7 @@ export class Healthlist {
       [HealthGoalType.ACTIVITY]?: number,
       [HealthGoalType.WEIGHT]?: number
     } = {},
+    public goalWeightRange?: GoalWeightRange,
     public createdAt?: Date,
     public updatedAt?: Date
   ) { }
