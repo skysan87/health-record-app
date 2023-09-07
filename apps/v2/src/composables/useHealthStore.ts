@@ -1,6 +1,5 @@
-import { Health, Healthlist } from "@health-record/core/model"
+import { Healthlist } from "@health-record/core/model"
 import type { HealthUseCase } from "@health-record/core/usecase"
-import { dateFactory } from "@health-record/core/util/DateUtil"
 import { HealthGoalType, HealthType } from "@health-record/core/value-object"
 
 export type HealthStore = ReturnType<typeof useHealthStore>
@@ -22,23 +21,13 @@ export const useHealthStore = () => {
       if (!inputValue) {
         throw new Error('validation error')
       }
-      const date = dateFactory()
-      const health = new Health(''
-        , date.get('year'), date.get('month'), date.get('date')
-        , HealthType.WEIGHT, inputValue
-      )
-      healthlist.value = await usecase.addRecord(health)
+      healthlist.value = await usecase.addRecord(HealthType.WEIGHT, inputValue)
     },
     recordHeight: async (inputValue: number): Promise<void> => {
       if (!inputValue) {
         throw new Error('validation error')
       }
-      const date = dateFactory()
-      const health = new Health(''
-        , date.get('year'), date.get('month'), date.get('date')
-        , HealthType.HEIGHT, inputValue
-      )
-      healthlist.value = await usecase.addRecord(health)
+      healthlist.value = await usecase.addRecord(HealthType.HEIGHT, inputValue)
     },
     setGoalActivity: async (inputValue: number): Promise<void> => {
       if (!inputValue) {
