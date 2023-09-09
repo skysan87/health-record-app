@@ -92,7 +92,7 @@ export class GoalWeightRange {
   constructor(
     public startWeight: number = 0,
     public endWeight: number = 0,
-    public startDate: Date,
-    public endDate: Date
+    public startDate: Date | null,
+    public endDate: Date | null
   ) { }
 }

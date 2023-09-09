@@ -7,6 +7,7 @@ import { ITransaction } from "../Domain/Repository/ITransaction";
 import { GoalWeightRange, HealthGoalType, HealthType } from "../Domain/ValueObject";
 import { Healthlist } from "../Domain/Model/Healthlist";
 import { HealthService } from "../Domain/Logic/HealthService";
+import { dateFactory } from "../Util/DateUtil";
 
 // NOTE: 小規模なソースコードなので、ドメイン知識単位にUseCaseをまとめる
 export class HealthUseCase {
@@ -24,22 +25,29 @@ export class HealthUseCase {
     if (!list) {
       list = await this.healthlistRepo.save(user.id)
     }
-    return list
+    return this.format(list)
   }
 
-  public async addRecord(health: Health): Promise<Healthlist> {
+  public async addRecord(type: HealthType, value: number): Promise<Healthlist> {
     const result = await this.transaction.run(async scope => { // TODO: scope
       const user: User = await this.userRepo.get()
       const healthlist = await this.healthlistRepo.get(user.id)
       if (!healthlist) {
         throw new Error('health does not exist.')
       }
-      const updateData = new HealthService(healthlist).updateLatest(health.type as HealthType, health.value ?? 0)
-      await this.healthlistRepo.update({ latest: updateData.latest }, user.id)
+      healthlist.latest[type] = value
+      const updateData = await this.healthlistRepo.update({ latest: healthlist.latest }, user.id)
+
+      const date = dateFactory()
+      const health = new Health(''
+        , date.get('year'), date.get('month'), date.get('date')
+        , type, value
+      )
       await this.healthRepo.save(health, user.id)
+
       return updateData
     })
-    return result as Healthlist
+    return this.format(result as Healthlist)
   }
 
   public async updateGoal(type: HealthGoalType, value: number): Promise<Healthlist> {
@@ -49,8 +57,8 @@ export class HealthUseCase {
       throw new Error('health does not exist.')
     }
     list.goal[type] = value
-    await this.healthlistRepo.update({ goal: list.goal }, user.id)
-    return list
+    const updateData = await this.healthlistRepo.update({ goal: list.goal }, user.id)
+    return this.format(updateData)
   }
 
   public async updateGoalWeightRange(startDate: Date, endDate: Date): Promise<Healthlist> {
@@ -73,12 +81,18 @@ export class HealthUseCase {
       const updateData = await this.healthlistRepo.update({ goalWeightRange: healthlist.goalWeightRange }, user.id)
       return updateData
     })
-    return result as Healthlist
+    return this.format(result as Healthlist)
   }
 
   public async getRecords(): Promise<Health[]> {
     // TODO: limit
     const user: User = await this.userRepo.get()
     return await this.healthRepo.get(user.id)
+  }
+
+  private format(value: Healthlist): Healthlist {
+    const service = new HealthService(value)
+    service.calcBMI()
+    return service.data()
   }
 }
