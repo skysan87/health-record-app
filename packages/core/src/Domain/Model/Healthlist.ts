@@ -1,20 +1,18 @@
-import { HealthType, HealthGoalType, GoalWeightRange } from "../ValueObject"
+import { Nominal, HealthType, HealthGoalType, GoalWeightRange } from "../ValueObject"
 
-export class Healthlist {
-  constructor(
-    public id: string,
-    public BMI: number = 0,
-    public isOutOfLineBMI: boolean = false,
-    public latest: {
-      [HealthType.HEIGHT]?: number,
-      [HealthType.WEIGHT]?: number
-    } = {},
-    public goal: {
-      [HealthGoalType.ACTIVITY]?: number,
-      [HealthGoalType.WEIGHT]?: number
-    } = {},
-    public goalWeightRange?: GoalWeightRange,
-    public createdAt?: Date,
-    public updatedAt?: Date
-  ) { }
-}
+export type Healthlist = Nominal<{
+  id: string
+  BMI: number
+  isOutOfLineBMI: boolean
+  latest: {
+    [HealthType.HEIGHT]: number
+    [HealthType.WEIGHT]: number
+  }
+  goal: {
+    [HealthGoalType.ACTIVITY]: number
+    [HealthGoalType.WEIGHT]: number
+  }
+  goalWeightRange: GoalWeightRange
+  createdAt: Date
+  updatedAt: Date
+}, 'Healthlist'>

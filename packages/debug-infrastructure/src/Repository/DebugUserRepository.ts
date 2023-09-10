@@ -19,11 +19,11 @@ export class DebugUserRepository implements IUserRepository {
 
   public async login(): Promise<User> {
     await this.sleep(1000)
-    this.user = new User(
-      new UserId('dummyId'),
-      new Mail('dummy@sample.com'),
-      new DisplayName('dummy user')
-    )
+    this.user = {
+      id: new UserId('dummyId'),
+      email: new Mail('dummy@sample.com'),
+      displayName: new DisplayName('dummy user')
+    } as User
     return this.user
   }
 

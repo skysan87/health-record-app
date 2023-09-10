@@ -4,9 +4,10 @@ import { IHealthRepository } from "../Domain/Repository/IHealthRepository";
 import { IHealthlistRepository } from "../Domain/Repository/IHealthlistRepository";
 import { IUserRepository } from "../Domain/Repository/IUserRepository";
 import { ITransaction } from "../Domain/Repository/ITransaction";
-import { GoalWeightRange, HealthGoalType, HealthType } from "../Domain/ValueObject";
+import { HealthGoalType, HealthType } from "../Domain/ValueObject";
 import { Healthlist } from "../Domain/Model/Healthlist";
-import { HealthService } from "../Domain/Logic/HealthService";
+import { HealthlistBehavior } from "../Domain/Behavior/HealthlistBehavior";
+import { HealthBehavior } from "../Domain/Behavior/HealthBehavior";
 import { dateFactory } from "../Util/DateUtil";
 
 // NOTE: 小規模なソースコードなので、ドメイン知識単位にUseCaseをまとめる
@@ -21,33 +22,40 @@ export class HealthUseCase {
 
   public async init(): Promise<Healthlist> {
     const user: User = await this.userRepo.get()
-    let list = await this.healthlistRepo.get(user.id)
+
+    let list: Healthlist | null = await this.healthlistRepo.get(user.id)
     if (!list) {
       list = await this.healthlistRepo.save(user.id)
     }
-    return this.format(list)
+    return new HealthlistBehavior(list).format()
   }
 
   public async addRecord(type: HealthType, value: number): Promise<Healthlist> {
-    const result = await this.transaction.run(async scope => { // TODO: scope
+    // 通信時間を考慮
+    const date = dateFactory()
+
+    return await this.transaction.run<Healthlist>(async scope => { // TODO: scope
       const user: User = await this.userRepo.get()
-      const healthlist = await this.healthlistRepo.get(user.id)
-      if (!healthlist) {
+      const list = await this.healthlistRepo.get(user.id)
+      if (!list) {
         throw new Error('health does not exist.')
       }
-      healthlist.latest[type] = value
-      const updateData = await this.healthlistRepo.update({ latest: healthlist.latest }, user.id)
+      return new HealthlistBehavior(list).actionAsync(async behavior => {
+        const latest = behavior.get('latest') ?? {}
+        latest[type] = value
+        const updateData = await this.healthlistRepo.update({ latest }, user.id)
+        behavior.update(updateData)
 
-      const date = dateFactory()
-      const health = new Health(''
-        , date.get('year'), date.get('month'), date.get('date')
-        , type, value
-      )
-      await this.healthRepo.save(health, user.id)
-
-      return updateData
+        const healthBehavior = new HealthBehavior({
+          year: date.get('year'),
+          month: date.get('month'),
+          date: date.get('date'),
+          type,
+          value
+        } as Health)
+        await this.healthRepo.save(healthBehavior.format(), user.id)
+      })
     })
-    return this.format(result as Healthlist)
   }
 
   public async updateGoal(type: HealthGoalType, value: number): Promise<Healthlist> {
@@ -56,43 +64,37 @@ export class HealthUseCase {
     if (!list) {
       throw new Error('health does not exist.')
     }
-    list.goal[type] = value
-    const updateData = await this.healthlistRepo.update({ goal: list.goal }, user.id)
-    return this.format(updateData)
+
+    return new HealthlistBehavior(list).actionAsync(async behavior => {
+      const goal = behavior.get('goal') ?? {}
+      goal[type] = value
+      const updateData = await this.healthlistRepo.update({ goal }, user.id)
+      behavior.update(updateData)
+    })
   }
 
   public async updateGoalWeightRange(startDate: Date, endDate: Date): Promise<Healthlist> {
-    const result = await this.transaction.run(async scope => { // TODO: scope
+    return await this.transaction.run<Healthlist>(async scope => { // TODO: scope
       const user: User = await this.userRepo.get()
-      const healthlist = await this.healthlistRepo.get(user.id)
-      if (!healthlist) {
+      const list = await this.healthlistRepo.get(user.id)
+      if (!list) {
         throw new Error('health does not exist.')
       }
-      if (!Object.hasOwn(healthlist.goal, HealthGoalType.WEIGHT) ||
-        !Object.hasOwn(healthlist.latest, HealthType.WEIGHT)) {
-        throw new Error('goal.weight and latest.weight must be set.')
-      }
-      healthlist.goalWeightRange = new GoalWeightRange(
-        healthlist.latest[HealthType.WEIGHT] ?? 0,
-        healthlist.goal[HealthGoalType.WEIGHT] ?? 0,
-        startDate,
-        endDate
-      )
-      const updateData = await this.healthlistRepo.update({ goalWeightRange: healthlist.goalWeightRange }, user.id)
-      return updateData
+
+      return new HealthlistBehavior(list).actionAsync(async behavior => {
+        if (!behavior.validateGoalWeightRange()) {
+          throw new Error('goal.weight and latest.weight must be set.')
+        }
+        behavior.setGoalWeightRange(startDate, endDate)
+        const updateData = await this.healthlistRepo.update({ goalWeightRange: behavior.get("goalWeightRange") }, user.id)
+        behavior.update(updateData)
+      })
     })
-    return this.format(result as Healthlist)
   }
 
   public async getRecords(): Promise<Health[]> {
     // TODO: limit
     const user: User = await this.userRepo.get()
     return await this.healthRepo.get(user.id)
-  }
-
-  private format(value: Healthlist): Healthlist {
-    const service = new HealthService(value)
-    service.calcBMI()
-    return service.data()
   }
 }

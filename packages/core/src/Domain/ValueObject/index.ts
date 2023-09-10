@@ -1,5 +1,11 @@
 import { isEmpty } from "../../Util/StringUtil"
 
+/**
+ * 同一プロパティを持つ型定義の区別のために利用
+ * @param U type名
+ */
+export type Nominal<T, U extends string> = T & { __brand: U }
+
 interface ValueValidator {
   validate(): boolean
 }
@@ -26,13 +32,13 @@ export class Record implements ValueValidator {
 export class Menu implements ValueValidator {
 
   constructor(
-    public readonly label: string,
-    public readonly value: number,
-    public readonly unit: string = ''
+    public readonly label: string | null,
+    public readonly value: number | null,
+    public readonly unit: string | null
   ) { }
 
   validate(): boolean {
-      return true
+    return true
   }
 }
 
@@ -70,7 +76,7 @@ export class DateNumber implements ValueValidator {
   constructor(public readonly value: string) { }
 
   validate(): boolean {
-    return  DateNumber.pattern.test(this.value)
+    return DateNumber.pattern.test(this.value)
   }
 }
 

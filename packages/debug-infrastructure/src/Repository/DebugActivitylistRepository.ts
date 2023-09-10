@@ -1,4 +1,4 @@
-import { Activitylist } from "@health-record/core/model"
+import type { Activitylist } from "@health-record/core/model"
 import { UserId } from "@health-record/core/value-object"
 import { IActivitylistRepository } from "@health-record/core/repository"
 
@@ -15,7 +15,7 @@ export class DebugActivitylistRepository implements IActivitylistRepository {
 
   save(userId: UserId): Promise<Activitylist> {
     return new Promise(resolve => {
-      const data = new Activitylist(userId.value)
+      const data = { id: userId.value } as Activitylist
       this.memory.set(userId.value, data)
       resolve(data)
     })

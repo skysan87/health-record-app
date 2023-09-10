@@ -1,11 +1,9 @@
-import { Record } from "../ValueObject"
+import { Record, Nominal } from "../ValueObject"
 
-export class Activity {
-  constructor(
-    public id: string,
-    public total: number = 0,
-    public records: Record[] = [],
-    public createdAt?: Date,
-    public updatedAt?: Date,
-  ) { }
-}
+export type Activity = Nominal<{
+  id: string
+  total: number
+  records: Record[]
+  createdAt: Date
+  updatedAt: Date
+}, 'Activity'>

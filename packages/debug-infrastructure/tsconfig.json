@@ -1,7 +1,7 @@
 {
   "compilerOptions": {
     "target": "ESNext",
-    "module": "ESNext",
+    "module": "nodenext",
     "composite": false,
     "moduleResolution": "nodenext", // coreパッケージのエントリポイント対応(package.jsonのexportsフィールド)
     "paths": {
