@@ -1,4 +1,4 @@
-import { Healthlist } from "@health-record/core/model";
+import type { Healthlist } from "@health-record/core/model";
 import { IHealthlistRepository } from "@health-record/core/repository";
 import { HealthGoalType, HealthType, UserId } from "@health-record/core/value-object";
 
@@ -15,7 +15,7 @@ export class DebugHealthlistRepository implements IHealthlistRepository {
 
   save(userId: UserId): Promise<Healthlist> {
     return new Promise(resolve => {
-      const data = new Healthlist(userId.value)
+      const data = { id: userId.value } as Healthlist
       data.latest = {
         [HealthType.HEIGHT]: 0,
         [HealthType.WEIGHT]: 0

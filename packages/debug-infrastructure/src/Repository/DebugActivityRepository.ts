@@ -1,4 +1,4 @@
-import { Activity } from "@health-record/core/model"
+import type { Activity } from "@health-record/core/model"
 import { UserId, DateNumber, Record } from "@health-record/core/value-object"
 import { IActivityRepository } from "@health-record/core/repository"
 
@@ -17,13 +17,13 @@ export class DebugActivityRepository implements IActivityRepository {
 
   save(userId: UserId, dateNumber: DateNumber): Promise<Activity> {
     return new Promise(resolve => {
-      const data = new Activity(dateNumber.value)
+      const data = { id: dateNumber.value } as Activity
       this.memory.set(dateNumber.value, data)
       resolve(data)
     })
   }
 
-  update(params: {}, userId: UserId, dateNumber: DateNumber): Promise<Activity> {
+  update(params: Partial<Activity>, userId: UserId, dateNumber: DateNumber): Promise<Activity> {
     return new Promise(resolve => {
       const data = this.memory.get(dateNumber.value) ?? {} as Activity
       const clone = {
@@ -35,12 +35,15 @@ export class DebugActivityRepository implements IActivityRepository {
     })
   }
 
-  addRecord(params: {}, record: Record, userId: UserId, dateNumber: DateNumber): Promise<Activity> {
+  addRecord(params: Partial<Activity>, newRecord: Record, userId: UserId, dateNumber: DateNumber): Promise<Activity> {
     return new Promise(resolve => {
       const data = this.memory.get(dateNumber.value) ?? {} as Activity
+      const records = data.records ?? []
+      records.push(newRecord)
       const clone = {
         ...data,
-        ...params // 更新された値
+        ...params, // 更新された値
+        records
       } as Activity
       this.memory.set(dateNumber.value, clone)
       resolve(clone)

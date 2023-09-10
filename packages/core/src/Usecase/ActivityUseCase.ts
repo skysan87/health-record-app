@@ -1,4 +1,5 @@
-import { ActivityService } from "../Domain/Logic/ActivityService";
+import { ActivitylistBehavior } from "../Domain/Behavior/ActivitylistBehavior";
+import { ActivityBehavior } from "../Domain/Behavior/ActivityBehavior";
 import { Activity } from "../Domain/Model/Activity";
 import { Activitylist } from "../Domain/Model/Activitylist";
 import { User } from "../Domain/Model/User";
@@ -30,33 +31,36 @@ export class ActivityUseCase {
     if (!activity) {
       activity = await this.activityRepo.save(user.id, dateNumber)
     }
-    return [list, activity]
+    return [
+      new ActivitylistBehavior(list).format(),
+      new ActivityBehavior(activity).format()
+    ]
   }
 
   public async updateMenu(menu: Menu[]): Promise<Activitylist> {
     const user: User = await this.userRepo.get()
     const list = await this.activitylistRepo.get(user.id)
     if (!list) {
-      throw new Error('health does not exist.')
+      throw new Error('activity does not exist.')
     }
-    list.menu = menu
-    await this.activitylistRepo.update({ menu: list.menu }, user.id)
-    return list
+    return new ActivitylistBehavior(list).actionAsync(async behavir => {
+      const updateData: Activitylist = await this.activitylistRepo.update({ menu }, user.id)
+      behavir.update(updateData)
+    })
   }
 
   public async addRecord(record: Record): Promise<Activity> {
-    const result = await this.transaction.run(async scope => { // TODO: scope
+    return await this.transaction.run<Activity>(async scope => { // TODO: scope
       const user: User = await this.userRepo.get()
       const dateNumber: DateNumber = new DateNumber(dateFactory().getDateNumber().toString())
       const activity = await this.activityRepo.get(user.id, dateNumber)
       if (!activity) {
         throw new Error('activity does not exist.')
       }
-      new ActivityService(activity).addRecord(record)
-      await this.activityRepo.addRecord({ total: activity.total, records: activity.records }, record, user.id, dateNumber)
-
-      return activity
+      return new ActivityBehavior(activity).actionAsync(async behavior => {
+        behavior.addRecord(record)
+        await this.activityRepo.addRecord({ total: behavior.get('total') }, record, user.id, dateNumber)
+      })
     })
-    return result as Activity
   }
 }
