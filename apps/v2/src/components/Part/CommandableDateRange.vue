@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { DatePicker } from 'v-calendar'
 
-type Range = { start?: Date, end?: Date }
+type Range = { start?: Date | null, end?: Date | null }
 
 interface Props {
   value: Range
@@ -11,7 +11,7 @@ interface Props {
 
 const props = withDefaults(defineProps<Props>(), {
   value: () => ({ start: null, end: null } as Range),
-  update: () => {},
+  update: () => { },
   buttonClass: 'btn btn-regular'
 })
 

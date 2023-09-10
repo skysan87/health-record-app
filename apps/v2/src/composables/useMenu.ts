@@ -19,22 +19,14 @@ export const useMenu = () => {
       return input.value
         .filter((a: Menu) => a.label !== null && a.label !== '')
         .map((a: Menu) => {
-          return {
-            label: a.label.trim(),
-            value: fixFloat(a.value, 1),
-            unit: a.unit ? a.unit?.trim() : ''
-          } as Menu
+          return new Menu(a.label!.trim(), fixFloat(a.value!, 1), a.unit ? a.unit?.trim() : '')
         })
     },
     deleteRow: (index: number) => {
       input.value.splice(index, 1)
     },
     addRow: () => {
-      input.value.push({
-        label: null,
-        value: null,
-        unit: null
-      } as Menu)
+      input.value.push(new Menu(null, null, null))
     }
   }
 }
