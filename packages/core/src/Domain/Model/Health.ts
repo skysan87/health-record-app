@@ -1,14 +1,13 @@
-import { HealthType } from "../ValueObject"
+import { HealthType, Nominal } from "../ValueObject"
 
-export class Health {
-  constructor(
-    public id: string, // randam
-    public year: number,
-    public month: number,
-    public date: number,
-    public type?: HealthType,
-    public value?: number,
-    public createdAt?: Date,
-    public updatedAt?: Date
-  ) { }
-}
+export type Health = Nominal<{
+  /** random */
+  id: string
+  year: number
+  month: number
+  date: number
+  type: HealthType
+  value: number
+  createdAt: Date
+  updatedAt: Date
+}, 'Health'>

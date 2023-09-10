@@ -1,3 +1,4 @@
+// @ts-ignore
 import { useToast } from 'tailvue'
 
 interface toast {

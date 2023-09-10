@@ -18,14 +18,14 @@ export const useDialog = () => {
       }
       return new Promise<any>(async (resolve, reject) => {
         try {
-          dialog.value.showModal()
+          dialog.value!.showModal()
           await onOpen()
         } catch (error) {
           reject(error)
         }
-        dialog.value.addEventListener('close', async () => {
+        dialog.value!.addEventListener('close', async () => {
           try {
-            const isCancel = dialog.value.returnValue === CLOSE_REASON_CANCEL
+            const isCancel = dialog.value!.returnValue === CLOSE_REASON_CANCEL
             const returnValue = await onClose(isCancel)
             resolve(returnValue)
           } catch (error) {

@@ -4,10 +4,10 @@ import { dateFactory } from "@health-record/core/util/DateUtil"
 import { Menu, Record } from "@health-record/core/value-object"
 
 type Input = {
-  selectedActivity: Menu
-  valueKcal: number
-  valueUnit: number
-  otherMenuLabel: string
+  selectedActivity: Menu | null
+  valueKcal: number | null
+  valueUnit: number | null
+  otherMenuLabel: string | null
 }
 
 export type ActivityStore = ReturnType<typeof useActivityStore>
@@ -15,8 +15,8 @@ export type ActivityStore = ReturnType<typeof useActivityStore>
 export const useActivityStore = () => {
   const { $activity, $toast } = useNuxtApp()
 
-  const activity = ref<Activity>(null)
-  const activitylist = ref<Activitylist>(null)
+  const activity = ref<Activity>()
+  const activitylist = ref<Activitylist>()
   const total = ref(0)
   const records = ref<Record[]>([])
 
@@ -77,7 +77,7 @@ export const useActivityStore = () => {
         ? input.otherMenuLabel
         : input.selectedActivity.label
 
-      const record = new Record(new Date(), label, input.valueKcal)
+      const record = new Record(new Date(), label!, input.valueKcal!)
       if (!record.validate()) {
         return
       }
@@ -102,7 +102,7 @@ export const useActivityStore = () => {
       if (!input.selectedActivity) {
         return
       }
-      const data = input.valueUnit * input.selectedActivity.value
+      const data = input.valueUnit! * input.selectedActivity.value!
       input.valueKcal = parseFloat(data.toFixed(2))
     }
   }

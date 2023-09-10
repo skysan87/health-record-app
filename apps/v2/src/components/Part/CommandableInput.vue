@@ -2,7 +2,7 @@
 
 interface Props {
   inputType: string
-  value: string | number | Date
+  value: string | number | Date | null
   update: Function
   buttonClass?: string
   inputmode?: 'none' | 'text' | 'tel' | 'url' | 'email' | 'numeric' | 'decimal' | 'search'

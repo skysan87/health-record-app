@@ -7,7 +7,7 @@ import type { SeriesObject, SeriesPrimitiveValue } from 'chartist'
 
 type Point = {
   x: Date
-  y: number
+  y: number | null
 }
 
 const DEFAULT_PER_PAGE = 30
@@ -42,8 +42,8 @@ export const useChart = () => {
     })
 
     // グラフの末端に表示範囲の前後のデータを表示する
-    let startWeight: number = null
-    let endWeight: number = null
+    let startWeight: number | null = null
+    let endWeight: number | null = null
     if (targets.length >= 2) {
       const firstIndex = records.value.findIndex(v => v.x === targets[0].x)
       if (firstIndex > 0) {
@@ -74,7 +74,14 @@ export const useChart = () => {
    * @returns
    */
   const calcGoalWeightSeries = (visibleStart: Date, visibleEnd: Date) => {
-    const result = {
+    type result = {
+      startWeight: number | null
+      endWeight: number | null,
+      startDate: Date | null,
+      endDate: Date | null
+    }
+
+    const result: result = {
       startWeight: null,
       endWeight: null,
       startDate: null,
@@ -109,7 +116,7 @@ export const useChart = () => {
     const wpd = (startWeight - endWeight) / startDateObj.diff(endDateObj, 'day')
 
     // 減量予想を表す一次関数式
-    const f = x => wpd * x + startWeight
+    const f = (x: number) => wpd * x + startWeight
 
     // 正の値: 始点がグラフの表示範囲内
     const startDiff = dateFactory(visibleStart).diff(startDateObj, 'day')
@@ -122,7 +129,7 @@ export const useChart = () => {
     result.endWeight = endDiff > 0 ? f(endDiff) : endWeight
 
     // グラフの表示範囲かチェックする
-    const withinRange = x => x.getTime() > visibleStart.getTime() && x.getTime() < visibleEnd.getTime()
+    const withinRange = (x: Date) => x.getTime() > visibleStart.getTime() && x.getTime() < visibleEnd.getTime()
     result.startDate = withinRange(startDate) ? startDate : visibleStart
     result.endDate = withinRange(endDate) ? endDate : visibleEnd
 
