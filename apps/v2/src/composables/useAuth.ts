@@ -35,7 +35,7 @@ export const useAuth = () => {
       }
     },
     userName: computed<string>(() => {
-      return userInfo.value?.displayName?.value ?? ''
+      return userInfo.value?.displayName ?? ''
     })
   }
 }

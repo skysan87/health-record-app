@@ -42,43 +42,17 @@ export class Menu implements ValueValidator {
   }
 }
 
-export class UserId implements ValueValidator {
+// TODO: implement assert-function
+export type UserId = Nominal<string, 'UserId'>
 
-  constructor(public readonly value: string) { }
+// TODO: implement assert-function
+export type Mail = Nominal<string, 'Mail'>
 
-  validate(): boolean {
-    return true
-  }
-}
+// TODO: implement assert-function
+export type DisplayName = Nominal<string, 'DisplayName'>
 
-export class Mail implements ValueValidator {
-
-  constructor(public readonly value: string) { }
-
-  validate(): boolean {
-    return true
-  }
-}
-
-export class DisplayName implements ValueValidator {
-
-  constructor(public readonly value: string) { }
-
-  validate(): boolean {
-    return true
-  }
-}
-
-export class DateNumber implements ValueValidator {
-
-  private static readonly pattern: RegExp = new RegExp('[0-9]{8}')
-
-  constructor(public readonly value: string) { }
-
-  validate(): boolean {
-    return DateNumber.pattern.test(this.value)
-  }
-}
+// TODO: implement assert-function: new RegExp('[0-9]{8}')
+export type DateNumber = Nominal<string, 'DateNumber'>
 
 export const HealthType = {
   WEIGHT: 'weight',

@@ -20,7 +20,7 @@ export class ActivityUseCase {
 
   public async init(): Promise<[Activitylist, Activity]> {
     const user: User = await this.userRepo.get()
-    const dateNumber: DateNumber = new DateNumber(dateFactory().getDateNumber().toString())
+    const dateNumber: DateNumber = dateFactory().getDateNumber().toString() as DateNumber
 
     let list = await this.activitylistRepo.get(user.id)
     if (!list) {
@@ -52,7 +52,7 @@ export class ActivityUseCase {
   public async addRecord(record: Record): Promise<Activity> {
     return await this.transaction.run<Activity>(async scope => { // TODO: scope
       const user: User = await this.userRepo.get()
-      const dateNumber: DateNumber = new DateNumber(dateFactory().getDateNumber().toString())
+      const dateNumber: DateNumber = dateFactory().getDateNumber().toString() as DateNumber
       const activity = await this.activityRepo.get(user.id, dateNumber)
       if (!activity) {
         throw new Error('activity does not exist.')
