@@ -1,9 +1,7 @@
-import { DisplayName, UserId, Mail } from "../ValueObject"
+import { DisplayName, UserId, Mail, Nominal } from "../ValueObject"
 
-export class User {
-  constructor(
-    public id: UserId,
-    public email: Mail,
-    public displayName: DisplayName
-  ) { }
-}
+export type User = Nominal<{
+  id: UserId
+  email: Mail
+  displayName: DisplayName
+}, 'User'>

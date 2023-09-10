@@ -1,10 +1,8 @@
-import { Menu } from "../ValueObject"
+import { Menu, Nominal, UserId } from "../ValueObject"
 
-export class Activitylist {
-  constructor(
-    public id: string, // userId
-    public menu: Menu[] = [],
-    public createdAt?: Date,
-    public updatedAt?: Date
-  ) { }
-}
+export type Activitylist = Nominal<{
+  id: UserId
+  menu: Menu[]
+  createdAt: Date
+  updatedAt: Date
+}, 'Activitylist'>

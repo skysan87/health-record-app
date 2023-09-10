@@ -1,7 +1,7 @@
 {
   "compilerOptions": {
     "target": "esnext",
-    "module": "CommonJS", // ts-nodeの実行
+    "module": "nodenext", // ts-nodeの実行
     "composite": false,
     "moduleResolution": "nodenext",
     "paths": {

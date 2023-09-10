@@ -18,7 +18,7 @@ type menu = typeof menu[keyof typeof menu]
 const selectedMenu = ref<menu>(menu.Activity)
 
 const notAchievedGoal = computed(() => {
-  const goal = healthlist.value?.goal[HealthGoalType.ACTIVITY] ?? 0
+  const goal = healthlist.value?.goal?.[HealthGoalType.ACTIVITY] ?? 0
   return totalCalorie.value < goal
 })
 
@@ -46,7 +46,7 @@ onBeforeMount(async () => await init())
       </span>
       <span class="ml-2">●運動 <span :class="{'text-red-500': notAchievedGoal}">{{ totalCalorie.toFixed(2) }}kcal</span></span>
       <span class="ml-2">●体重 {{ latestData?.weight }}kg</span>
-      <span class="ml-2">●BMI <span :class="{'text-red-500': healthlist?.isOutOfLineBMI}">{{ healthlist?.BMI.toFixed(2) }}</span></span>
+      <span class="ml-2">●BMI <span :class="{'text-red-500': healthlist?.isOutOfLineBMI}">{{ healthlist?.BMI?.toFixed(2) ?? 0 }}</span></span>
     </div>
 
     <!-- ラジオボタンで表示切り替え -->

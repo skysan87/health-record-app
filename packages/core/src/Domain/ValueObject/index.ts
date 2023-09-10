@@ -1,5 +1,11 @@
 import { isEmpty } from "../../Util/StringUtil"
 
+/**
+ * 同一プロパティを持つ型定義の区別のために利用
+ * @param U type名
+ */
+export type Nominal<T, U extends string> = T & { __brand: U }
+
 interface ValueValidator {
   validate(): boolean
 }
@@ -26,53 +32,27 @@ export class Record implements ValueValidator {
 export class Menu implements ValueValidator {
 
   constructor(
-    public readonly label: string,
-    public readonly value: number,
-    public readonly unit: string = ''
+    public readonly label: string | null,
+    public readonly value: number | null,
+    public readonly unit: string | null
   ) { }
 
   validate(): boolean {
-      return true
-  }
-}
-
-export class UserId implements ValueValidator {
-
-  constructor(public readonly value: string) { }
-
-  validate(): boolean {
     return true
   }
 }
 
-export class Mail implements ValueValidator {
+// TODO: implement assert-function
+export type UserId = Nominal<string, 'UserId'>
 
-  constructor(public readonly value: string) { }
+// TODO: implement assert-function
+export type Mail = Nominal<string, 'Mail'>
 
-  validate(): boolean {
-    return true
-  }
-}
+// TODO: implement assert-function
+export type DisplayName = Nominal<string, 'DisplayName'>
 
-export class DisplayName implements ValueValidator {
-
-  constructor(public readonly value: string) { }
-
-  validate(): boolean {
-    return true
-  }
-}
-
-export class DateNumber implements ValueValidator {
-
-  private static readonly pattern: RegExp = new RegExp('[0-9]{8}')
-
-  constructor(public readonly value: string) { }
-
-  validate(): boolean {
-    return  DateNumber.pattern.test(this.value)
-  }
-}
+// TODO: implement assert-function: new RegExp('[0-9]{8}')
+export type DateNumber = Nominal<string, 'DateNumber'>
 
 export const HealthType = {
   WEIGHT: 'weight',

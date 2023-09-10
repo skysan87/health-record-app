@@ -1,3 +1,4 @@
+// @ts-ignore
 import { setupCalendar } from 'v-calendar'
 import 'v-calendar/style.css'
 

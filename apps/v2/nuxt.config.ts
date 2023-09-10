@@ -33,6 +33,7 @@ export default defineNuxtConfig({
   },
 
   plugins: [
+    // @ts-ignore
     { src: coreEnv[process.env.NODE_ENV], mode: 'client' }
   ],
 
@@ -61,6 +62,6 @@ export default defineNuxtConfig({
     '@fortawesome/fontawesome-svg-core/styles.css'
   ],
   typescript: {
-    strict: false
+    strict: true
   }
 })
