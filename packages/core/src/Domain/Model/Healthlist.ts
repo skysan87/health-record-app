@@ -1,7 +1,7 @@
-import { Nominal, HealthType, HealthGoalType, GoalWeightRange } from "../ValueObject"
+import { Nominal, HealthType, HealthGoalType, GoalWeightRange, UserId } from "../ValueObject"
 
 export type Healthlist = Nominal<{
-  id: string
+  id: UserId
   BMI: number
   isOutOfLineBMI: boolean
   latest: {
