@@ -7,13 +7,13 @@ export type HealthStore = ReturnType<typeof useHealthStore>
 export const useHealthStore = () => {
   const { $health } = useNuxtApp()
   const usecase: HealthUseCase = $health()
-  const healthlist = ref<Healthlist>(null)
+  const healthlist = ref<Healthlist>()
 
   return {
     healthlist: readonly(healthlist),
     latestData: computed(() => healthlist.value?.latest),
-    goal: computed(() => healthlist.value?.goal),
-    range: computed(() => healthlist.value?.goalWeightRange),
+    goal: computed(() => healthlist.value!.goal),
+    range: computed(() => healthlist.value!.goalWeightRange),
     initHealth: async () => { //TODO: useAsyncData
       healthlist.value = await usecase.init()
     },
