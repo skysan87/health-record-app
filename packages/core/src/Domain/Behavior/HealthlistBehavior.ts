@@ -32,6 +32,7 @@ export class HealthlistBehavior implements IBehavior<Healthlist> {
   }
 
   public format(): Healthlist {
+    this.calcBMI(this._healthlist)
     const input = this._healthlist
     return {
       id: input.id ?? '',
