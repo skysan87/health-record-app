@@ -13,15 +13,15 @@ export class DebugActivitylistRepository implements IActivitylistRepository {
     })
   }
 
-  save(userId: UserId): Promise<Activitylist> {
+  save(userId: UserId, data: Partial<Activitylist>): Promise<void> {
     return new Promise(resolve => {
       const data = { id: userId } as Activitylist
       this.memory.set(userId, data)
-      resolve(data)
+      resolve()
     })
   }
 
-  update(params: {}, userId: UserId): Promise<Activitylist> {
+  update(params: {}, userId: UserId): Promise<void> {
     return new Promise(resolve => {
       const data = this.memory.get(userId) ?? {} as Activitylist
       const clone = {
@@ -29,7 +29,7 @@ export class DebugActivitylistRepository implements IActivitylistRepository {
         ...params // 更新された値
       } as Activitylist
       this.memory.set(userId, clone)
-      resolve(clone)
+      resolve()
     })
   }
 }

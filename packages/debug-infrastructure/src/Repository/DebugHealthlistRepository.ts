@@ -13,23 +13,15 @@ export class DebugHealthlistRepository implements IHealthlistRepository {
     })
   }
 
-  save(userId: UserId): Promise<Healthlist> {
+  save(userId: UserId, data: Partial<Healthlist>): Promise<void> {
     return new Promise(resolve => {
-      const data = { id: userId } as Healthlist
-      data.latest = {
-        [HealthType.HEIGHT]: 0,
-        [HealthType.WEIGHT]: 0
-      }
-      data.goal = {
-        [HealthGoalType.ACTIVITY]: 0,
-        [HealthGoalType.WEIGHT]: 0
-      }
-      this.memory.set(userId, data)
-      resolve(data)
+      const newData = { ...data, id: userId } as Healthlist
+      this.memory.set(userId, newData)
+      resolve()
     })
   }
 
-  update(params: {}, userId: UserId): Promise<Healthlist> {
+  update(params: Partial<Healthlist>, userId: UserId): Promise<void> {
     return new Promise(resolve => {
       const data = this.memory.get(userId) ?? {} as Healthlist
       const clone = {
@@ -37,7 +29,7 @@ export class DebugHealthlistRepository implements IHealthlistRepository {
         ...params // 更新された値
       } as Healthlist
       this.memory.set(userId, clone)
-      resolve(clone)
+      resolve()
     })
   }
 
