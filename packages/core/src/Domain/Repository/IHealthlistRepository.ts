@@ -4,6 +4,6 @@ import { IRepositoryBase } from "./IRepositoryBase";
 
 export interface IHealthlistRepository extends IRepositoryBase {
   get(userId: UserId): Promise<Healthlist | null>
-  save(userId: UserId): Promise<Healthlist>
-  update(params: {}, userId: UserId): Promise<Healthlist>
+  save(userId: UserId, data: Partial<Healthlist>): Promise<void>
+  update(params: Partial<Healthlist>, userId: UserId): Promise<void>
 }

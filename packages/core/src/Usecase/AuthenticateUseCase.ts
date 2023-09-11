@@ -18,6 +18,11 @@ export class AuthenticateUseCase {
     await this.repo.logout()
   }
 
+  /**
+   * 認証済み状態かチェックする
+   * @description
+   *  アプリケーション実行時に一度だけ実行する。(app.vueなどで初期化)
+   */
   public async checkLogin(): Promise<boolean> {
     return await this.repo.authenticated()
   }
