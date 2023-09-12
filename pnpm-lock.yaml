@@ -30,6 +30,9 @@ importers:
       '@health-record/debug-infrastructure':
         specifier: workspace:*
         version: link:../../packages/debug-infrastructure
+      '@health-record/firebase-infrastructure':
+        specifier: workspace:*
+        version: link:../../packages/firebase-infrastructure
       '@popperjs/core':
         specifier: ^2.11.8
         version: 2.11.8
