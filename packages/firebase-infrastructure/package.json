@@ -5,6 +5,7 @@
   "private": true,
   "exports": {
     "./repository/*": "./src/Repository/*.ts",
+    "./Emulator.ts": "./src/Emulator.ts",
     "./package.json": "./package.json"
   },
   "scripts": {
