@@ -1,6 +1,6 @@
+import { setPersistence, browserLocalPersistence, signInWithPopup, GoogleAuthProvider, signOut, onAuthStateChanged, UserCredential, User } from "firebase/auth"
 import { User as UserModel } from "@health-record/core/model"
 import { IUserRepository } from "@health-record/core/repository"
-import { setPersistence, browserLocalPersistence, signInWithPopup, GoogleAuthProvider, signOut, onAuthStateChanged, UserCredential, User } from "firebase/auth"
 import { Mail } from "@health-record/core/value-object"
 import { auth } from "../AppSetting"
 

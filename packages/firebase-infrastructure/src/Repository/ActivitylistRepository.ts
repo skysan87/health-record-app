@@ -1,10 +1,10 @@
+import { DocumentData, DocumentSnapshot, collection, doc, getDoc, serverTimestamp, setDoc, updateDoc } from "firebase/firestore"
 import { Activitylist } from "@health-record/core/model"
 import { IActivitylistRepository } from "@health-record/core/repository"
 import { UserId } from "@health-record/core/value-object"
-import { scope } from "./Transaction"
-import { DocumentData, DocumentSnapshot, collection, doc, getDoc, serverTimestamp, setDoc, updateDoc } from "firebase/firestore"
 import { ActivitylistEntity } from "../Entity/ActivitylistEntity"
 import { firestore } from "../AppSetting"
+import { scope } from "./Transaction"
 
 export class ActivitylistRepository implements IActivitylistRepository {
 

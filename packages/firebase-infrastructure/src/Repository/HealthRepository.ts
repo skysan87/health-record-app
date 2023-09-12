@@ -1,10 +1,10 @@
+import { CollectionReference, DocumentData, collection, doc, getDocs, limit, orderBy, query, serverTimestamp, setDoc } from "firebase/firestore";
 import { Health } from "@health-record/core/model";
 import { IHealthRepository } from "@health-record/core/repository";
 import { UserId } from "@health-record/core/value-object";
-import { CollectionReference, DocumentData, collection, doc, getDocs, limit, orderBy, query, serverTimestamp, setDoc } from "firebase/firestore";
-import { scope } from "./Transaction";
 import { HealthEntity } from "../Entity/HealthEntity";
 import { firestore } from "../AppSetting"
+import { scope } from "./Transaction";
 
 export class HealthRepository implements IHealthRepository {
 
