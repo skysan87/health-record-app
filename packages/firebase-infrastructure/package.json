@@ -11,7 +11,8 @@
     "clean": "rm -rf build tsconfig.tsbuildinfo",
     "build": "tsc --incremental",
     "type-chcek": "tsc -noEmit",
-    "test": "ts-node test/test.ts"
+    "test": "ts-node test/test.ts",
+    "dev-emulator-start": "firebase emulators:start --import=emulator_data --export-on-exit=emulator_data"
   },
   "keywords": [],
   "author": "",
