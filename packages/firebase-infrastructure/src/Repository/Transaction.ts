@@ -1,4 +1,4 @@
-import { firestore } from "@/AppSetting"
+import { firestore } from "../AppSetting"
 import { ITransaction, ITransactionScope } from "@health-record/core/repository"
 import { Transaction } from 'firebase/firestore'
 import { runTransaction } from 'firebase/firestore'
