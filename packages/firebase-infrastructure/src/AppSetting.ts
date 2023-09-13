@@ -1,14 +1,8 @@
+// @ts-ignore
+import config from './config/app.config.js'
 import { getApps, getApp, initializeApp } from 'firebase/app'
 import { getAuth } from 'firebase/auth'
 import { getFirestore, enableIndexedDbPersistence } from 'firebase/firestore'
-
-const config = {
-  apiKey: process.env.FIREBASE_API_KEY,
-  authDomain: process.env.FIREBASE_AUTH_DOMAIN,
-  projectId: process.env.FIREBASE_PROJECT_ID,
-  databaseURL: process.env.FIREBASE_DATABASE_URL,
-  appId: process.env.FIREBASE_APP_ID
-}
 
 const firebaseApp = !getApps().length ? initializeApp(config) : getApp()
 

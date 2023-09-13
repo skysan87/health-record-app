@@ -46,6 +46,14 @@ Authentication Emulator, Firestore Emulator
 ? Would you like to download the emulators now? Yes
 ```
 
+### エミュレータの起動
+
+* コマンド: https://firebase.google.com/docs/emulator-suite/install_and_configure?hl=ja
+
+```bash
+$ pnpm firebase emulators:start --import=emulator_data --export-on-exit=emulator_data
+```
+
 ## データ構造(firestore)
 
 * health
