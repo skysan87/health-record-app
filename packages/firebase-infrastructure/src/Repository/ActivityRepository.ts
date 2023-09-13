@@ -2,18 +2,18 @@ import { CollectionReference, DocumentData, DocumentSnapshot, arrayUnion, collec
 import { Activity } from "@health-record/core/model"
 import { IActivityRepository } from "@health-record/core/repository"
 import { UserId, DateNumber, Record } from "@health-record/core/value-object"
-import { ActivityEntity } from "@/Entity/ActivityEntity"
+import { ActivityEntity } from "../Entity/ActivityEntity"
 import { firestore } from "../AppSetting"
 import { scope } from "./Transaction"
 
 export class ActivityRepository implements IActivityRepository {
 
-  private getRef(userId: UserId, dateNumber: DateNumber): CollectionReference {
-    return collection(firestore, 'activity', userId, 'records', dateNumber)
+  private getRef(userId: UserId): CollectionReference {
+    return collection(firestore, 'activity', userId, 'records')
   }
 
   public async get(userId: UserId, dateNumber: DateNumber): Promise<Activity | null> {
-    const docRef = doc(this.getRef(userId, dateNumber))
+    const docRef = doc(this.getRef(userId), dateNumber)
     let activityDoc: DocumentSnapshot
 
     if (scope.hasTransaction) {
@@ -30,7 +30,7 @@ export class ActivityRepository implements IActivityRepository {
   }
 
   public async save(userId: UserId, dateNumber: DateNumber, data: Partial<Activity>): Promise<void> {
-    const docRef = doc(this.getRef(userId, dateNumber))
+    const docRef = doc(this.getRef(userId), dateNumber)
 
     const newData: ActivityEntity = {
       total: data.total,
@@ -48,7 +48,7 @@ export class ActivityRepository implements IActivityRepository {
   }
 
   public async update(params: Partial<Activity>, userId: UserId, dateNumber: DateNumber): Promise<void> {
-    const docRef = doc(this.getRef(userId, dateNumber))
+    const docRef = doc(this.getRef(userId), dateNumber)
 
     const newData: ActivityEntity = {
       total: params.total ?? undefined,
@@ -67,7 +67,7 @@ export class ActivityRepository implements IActivityRepository {
   }
 
   public async addRecord(params: Partial<Activity>, record: Record, userId: UserId, dateNumber: DateNumber): Promise<void> {
-    const docRef = doc(this.getRef(userId, dateNumber))
+    const docRef = doc(this.getRef(userId), dateNumber)
 
     const updateData: ActivityEntity = {
       total: params.total,

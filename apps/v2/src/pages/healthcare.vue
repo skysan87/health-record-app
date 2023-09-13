@@ -33,7 +33,7 @@ const init = async () => {
   await Promise.all([initActivity(), initHealth()])
 }
 
-onBeforeMount(async () => await init())
+onMounted(async () => await init())
 </script>
 
 <template>
