@@ -1,7 +1,7 @@
 import { setPersistence, browserLocalPersistence, signInWithPopup, GoogleAuthProvider, signOut, onAuthStateChanged, UserCredential, User } from "firebase/auth"
 import { User as UserModel } from "@health-record/core/model"
 import { IUserRepository } from "@health-record/core/repository"
-import { Mail } from "@health-record/core/value-object"
+import { DisplayName, Mail, UserId } from "@health-record/core/value-object"
 import { auth } from "../AppSetting"
 
 export class UserRepository implements IUserRepository {
@@ -41,16 +41,15 @@ export class UserRepository implements IUserRepository {
     await signOut(auth)
   }
 
-  private getAuthChanged(): Promise<UserModel> {
+  private getAuthChanged(): Promise<UserModel | null> {
     return new Promise((resolve, reject) => {
       const unsubscribe = onAuthStateChanged(auth,
         user => {
           unsubscribe()
-          if (!user) {
-            reject(new Error('non-user!'))
-          } else {
-            resolve(this.convert(user!))
+          if (user?.uid !== undefined && user?.uid !== null && user?.uid !== '') {
+            this._user = this.convert(user!)
           }
+          resolve(this._user)
         },
         err => reject(err)
       )
@@ -59,9 +58,9 @@ export class UserRepository implements IUserRepository {
 
   private convert(user: User): UserModel {
     return {
-      id: user.uid,
+      id: user.uid as UserId,
       email: user.email as Mail,
-      displayName: user.displayName
+      displayName: user.displayName as DisplayName
     } as UserModel
   }
 }
