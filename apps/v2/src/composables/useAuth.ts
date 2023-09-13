@@ -5,13 +5,11 @@ import { AuthenticateUseCase } from "@health-record/core/usecase"
 export const useAuth = () => {
   const { $auth } = useNuxtApp()
   const usecase: AuthenticateUseCase = $auth()
-  const userInfo = ref<User>()
 
   return {
     login: async (onSuccess = (credential: User) => { }, onError = (error: NuxtError) => { }) => {
       try {
         const user = await usecase.login()
-        userInfo.value = user
         onSuccess(user)
       } catch (error) {
         onError(createError(error as NuxtError))
@@ -28,14 +26,14 @@ export const useAuth = () => {
     logout: async (onSuccess = () => { }, onError = (error: NuxtError) => { }) => {
       try {
         await usecase.logout()
-        userInfo.value = {} as User
         onSuccess()
       } catch (error) {
         onError(createError(error as NuxtError))
       }
     },
-    userName: computed<string>(() => {
-      return userInfo.value?.displayName ?? ''
-    })
+    getUserName: async () => {
+      const user = await usecase.getUser()
+      return user.displayName ?? ''
+    }
   }
 }
