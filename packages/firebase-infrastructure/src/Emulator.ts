@@ -5,5 +5,5 @@ import { connectFirestoreEmulator } from 'firebase/firestore'
 
 export function startEmulator() {
   connectFirestoreEmulator(firestore, 'localhost', 8080)
-  connectAuthEmulator(auth, 'localhost:9099')
+  connectAuthEmulator(auth, 'http://localhost:9099')
 }
