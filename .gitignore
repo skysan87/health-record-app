@@ -103,7 +103,8 @@ sw.*
 .vscode/
 .firebase/
 .firebaserc
-config/
+**/config/*
+!**/config/.gitkeep
 .env
 
 emulator_data/
