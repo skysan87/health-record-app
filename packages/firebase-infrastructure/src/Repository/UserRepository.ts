@@ -21,9 +21,6 @@ export class UserRepository implements IUserRepository {
   }
 
   public get(): Promise<UserModel> {
-    if (!this._user) {
-      return Promise.reject('auth error')
-    }
     return Promise.resolve(this._user as UserModel)
   }
 
@@ -40,6 +37,7 @@ export class UserRepository implements IUserRepository {
 
   public async logout(): Promise<void> {
     // TODO: clear cache
+    this._user = null
     await signOut(auth)
   }
 
@@ -48,7 +46,11 @@ export class UserRepository implements IUserRepository {
       const unsubscribe = onAuthStateChanged(auth,
         user => {
           unsubscribe()
-          resolve(this.convert(user!))
+          if (!user) {
+            reject(new Error('non-user!'))
+          } else {
+            resolve(this.convert(user!))
+          }
         },
         err => reject(err)
       )

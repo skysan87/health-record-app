@@ -88,6 +88,10 @@ export const useChart = () => {
       endDate: null
     }
 
+    if (!_healthlist) {
+      return result
+    }
+
     const { startDate, endDate, startWeight, endWeight } = _healthlist.goalWeightRange
 
     // 未設定ならば、目標体重を設定

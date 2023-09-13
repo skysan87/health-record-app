@@ -46,7 +46,12 @@ export class HealthlistBehavior implements IBehavior<Healthlist> {
         [HealthGoalType.ACTIVITY]: input.goal?.[HealthGoalType.ACTIVITY] ?? 0,
         [HealthGoalType.WEIGHT]: input.goal?.[HealthGoalType.WEIGHT] ?? 0,
       },
-      goalWeightRange: input.goalWeightRange ?? new GoalWeightRange(0, 0, null, null),
+      goalWeightRange: input.goalWeightRange ?? {
+        startWeight: 0,
+        endWeight: 0,
+        startDate: null,
+        endDate: null
+      } ,
       createdAt: input.createdAt ?? null,
       updatedAt: input.updatedAt ?? null
     } as Healthlist
@@ -58,12 +63,12 @@ export class HealthlistBehavior implements IBehavior<Healthlist> {
   }
 
   public setGoalWeightRange(startDate: Date, endDate: Date) {
-    this._healthlist.goalWeightRange = new GoalWeightRange(
-      this._healthlist.latest?.[HealthType.WEIGHT] ?? 0,
-      this._healthlist.goal?.[HealthGoalType.WEIGHT] ?? 0,
+    this._healthlist.goalWeightRange = {
+      startWeight: this._healthlist.latest?.[HealthType.WEIGHT] ?? 0,
+      endWeight: this._healthlist.goal?.[HealthGoalType.WEIGHT] ?? 0,
       startDate,
       endDate
-    )
+    }
   }
 
   private calcBMI(input: Healthlist): void {
