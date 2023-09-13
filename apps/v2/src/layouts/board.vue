@@ -2,12 +2,14 @@
 import { dateFactory } from '@health-record/core/util/DateUtil';
 import { useAuth } from '~/composables/useAuth'
 
-const { logout, userName } = useAuth()
+const { logout, getUserName } = useAuth()
 const config = useRuntimeConfig()
 
 const appVersion = config.public.appVersion
 
 const currentDate: string = dateFactory().format('YYYY.M.D(ddd)')
+
+const userName = await getUserName()
 
 const handleLogout = async () => {
   await logout(() => {

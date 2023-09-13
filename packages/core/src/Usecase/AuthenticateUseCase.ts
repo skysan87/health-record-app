@@ -18,6 +18,10 @@ export class AuthenticateUseCase {
     await this.repo.logout()
   }
 
+  public async getUser(): Promise<User> {
+    return await this.repo.get()
+  }
+
   /**
    * 認証済み状態かチェックする
    * @description
