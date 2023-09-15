@@ -86,6 +86,15 @@ export class ActivityRepository implements IActivityRepository {
   private convert(dateNumber: DateNumber, data: DocumentData): Activity {
     const activity = { ...data, id: dateNumber } as Activity
     // timestampをDateに変換
+    if (data.records?.length > 0) {
+      activity.records = data.records.map((record: any) => {
+        return {
+          name: record.name,
+          timestamp: record.timestamp?.toDate(),
+          value: record.value
+        } as Record
+      })
+    }
     activity.createdAt = data.createdAt?.toDate() ?? null
     activity.updatedAt = data.updatedAt?.toDate() ?? null
     return activity
