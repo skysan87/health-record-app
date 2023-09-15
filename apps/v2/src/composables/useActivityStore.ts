@@ -56,9 +56,13 @@ export const useActivityStore = () => {
     clearInput,
     initActivity: async () => { // TODO: useAsyncData
       const [firstActivitylist, firstActivity] = await usecase.init()
-      activity.value = firstActivity
+
       activitylist.value = firstActivitylist
       _menulist.value = firstActivitylist.menu
+
+      activity.value = firstActivity
+      total.value = firstActivity.total ?? 0
+      records.value = [...firstActivity.records ?? []]
     },
     updateMenu: async (menulist: Menu[]) => {
       try {
