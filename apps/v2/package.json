@@ -5,6 +5,7 @@
   "scripts": {
     "build": "nuxt build",
     "dev:emulator": "cross-env APP_MODE=dev-emulator nuxt dev",
+    "dev:inmemory": "cross-env APP_MODE=dev-inmemory nuxt dev",
     "generate": "nuxt generate",
     "preview": "nuxt preview",
     "type-check": "tsc -noEmit"

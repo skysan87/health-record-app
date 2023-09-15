@@ -7,6 +7,7 @@ console.log('ENV: ', process.env.APP_MODE)
  * process.env.APP_MODEを参照
  */
 const coreEnv = {
+  'dev-inmemory': '@/plugins/core/debug-infrastructure',
   'dev-emulator': '@/plugins/core/firebase-local-infrastructure',
   'production': '@/plugins/core/debug-infrastructure'
 }
