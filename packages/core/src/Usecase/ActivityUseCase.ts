@@ -61,7 +61,7 @@ export class ActivityUseCase {
       if (!activity) {
         throw new Error('activity does not exist.')
       }
-      let result = await new ActivityBehavior(activity).actionAsync(async behavior => {
+      result = await new ActivityBehavior(activity).actionAsync(async behavior => {
         behavior.addRecord(record)
         await this.activityRepo.addRecord({ total: behavior.get('total') }, record, user.id, dateNumber)
       })

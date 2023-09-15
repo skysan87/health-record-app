@@ -6,40 +6,26 @@ import { isEmpty } from "../../Util/StringUtil"
  */
 export type Nominal<T, U extends string> = T & { __brand: U }
 
-interface ValueValidator {
-  validate(): boolean
+export type Record = {
+  timestamp: Date
+  name: string
+  value: number
 }
 
-export class Record implements ValueValidator {
-
-  constructor(
-    public readonly timestamp: Date,
-    public readonly name: string,
-    public readonly value: number
-  ) { }
-
-  validate(): boolean {
-    if (isEmpty(this.name)) {
-      return false
-    }
-    if (!this.value || this.value < 0) {
-      return false
-    }
-    return true
-  }
+export function validRecord(data: Record): boolean {
+  if (isEmpty(data.name)) return false
+  if (!data.value || data.value <= 0) return false
+  return true
 }
 
-export class Menu implements ValueValidator {
+export type Menu = {
+  label: string | null
+  value: number | null
+  unit: string | null
+}
 
-  constructor(
-    public readonly label: string | null,
-    public readonly value: number | null,
-    public readonly unit: string | null
-  ) { }
-
-  validate(): boolean {
-    return true
-  }
+export function validMenu(data: Menu): boolean {
+  return !isEmpty(data.label ?? '')
 }
 
 // TODO: implement assert-function
