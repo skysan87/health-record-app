@@ -23,9 +23,7 @@ class FirestoreTransactoinScope implements ITransactionScope {
 export const scope = new FirestoreTransactoinScope()
 
 export class Firestoreransaction implements ITransaction {
-  async run<Object>(callback: () => Promise<void>): Promise<Object> {
-    // TODO:
-    let returnObject: Object = {} as Object
+  async run(callback: () => Promise<void>): Promise<void> {
     await runTransaction(firestore, async transaction => {
       try {
         scope.setTransaction(transaction)
@@ -37,7 +35,5 @@ export class Firestoreransaction implements ITransaction {
         scope.releaseTransaction()
       }
     })
-    return returnObject
   }
-  // TODO: batch版が必要かも
 }

@@ -46,11 +46,11 @@ export class HealthlistBehavior implements IBehavior<Healthlist> {
         [HealthGoalType.ACTIVITY]: input.goal?.[HealthGoalType.ACTIVITY] ?? 0,
         [HealthGoalType.WEIGHT]: input.goal?.[HealthGoalType.WEIGHT] ?? 0,
       },
-      goalWeightRange: input.goalWeightRange ?? {
-        startWeight: 0,
-        endWeight: 0,
-        startDate: null,
-        endDate: null
+      goalWeightRange: {
+        startWeight: input.goalWeightRange?.startWeight ?? 0,
+        endWeight: input.goalWeightRange?.endWeight ?? 0,
+        startDate: input.goalWeightRange?.startDate ?? null,
+        endDate: input.goalWeightRange?.endDate ?? null
       } ,
       createdAt: input.createdAt ?? null,
       updatedAt: input.updatedAt ?? null

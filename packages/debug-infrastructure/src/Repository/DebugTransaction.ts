@@ -5,7 +5,7 @@ class DebugTransactionScope implements ITransactionScope {
 }
 
 export class DebugTransaction implements ITransaction {
-  async run<Object>(callback: (scope: ITransactionScope) => Promise<Object>): Promise<Object> {
-    return await callback(new DebugTransactionScope())
+  async run(callback: (scope: ITransactionScope) => Promise<void>): Promise<void> {
+    await callback(new DebugTransactionScope())
   }
 }
