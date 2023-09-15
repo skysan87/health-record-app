@@ -52,17 +52,21 @@ export class ActivityUseCase {
   }
 
   public async addRecord(record: Record): Promise<Activity> {
-    return await this.transaction.run<Activity>(async () => {
+    let result: Activity
+
+    await this.transaction.run(async () => {
       const user: User = await this.userRepo.get()
       const dateNumber: DateNumber = dateFactory().getDateNumber().toString() as DateNumber
       const activity = await this.activityRepo.get(user.id, dateNumber)
       if (!activity) {
         throw new Error('activity does not exist.')
       }
-      return await new ActivityBehavior(activity).actionAsync(async behavior => {
+      let result = await new ActivityBehavior(activity).actionAsync(async behavior => {
         behavior.addRecord(record)
         await this.activityRepo.addRecord({ total: behavior.get('total') }, record, user.id, dateNumber)
       })
     })
+
+    return result!
   }
 }
