@@ -16,7 +16,7 @@ const range: Array<{ label: string, value: number }> = [
 
 watch(selectedRange, viewReset)
 
-onMounted(async () => await init(healthlist.value))
+onMounted(async () => await init(healthlist.value!))
 
 definePageMeta({
   layout: computed<LayoutKey>(() => {
