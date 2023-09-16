@@ -13,6 +13,7 @@ pnpm install @fortawesome/free-solid-svg-icons @fortawesome/free-brands-svg-icon
 pnpm install -D @nuxt/types -F @health-record/web
 pnpm install v-calendar@next @popperjs/core -F @health-record/web
 pnpm install -D @kevinmarrec/nuxt-pwa -F @health-record/web
+pnpm install -D firebase-tools -F @health-record/web
 
 # at this directory
 pnpm tailwindcss init tailwind.config.js
@@ -62,6 +63,64 @@ pnpm run preview
 ```
 
 Check out the [deployment documentation](https://nuxt.com/docs/getting-started/deployment) for more information.
+
+## Setting for Firebase Hosting
+
+<details>
+
+```bash
+skysan@skysan-mbp-2017 v2 % pnpm firebase init
+
+     ######## #### ########  ######## ########     ###     ######  ########
+     ##        ##  ##     ## ##       ##     ##  ##   ##  ##       ##
+     ######    ##  ########  ######   ########  #########  ######  ######
+     ##        ##  ##    ##  ##       ##     ## ##     ##       ## ##
+     ##       #### ##     ## ######## ########  ##     ##  ######  ########
+
+You're about to initialize a Firebase project in this directory:
+
+  /Users/skysan/Documents/github/health-record-app/apps/v2
+
+? Which Firebase features do you want to set up for this directory? Press Space to select features, then Enter to confirm your choices. Hosting: Configure files for Firebase Hosting and (optionally) set
+ up GitHub Action deploys
+
+=== Project Setup
+
+First, let's associate this project directory with a Firebase project.
+You can create multiple project aliases by running firebase use --add,
+but for now we'll just set up a default project.
+
+? Please select an option: Use an existing project
+? Select a default Firebase project for this directory: ******
+i  Using project ******
+
+=== Hosting Setup
+
+Your public directory is the folder (relative to your project directory) that
+will contain Hosting assets to be uploaded with firebase deploy. If you
+have a build process for your assets, use your build's output directory.
+
+? What do you want to use as your public directory? public
+? Configure as a single-page app (rewrite all urls to /index.html)? Yes
+? Set up automatic builds and deploys with GitHub? No
+✔  Wrote public/index.html
+
+i  Writing configuration info to firebase.json...
+i  Writing project information to .firebaserc...
+
+```
+
+</details>
+
+
+### Deploy as preview
+
+```bash
+# nuxt generate for SPA
+pnpm run release-build
+
+pnpm firebase hosting:channel:deploy <preview_name>
+```
 
 ## NOTE
 

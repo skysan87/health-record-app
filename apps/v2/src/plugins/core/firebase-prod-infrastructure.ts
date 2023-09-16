@@ -5,7 +5,6 @@ import { ActivitylistRepository } from '@health-record/firebase-infrastructure/r
 import { HealthRepository } from '@health-record/firebase-infrastructure/repository/HealthRepository'
 import { HealthlistRepository } from '@health-record/firebase-infrastructure/repository/HealthlistRepository'
 import { Firestoreransaction } from '@health-record/firebase-infrastructure/repository/Transaction'
-import { startEmulator } from '@health-record/firebase-infrastructure/Emulator'
 
 // @ts-ignore #appのaliasが有効にならない(tsconfig.json)
 declare module '#app' {
@@ -18,7 +17,7 @@ declare module '#app' {
 
 export default defineNuxtPlugin(() => {
 
-  console.log('install firebase-local-infrastructure')
+  console.log('install firebase-prod-infrastructure')
 
   const userRepo = new UserRepository()
   const transaction = new Firestoreransaction()
@@ -35,8 +34,6 @@ export default defineNuxtPlugin(() => {
     , transaction
   )
   const auth = new AuthenticateUseCase(userRepo)
-
-  startEmulator()
 
   return {
     provide: {
