@@ -25,7 +25,8 @@ export class HealthUseCase {
 
     let list: Healthlist | null = await this.healthlistRepo.get(user.id)
     if (!list) {
-      list = await this.healthlistRepo.save(user.id)
+      list = new HealthlistBehavior({ id: user.id } as Healthlist).format()
+      await this.healthlistRepo.save(user.id, list)
     }
     return new HealthlistBehavior(list).format()
   }
@@ -34,17 +35,20 @@ export class HealthUseCase {
     // 通信時間を考慮
     const date = dateFactory()
 
-    return await this.transaction.run<Healthlist>(async scope => { // TODO: scope
+    let result: Healthlist
+
+    await this.transaction.run(async () => {
       const user: User = await this.userRepo.get()
       const list = await this.healthlistRepo.get(user.id)
       if (!list) {
         throw new Error('health does not exist.')
       }
-      return new HealthlistBehavior(list).actionAsync(async behavior => {
+
+      result = await new HealthlistBehavior(list).actionAsync(async behavior => {
         const latest = behavior.get('latest') ?? {}
         latest[type] = value
-        const updateData = await this.healthlistRepo.update({ latest }, user.id)
-        behavior.update(updateData)
+        await this.healthlistRepo.update({ latest }, user.id)
+        behavior.update({ latest } as Healthlist)
 
         const healthBehavior = new HealthBehavior({
           year: date.get('year'),
@@ -56,6 +60,8 @@ export class HealthUseCase {
         await this.healthRepo.save(healthBehavior.format(), user.id)
       })
     })
+
+    return result!
   }
 
   public async updateGoal(type: HealthGoalType, value: number): Promise<Healthlist> {
@@ -65,31 +71,34 @@ export class HealthUseCase {
       throw new Error('health does not exist.')
     }
 
-    return new HealthlistBehavior(list).actionAsync(async behavior => {
+    return await new HealthlistBehavior(list).actionAsync(async behavior => {
       const goal = behavior.get('goal') ?? {}
       goal[type] = value
-      const updateData = await this.healthlistRepo.update({ goal }, user.id)
-      behavior.update(updateData)
+      await this.healthlistRepo.update({ goal }, user.id)
+      behavior.update({ goal } as Healthlist)
     })
   }
 
   public async updateGoalWeightRange(startDate: Date, endDate: Date): Promise<Healthlist> {
-    return await this.transaction.run<Healthlist>(async scope => { // TODO: scope
+    let result: Healthlist
+
+    await this.transaction.run(async () => {
       const user: User = await this.userRepo.get()
       const list = await this.healthlistRepo.get(user.id)
       if (!list) {
         throw new Error('health does not exist.')
       }
 
-      return new HealthlistBehavior(list).actionAsync(async behavior => {
+      result = await new HealthlistBehavior(list).actionAsync(async behavior => {
         if (!behavior.validateGoalWeightRange()) {
           throw new Error('goal.weight and latest.weight must be set.')
         }
         behavior.setGoalWeightRange(startDate, endDate)
-        const updateData = await this.healthlistRepo.update({ goalWeightRange: behavior.get("goalWeightRange") }, user.id)
-        behavior.update(updateData)
+        await this.healthlistRepo.update({ goalWeightRange: behavior.get("goalWeightRange") }, user.id)
       })
     })
+
+    return result!
   }
 
   public async getRecords(): Promise<Health[]> {

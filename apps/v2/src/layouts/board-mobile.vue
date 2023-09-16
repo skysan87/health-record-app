@@ -5,13 +5,15 @@ import { useMobileLayout } from '@/composables/useMobileLayout'
 
 const { isMenuExpanded, switchMenu, close } = useMobileLayout()
 
-const { logout, userName } = useAuth()
+const { logout, getUserName } = useAuth()
 
 const config = useRuntimeConfig()
 
 const appVersion = config.public.appVersion
 
 const currentDate: string = dateFactory().format('YYYY.M.D(ddd)')
+
+const userName = await getUserName()
 
 const handleLogout = async () => {
   await logout(() => {

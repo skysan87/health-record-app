@@ -13,7 +13,7 @@ dayjs.locale('ja')
  * @param {Date} endDate 終了日
  * @param {Function} callback コールバック(trueで中断)
  */
-export function forDayEach (startDate: Date, endDate: Date, callback: (date: Date) => boolean) {
+export function forDayEach(startDate: Date, endDate: Date, callback: (date: Date) => boolean) {
   _forDayEach(dayjs(startDate), dayjs(endDate), callback)
 }
 
@@ -23,8 +23,21 @@ export function forDayEach (startDate: Date, endDate: Date, callback: (date: Dat
  * @param {Date} endDate 終了日
  * @param {Function} callback コールバック(trueで中断)
  */
-export function forDayReverseEach (startDate: Date, endDate: Date, callback: (date: Date) => boolean) {
+export function forDayReverseEach(startDate: Date, endDate: Date, callback: (date: Date) => boolean) {
   _forDayReverseEach(dayjs(startDate), dayjs(endDate), callback)
+}
+
+/**
+ * 日時の差分を算出
+ * @param start
+ * @param end
+ * @param unit 単位(day, week, month, quarter, year, hour, minute, second, millisecond)
+ * @returns 過去の日付->負の数. 未来の日付->正の数
+ */
+export function dateDiff(start: Date, end: Date, unit: dayjs.UnitType): number {
+  const startObj = dayjs(start)
+  const endObj = dayjs(end)
+  return endObj.diff(startObj, unit)
 }
 
 function _forDayEach(startDate: dayjs.Dayjs, endDate: dayjs.Dayjs, callback: (date: Date) => boolean) {
@@ -36,7 +49,7 @@ function _forDayEach(startDate: dayjs.Dayjs, endDate: dayjs.Dayjs, callback: (da
   }
 }
 
-function _forDayReverseEach (startDate: dayjs.Dayjs, endDate: dayjs.Dayjs, callback: (date: Date) => boolean) {
+function _forDayReverseEach(startDate: dayjs.Dayjs, endDate: dayjs.Dayjs, callback: (date: Date) => boolean) {
   for (let date = endDate; startDate <= date; date = date.subtract(1, 'day')) {
     const cancel = callback(date.toDate())
     if (cancel) {
@@ -148,25 +161,5 @@ class Wrapper {
    */
   getWeekIndex(): number {
     return Math.ceil(this.instance.get('date') / 7)
-  }
-
-  /**
-   * 日付の差分を算出
-   * @param wrapper 比較対象
-   * @param unit 単位(day, week, month, quarter, year, hour, minute, second, millisecond)
-   * @returns `比較対象`がこのインスタンスより過去の日付の場合、戻り値は正の数
-   */
-  diff(wrapper: Wrapper, unit: string): number {
-    return this.instance.diff(wrapper.instance, unit as dayjs.UnitType)
-  }
-
-  forDayEach(end: Wrapper | Date, callback: (date: Date) => boolean): void {
-    const endDate = end instanceof Wrapper ? end.instance : dayjs(end)
-    _forDayEach(this.instance, endDate, callback)
-  }
-
-  forDayReverseEach(end: Wrapper, callback: (date: Date) => boolean): void {
-    const endDate = end instanceof Wrapper ? end.instance : dayjs(end)
-    _forDayReverseEach(this.instance, endDate, callback)
   }
 }

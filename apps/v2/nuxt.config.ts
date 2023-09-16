@@ -1,9 +1,14 @@
 import packageInfo from './package.json'
 
-console.log('ENV: ', process.env.NODE_ENV)
+// NOTE: Nuxt3では、NODE_ENVは、productionとdevelopmentの2種類しか取れない
+console.log('ENV: ', process.env.APP_MODE)
 
+/**
+ * process.env.APP_MODEを参照
+ */
 const coreEnv = {
-  'development': '@/plugins/core/debug-infrastructure',
+  'dev-inmemory': '@/plugins/core/debug-infrastructure',
+  'dev-emulator': '@/plugins/core/firebase-local-infrastructure',
   'production': '@/plugins/core/debug-infrastructure'
 }
 
@@ -34,7 +39,7 @@ export default defineNuxtConfig({
 
   plugins: [
     // @ts-ignore
-    { src: coreEnv[process.env.NODE_ENV], mode: 'client' }
+    { src: coreEnv[process.env.APP_MODE], mode: 'client' }
   ],
 
   postcss: {

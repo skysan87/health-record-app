@@ -24,12 +24,14 @@ export class ActivityUseCase {
 
     let list = await this.activitylistRepo.get(user.id)
     if (!list) {
-      list = await this.activitylistRepo.save(user.id)
+      list = new ActivitylistBehavior({ id: user.id } as Activitylist).format()
+      await this.activitylistRepo.save(user.id, list)
     }
 
     let activity = await this.activityRepo.get(user.id, dateNumber)
     if (!activity) {
-      activity = await this.activityRepo.save(user.id, dateNumber)
+      activity = new ActivityBehavior({ id: dateNumber } as Activity).format()
+      await this.activityRepo.save(user.id, dateNumber, activity)
     }
     return [
       new ActivitylistBehavior(list).format(),
@@ -43,24 +45,28 @@ export class ActivityUseCase {
     if (!list) {
       throw new Error('activity does not exist.')
     }
-    return new ActivitylistBehavior(list).actionAsync(async behavir => {
-      const updateData: Activitylist = await this.activitylistRepo.update({ menu }, user.id)
-      behavir.update(updateData)
+    return await new ActivitylistBehavior(list).actionAsync(async behavir => {
+      await this.activitylistRepo.update({ menu }, user.id)
+      behavir.update({ menu } as Activitylist)
     })
   }
 
   public async addRecord(record: Record): Promise<Activity> {
-    return await this.transaction.run<Activity>(async scope => { // TODO: scope
+    let result: Activity
+
+    await this.transaction.run(async () => {
       const user: User = await this.userRepo.get()
       const dateNumber: DateNumber = dateFactory().getDateNumber().toString() as DateNumber
       const activity = await this.activityRepo.get(user.id, dateNumber)
       if (!activity) {
         throw new Error('activity does not exist.')
       }
-      return new ActivityBehavior(activity).actionAsync(async behavior => {
+      result = await new ActivityBehavior(activity).actionAsync(async behavior => {
         behavior.addRecord(record)
         await this.activityRepo.addRecord({ total: behavior.get('total') }, record, user.id, dateNumber)
       })
     })
+
+    return result!
   }
 }
