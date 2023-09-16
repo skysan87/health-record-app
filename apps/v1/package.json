@@ -1,0 +1,51 @@
+{
+  "name": "health-record-app",
+  "version": "1.3.0",
+  "private": true,
+  "scripts": {
+    "dev": "NUXT_HOST=0.0.0.0 NUXT_PORT=3000 nuxt dev",
+    "dev_local": "nuxt dev",
+    "start": "nuxt start",
+    "release-build": "nuxt build && nuxt generate",
+    "lint:js": "eslint --ext .js,.ts,.vue --ignore-path .gitignore .",
+    "lint": "npm run lint:js",
+    "lintfix": "npm run lint:js -- --fix"
+  },
+  "dependencies": {
+    "@fortawesome/fontawesome-svg-core": "^6.3.0",
+    "@fortawesome/free-brands-svg-icons": "^6.3.0",
+    "@fortawesome/free-regular-svg-icons": "^6.3.0",
+    "@fortawesome/free-solid-svg-icons": "^6.3.0",
+    "@fortawesome/vue-fontawesome": "^2.0.10",
+    "@nuxtjs/device": "^2.1.0",
+    "@nuxtjs/dotenv": "^1.4.1",
+    "@nuxtjs/pwa": "^3.3.5",
+    "@nuxtjs/toast": "^3.3.1",
+    "chartist": "^1.3.0",
+    "core-js": "^3.25.3",
+    "dayjs": "^1.11.7",
+    "firebase": "^9.17.1",
+    "nuxt": "^2.15.8",
+    "v-calendar": "^2.4.1",
+    "vue": "^2.7.10",
+    "vue-server-renderer": "^2.7.10",
+    "vue-template-compiler": "^2.7.10"
+  },
+  "devDependencies": {
+    "@babel/eslint-parser": "^7.19.1",
+    "@nuxt/types": "^2.15.8",
+    "@nuxt/typescript-build": "^2.1.0",
+    "@nuxtjs/eslint-config-typescript": "^11.0.0",
+    "@nuxtjs/eslint-module": "^3.1.0",
+    "@nuxtjs/tailwindcss": "^4.2.1",
+    "eslint": "^8.24.0",
+    "eslint-plugin-nuxt": "^4.0.0",
+    "eslint-plugin-vue": "^9.5.1",
+    "firebase-tools": "^11.24.0",
+    "postcss": "^8.4.17",
+    "regenerator-runtime": "^0.13.10",
+    "sass": "^1.49.9",
+    "sass-loader": "^10.3.1",
+    "webpack": "^4.46.0"
+  }
+}
