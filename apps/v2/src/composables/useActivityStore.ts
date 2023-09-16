@@ -1,7 +1,7 @@
 import type { Activity, Activitylist } from "@health-record/core/model"
 import type { ActivityUseCase } from "@health-record/core/usecase"
 import { dateFactory } from "@health-record/core/util/DateUtil"
-import { Menu, Record } from "@health-record/core/value-object"
+import { Menu, Record, validRecord } from "@health-record/core/value-object"
 
 type Input = {
   selectedActivity: Menu | null
@@ -56,9 +56,13 @@ export const useActivityStore = () => {
     clearInput,
     initActivity: async () => { // TODO: useAsyncData
       const [firstActivitylist, firstActivity] = await usecase.init()
-      activity.value = firstActivity
+
       activitylist.value = firstActivitylist
       _menulist.value = firstActivitylist.menu
+
+      activity.value = firstActivity
+      total.value = firstActivity.total ?? 0
+      records.value = [...firstActivity.records ?? []]
     },
     updateMenu: async (menulist: Menu[]) => {
       try {
@@ -77,8 +81,13 @@ export const useActivityStore = () => {
         ? input.otherMenuLabel
         : input.selectedActivity.label
 
-      const record = new Record(new Date(), label!, input.valueKcal!)
-      if (!record.validate()) {
+      const record = {
+        timestamp: new Date(),
+        name: label!,
+        value: input.valueKcal!
+      } as Record
+
+      if (!validRecord(record)) {
         return
       }
       try {
