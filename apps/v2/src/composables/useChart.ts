@@ -2,7 +2,7 @@ import type { Health, Healthlist } from "@health-record/core/model"
 import type { HealthUseCase } from "@health-record/core/usecase"
 import { HealthType } from "@health-record/core/value-object"
 import TimelineChart from '~/components/Chart/TimelineChart.vue'
-import { dateFactory } from '@health-record/core/util/DateUtil'
+import { dateDiff, dateFactory } from '@health-record/core/util/DateUtil'
 import type { SeriesObject, SeriesPrimitiveValue } from 'chartist'
 
 type Point = {
@@ -112,30 +112,27 @@ export const useChart = () => {
       return result
     }
 
-    // 期間が設定されている場合、目標値の値を計算して表示する
-    const startDateObj = dateFactory(startDate)
-    const endDateObj = dateFactory(endDate)
-
     // 係数
-    const wpd = (startWeight - endWeight) / startDateObj.diff(endDateObj, 'day')
+    const wpd = (startWeight - endWeight) / dateDiff(startDate, endDate, 'day')
 
     // 減量予想を表す一次関数式
     const f = (x: number) => wpd * x + startWeight
 
-    // 正の値: 始点がグラフの表示範囲内
-    const startDiff = dateFactory(visibleStart).diff(startDateObj, 'day')
-    // 表示する最初の体重
-    result.startWeight = startDiff > 0 ? f(startDiff) : startWeight
+    if (visibleStart.getTime() > startDate.getTime()) {
+      result.startDate = visibleStart
+      result.startWeight = f(dateDiff(visibleStart, startDate, 'day'))
+    } else {
+      result.startDate = startDate
+      result.startWeight = startWeight
+    }
 
-    // 正の値: 終点がグラフの表示範囲内
-    const endDiff = dateFactory(visibleEnd).diff(startDateObj, 'day')
-    // 表示する最後の体重
-    result.endWeight = endDiff > 0 ? f(endDiff) : endWeight
-
-    // グラフの表示範囲かチェックする
-    const withinRange = (x: Date) => x.getTime() > visibleStart.getTime() && x.getTime() < visibleEnd.getTime()
-    result.startDate = withinRange(startDate) ? startDate : visibleStart
-    result.endDate = withinRange(endDate) ? endDate : visibleEnd
+    if (visibleEnd.getTime() < endDate.getTime()) {
+      result.endDate = visibleEnd
+      result.endWeight = f(dateDiff(visibleEnd, startDate, 'day'))
+    } else {
+      result.endDate = endDate
+      result.endWeight = endWeight
+    }
 
     return result
   }
