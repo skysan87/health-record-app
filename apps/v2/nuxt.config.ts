@@ -11,7 +11,7 @@ console.log('ENV: ', process.env.APP_MODE)
 const coreEnv = {
   'dev-inmemory': '@/plugins/core/debug-infrastructure',
   'dev-emulator': '@/plugins/core/firebase-local-infrastructure',
-  'production': '@/plugins/core/debug-infrastructure'
+  'production': '@/plugins/core/firebase-prod-infrastructure'
 }
 
 // https://nuxt.com/docs/api/configuration/nuxt-config
@@ -79,6 +79,8 @@ export default defineNuxtConfig({
       nativeUI: true
     },
     manifest: {
+      name: 'health-record-app',
+      short_name: 'health-record',
       lang: 'ja',
       theme_color: 'indigo'
     },
