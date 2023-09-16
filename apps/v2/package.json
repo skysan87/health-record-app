@@ -3,14 +3,14 @@
   "version": "2.0.0",
   "private": true,
   "scripts": {
-    "build": "nuxt build",
+    "release-build": "cross-env APP_MODE=production nuxt build && cross-env APP_MODE=production nuxt generate",
     "dev:emulator": "cross-env APP_MODE=dev-emulator nuxt dev",
     "dev:inmemory": "cross-env APP_MODE=dev-inmemory nuxt dev",
-    "generate": "nuxt generate",
     "preview": "nuxt preview",
     "type-check": "tsc -noEmit"
   },
   "devDependencies": {
+    "@kevinmarrec/nuxt-pwa": "^0.17.0",
     "@nuxt/types": "^2.17.0",
     "@nuxtjs/device": "^3.1.0",
     "@types/node": "^18",
