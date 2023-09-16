@@ -1,6 +1,8 @@
 import packageInfo from './package.json'
 
-// NOTE: Nuxt3では、NODE_ENVは、productionとdevelopmentの2種類しか取れない
+// NOTE:
+//  Nuxt3では、NODE_ENVは、productionとdevelopmentの2種類しか取れない
+//  APP_MODEを定義し環境を分類する
 console.log('ENV: ', process.env.APP_MODE)
 
 /**
@@ -17,7 +19,7 @@ export default defineNuxtConfig({
   srcDir: 'src',
   ssr: false,
   // NOTE: .envで上書き可能
-  runtimeConfig:{
+  runtimeConfig: {
     public: {
       appVersion: packageInfo.version,
       rootPath: 'healthcare'
@@ -32,7 +34,7 @@ export default defineNuxtConfig({
         { hid: 'robots', name: 'robots', content: 'noindex' }
       ],
       link: [
-      { rel: 'icon', type: 'image/svg+xml', href: '/favicon.svg' }
+        { rel: 'icon', type: 'image/svg+xml', href: '/favicon.svg' }
       ]
     }
   },
@@ -48,7 +50,8 @@ export default defineNuxtConfig({
     }
   },
   modules: [
-    '@nuxtjs/device'
+    '@nuxtjs/device',
+    '@kevinmarrec/nuxt-pwa'
   ],
   dir: {
     layouts: "layouts",
@@ -68,5 +71,20 @@ export default defineNuxtConfig({
   ],
   typescript: {
     strict: true
+  },
+  pwa: {
+    meta: {
+      // iOSでスプラッシュ画面表示
+      mobileAppIOS: true,
+      nativeUI: true
+    },
+    manifest: {
+      lang: 'ja',
+      theme_color: 'indigo'
+    },
+    workbox: {
+      // local実行時にinstallを有効にする
+      enabled: true
+    }
   }
 })
