@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { useChart } from '@/composables/useChart'
-import { LayoutKey } from '~~/.nuxt/types/layouts'
+import type { LayoutKey } from '~~/.nuxt/types/layouts'
 import { HealthStore } from '@/composables/useHealthStore'
 
 const { chart, selectedRange, init, viewReset, viewPreview, viewNext } = useChart()
