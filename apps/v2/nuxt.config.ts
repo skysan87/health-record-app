@@ -22,7 +22,7 @@ export default defineNuxtConfig({
   runtimeConfig: {
     public: {
       appVersion: packageInfo.version,
-      rootPath: 'healthcare'
+      rootPath: '/'
     }
   },
   app: {
@@ -85,8 +85,9 @@ export default defineNuxtConfig({
       theme_color: 'indigo'
     },
     workbox: {
-      // local実行時にinstallを有効にする
-      enabled: true
+      // local実行時にinstallを有効にする場合: true
+      // キャッシュが残るので注意
+      enabled: false
     }
   }
 })
