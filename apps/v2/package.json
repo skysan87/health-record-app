@@ -1,6 +1,6 @@
 {
   "name": "@health-record/web",
-  "version": "2.0.0",
+  "version": "2.0.1",
   "private": true,
   "scripts": {
     "release-build": "cross-env APP_MODE=production nuxt build && cross-env APP_MODE=production nuxt generate",
