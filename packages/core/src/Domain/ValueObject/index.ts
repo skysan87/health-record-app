@@ -1,4 +1,5 @@
 import { isEmpty } from "../../Util/StringUtil"
+import { isNumericPattern } from "../../Util/NumberUtil"
 
 /**
  * 同一プロパティを持つ型定義の区別のために利用
@@ -14,7 +15,7 @@ export type Record = {
 
 export function validRecord(data: Record): boolean {
   if (isEmpty(data.name)) return false
-  if (!data.value || data.value <= 0) return false
+  if (!isNumericPattern(String(data.value))) return false
   return true
 }
 
