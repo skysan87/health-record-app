@@ -66,7 +66,7 @@ onMounted(async () => await init())
           <span class="p-2 w-1/4">体重(kg)</span>
           <PartCommandableInput
             key="latest-waight"
-            input-type="number"
+            input-type="text"
             :value="latestData?.weight"
             :update="recordWeight"
             inputmode="decimal" />
@@ -75,7 +75,7 @@ onMounted(async () => await init())
           <span class="p-2 w-1/4">身長(cm)</span>
           <PartCommandableInput
             key="latest-height"
-            input-type="number"
+            input-type="text"
             :value="latestData?.height"
             :update="recordHeight"
             inputmode="decimal"
@@ -89,7 +89,7 @@ onMounted(async () => await init())
           <span class="p-2 w-1/4">運動量(kcal)</span>
           <PartCommandableInput
             key="goal-activity"
-            input-type="number"
+            input-type="text"
             :value="goal?.activity"
             :update="setGoalActivity"
             inputmode="decimal"
@@ -99,7 +99,7 @@ onMounted(async () => await init())
           <span class="p-2 w-1/4">体重(kg)</span>
           <PartCommandableInput
             key="goal-weight"
-            input-type="number"
+            input-type="text"
             :value="goal?.weight"
             :update="setGoalWeight"
             inputmode="decimal"

@@ -52,7 +52,7 @@ const open = async () => {
             {{ input.selectedActivity?.value }}kcal / {{ input.selectedActivity?.unit }}
           </span>
         </div>
-        <input v-model="input.valueUnit" type="number" inputmode="decimal" class="input-text" placeholder="実装した回数を追加"
+        <input v-model="input.valueUnit" type="text" inputmode="decimal" class="input-text" placeholder="実装した回数を追加" maxlength="7"
           @input="calcKcal">
       </div>
       <div>

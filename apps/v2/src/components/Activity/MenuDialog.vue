@@ -32,7 +32,7 @@ defineExpose({
         <div v-for="(menu, index) in list" :key="index" class="pb-2 flex items-center">
           <div class="flex-1 flex flex-wrap">
             <input v-model.trim="menu.label" type="text" class="flex-1 mr-1 activity-input" placeholder="メニュー名">
-            <input v-model="menu.value" type="number" inputmode="decimal" class="flex-1 mr-1 activity-input"
+            <input v-model="menu.value" type="text" inputmode="decimal" class="flex-1 mr-1 activity-input"
               placeholder="消費カロリー">
             <input v-model.trim="menu.unit" type="text" class="flex-1 mr-1 activity-input" placeholder="実施単位">
           </div>
