@@ -29,8 +29,12 @@
     "@health-record/debug-infrastructure": "workspace:*",
     "@health-record/firebase-infrastructure": "workspace:*",
     "@popperjs/core": "^2.11.8",
+    "cal-heatmap": "^4.2.4",
     "chartist": "^1.3.0",
     "tailvue": "^1.0.0",
     "v-calendar": "^3.0.3"
+  },
+  "volta": {
+    "node": "18.19.0"
   }
 }
