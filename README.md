@@ -4,15 +4,19 @@
 
 ```bash
 # nodeバージョン指定(バージョン管理ツールは任意)
-$ nodebrew ls-remote
-$ nodebrew install v18.18.0
-$ nodebrew list
-$ nodebrew use v18.18.0
+$ volta install node@18.19.0
+$ volta list node
+# プロジェクトで利用するバージョンを指定(package.jsonに設定)
+$ volta pin node@18.19.0
 $ node -v
 
 # pnpm
-$ npm install -g pnpm
+$ volta install pnpm
 $ pnpm -v
+
+# volta
+# golobalとプロジェクトの指定バージョンが異なる場合
+volta run --node v18.19.0 pnpm install cal-heatmap -F @health-record/web
 ```
 
 ## コマンド
