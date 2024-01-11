@@ -56,6 +56,9 @@ importers:
       '@nuxtjs/device':
         specifier: ^3.1.0
         version: 3.1.0
+      '@types/cal-heatmap':
+        specifier: ^3.5.39
+        version: 3.5.39
       '@types/node':
         specifier: ^18
         version: 18.0.0
@@ -1866,6 +1869,12 @@ packages:
       '@types/node': 18.0.0
     dev: true
 
+  /@types/cal-heatmap@3.5.39:
+    resolution: {integrity: sha512-I6/1sQEstCQ3+ocP04Ugp7eIFID3mqxoCvqu4fv08iJpgSJKg/KT5I/bO3wJFBN7QdikMozXNeAd8baOS7cAvQ==}
+    dependencies:
+      '@types/d3': 3.5.53
+    dev: true
+
   /@types/clean-css@4.2.6:
     resolution: {integrity: sha512-Ze1tf+LnGPmG6hBFMi0B4TEB0mhF7EiMM5oyjLDNPE9hxrPU0W+5+bHvO+eFPA+bt0iC1zkQMoU/iGdRVjcRbw==}
     dependencies:
@@ -1883,6 +1892,10 @@ packages:
     resolution: {integrity: sha512-cdeYyv4KWoEgpBISTxWvqYsVy444DOqehiF3fM3ne10AmJ62RSyNkUnxMJXHQWRQQX2eR94m5y1IZyDwBjV9FQ==}
     dependencies:
       '@types/node': 18.0.0
+    dev: true
+
+  /@types/d3@3.5.53:
+    resolution: {integrity: sha512-8yKQA9cAS6+wGsJpBysmnhlaaxlN42Qizqkw+h2nILSlS+MAG2z4JdO6p+PJrJ+ACvimkmLJL281h157e52psQ==}
     dev: true
 
   /@types/duplexify@3.6.1:
