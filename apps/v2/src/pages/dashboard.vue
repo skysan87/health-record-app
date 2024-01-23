@@ -2,9 +2,13 @@
 import { useChart } from '@/composables/useChart'
 import type { LayoutKey } from '~~/.nuxt/types/layouts'
 import { HealthStore } from '@/composables/useHealthStore'
+import { ActivityStore } from '@/composables/useActivityStore'
+import Heatmap from '@/components/Chart/Heatmap.vue'
 
 const { chart, selectedRange, init, viewReset, viewPreview, viewNext } = useChart()
 const { healthlist } = inject('health') as HealthStore
+const { getHistory } = inject('activity') as ActivityStore
+const heatmap = ref<InstanceType<typeof Heatmap>>()
 
 const range: Array<{ label: string, value: number }> = [
   { label: '2週', value: 14 },
@@ -16,7 +20,16 @@ const range: Array<{ label: string, value: number }> = [
 
 watch(selectedRange, viewReset)
 
-onMounted(async () => await init(healthlist.value!))
+onMounted(async () => {
+  const getActivity = async () => {
+    heatmap.value.init(await getHistory())
+  }
+
+  await Promise.all([
+    init(healthlist.value!),
+    getActivity()
+  ])
+})
 
 definePageMeta({
   layout: computed<LayoutKey>(() => {
@@ -28,7 +41,8 @@ definePageMeta({
 
 <template>
   <div>
-    <header class="border-b flex">
+    <div class="px-4">体重推移</div>
+    <header class="flex">
       <div class="cursor-pointer py-2 pl-4 inline-block text-gray-600" @click="viewPreview">
         <fa :icon="['fas', 'arrow-left']" size="lg" ontouchend="" />
       </div>
@@ -47,5 +61,10 @@ definePageMeta({
       </div>
     </header>
     <ChartTimelineChart ref="chart" />
+
+    <div class="p-4 border-t">
+      <div>運動回数</div>
+      <ChartHeatmap ref="heatmap" />
+    </div>
   </div>
 </template>
