@@ -1,6 +1,7 @@
 import type { Activity } from "@health-record/core/model"
 import { UserId, DateNumber, Record } from "@health-record/core/value-object"
 import { IActivityRepository } from "@health-record/core/repository"
+import { dateFactory } from "@health-record/core/util/DateUtil"
 
 export class DebugActivityRepository implements IActivityRepository {
 
@@ -12,6 +13,16 @@ export class DebugActivityRepository implements IActivityRepository {
     return new Promise(resolve => {
       const data = this.memory.get(dateNumber) ?? null
       resolve(structuredClone(data))
+    })
+  }
+
+  getList(userId: UserId): Promise<Activity[]> {
+    return new Promise(resolve => {
+      const result: Activity[] = []
+      this.memory.forEach((v, k, m) => {
+        result.push(v)
+      })
+      resolve(result)
     })
   }
 

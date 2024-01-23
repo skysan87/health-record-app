@@ -64,6 +64,9 @@ export const useActivityStore = () => {
       total.value = firstActivity.total ?? 0
       records.value = [...firstActivity.records ?? []]
     },
+    getHistory: (): Promise<Activity[]> => {
+      return usecase.getActivityHistory()
+    },
     updateMenu: async (menulist: Menu[]) => {
       try {
         activitylist.value = await usecase.updateMenu(menulist)
