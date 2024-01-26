@@ -56,6 +56,5 @@ defineExpose({
 </script>
 
 <template>
-  <!-- TODO: 横スクロール -->
-  <div id="cal-heatmap"></div>
+  <div id="cal-heatmap" class="overflow-auto"></div>
 </template>
