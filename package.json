@@ -10,8 +10,8 @@
     "npm": "please use pnpm"
   },
   "scripts": {
-    "nuxt:dev": "pnpm --filter @health-record/web run dev",
-    "nuxt:build": "pnpm --filter @health-record/web run build"
+    "nuxt:dev:inmemory": "pnpm --filter @health-record/web run dev:inmemory",
+    "nuxt:build": "pnpm --filter @health-record/web run release-build"
   },
   "keywords": [],
   "author": "",
