@@ -109,7 +109,7 @@ const handleLogout = async () => {
   display: grid;
   overflow: hidden;
   position: relative;
-  grid-template-columns: 240px auto;
+  grid-template-columns: 240px calc(100vw - 240px);
   grid-template-rows: 100%;
   grid-template-areas:
     "app-workspace__sidebar app-workspace__view";
