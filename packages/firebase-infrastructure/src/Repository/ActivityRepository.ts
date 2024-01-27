@@ -1,4 +1,7 @@
-import { CollectionReference, DocumentData, DocumentSnapshot, arrayUnion, collection, doc, getDoc, serverTimestamp, setDoc, updateDoc } from "firebase/firestore"
+import {
+  CollectionReference, DocumentData, DocumentSnapshot, arrayUnion, collection, doc, getDoc, serverTimestamp, setDoc, updateDoc
+  , query, limit, getDocs, orderBy
+} from "firebase/firestore"
 import { Activity } from "@health-record/core/model"
 import { IActivityRepository } from "@health-record/core/repository"
 import { UserId, DateNumber, Record } from "@health-record/core/value-object"
@@ -27,6 +30,21 @@ export class ActivityRepository implements IActivityRepository {
     }
 
     return this.convert(dateNumber, activityDoc.data())
+  }
+
+  public async getList(userId: UserId): Promise<Activity[]> {
+    // Tips: documentIdで降順ソートはできない
+    const q = query(this.getRef(userId)
+      , orderBy('createdAt', 'desc')
+      , limit(366) // 過去1年分取得(うるう年対応)
+    )
+
+    const querySnapshot = await getDocs(q)
+    const result: Activity[] = []
+    querySnapshot.docs.forEach(doc => {
+      result.push(this.convert(doc.id as DateNumber, doc.data()))
+    })
+    return result
   }
 
   public async save(userId: UserId, dateNumber: DateNumber, data: Partial<Activity>): Promise<void> {

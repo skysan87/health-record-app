@@ -1,9 +1,10 @@
 {
   "name": "@health-record/web",
-  "version": "2.0.1",
+  "version": "2.1.0",
   "private": true,
   "scripts": {
-    "release-build": "cross-env APP_MODE=production nuxt build && cross-env APP_MODE=production nuxt generate",
+    "release-build": "cross-env APP_MODE=production nuxt generate",
+    "build": "cross-env APP_MODE=production nuxt build",
     "dev:emulator": "cross-env APP_MODE=dev-emulator nuxt dev",
     "dev:inmemory": "cross-env APP_MODE=dev-inmemory nuxt dev",
     "preview": "nuxt preview",
@@ -13,6 +14,7 @@
     "@kevinmarrec/nuxt-pwa": "^0.17.0",
     "@nuxt/types": "^2.17.0",
     "@nuxtjs/device": "^3.1.0",
+    "@types/cal-heatmap": "^3.5.39",
     "@types/node": "^18",
     "cross-env": "^7.0.3",
     "firebase-tools": "^12.5.3",
@@ -29,6 +31,7 @@
     "@health-record/debug-infrastructure": "workspace:*",
     "@health-record/firebase-infrastructure": "workspace:*",
     "@popperjs/core": "^2.11.8",
+    "cal-heatmap": "^4.2.4",
     "chartist": "^1.3.0",
     "tailvue": "^1.0.0",
     "v-calendar": "^3.0.3"
