@@ -69,4 +69,9 @@ export class ActivityUseCase {
 
     return result!
   }
+
+  public async getActivityHistory(): Promise<Activity[]> {
+    const user: User = await this.userRepo.get()
+    return this.activityRepo.getList(user.id)
+  }
 }

@@ -43,7 +43,7 @@ defineExpose({
 </script>
 
 <template>
-  <div id="chart" />
+  <div id="chart" class="w-full" />
 </template>
 
 <style>
