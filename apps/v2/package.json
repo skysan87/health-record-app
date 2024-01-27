@@ -14,6 +14,7 @@
     "@kevinmarrec/nuxt-pwa": "^0.17.0",
     "@nuxt/types": "^2.17.0",
     "@nuxtjs/device": "^3.1.0",
+    "@types/cal-heatmap": "^3.5.39",
     "@types/node": "^18",
     "cross-env": "^7.0.3",
     "firebase-tools": "^12.5.3",
@@ -30,6 +31,7 @@
     "@health-record/debug-infrastructure": "workspace:*",
     "@health-record/firebase-infrastructure": "workspace:*",
     "@popperjs/core": "^2.11.8",
+    "cal-heatmap": "^4.2.4",
     "chartist": "^1.3.0",
     "tailvue": "^1.0.0",
     "v-calendar": "^3.0.3"

@@ -15,8 +15,5 @@
   },
   "keywords": [],
   "author": "",
-  "license": "ISC",
-  "volta": {
-    "node": "18.19.0"
-  }
+  "license": "ISC"
 }

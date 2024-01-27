@@ -5,7 +5,8 @@
     "moduleResolution": "Bundler",
     "types": [
       "@types/node",
-      "@nuxt/types"
+      "@nuxt/types",
+      "@types/cal-heatmap"
     ]
   }
 }

@@ -3,16 +3,20 @@
 ### global setup
 
 ```bash
-# nodeバージョン指定(バージョン管理ツールは任意)
-$ nodebrew ls-remote
-$ nodebrew install v18.18.0
-$ nodebrew list
-$ nodebrew use v18.18.0
-$ node -v
-
+# node
+$ devbox add nodejs@18
 # pnpm
-$ npm install -g pnpm
-$ pnpm -v
+$ devbox add nodePackages.pnpm@latest
+
+# devbox起動
+$ devbox shell
+
+# バージョン確認
+(devbox) $ node -v
+(devbox) $ pnpm -v
+
+# devboxの終了
+(devbox) $ exit
 ```
 
 ## コマンド
