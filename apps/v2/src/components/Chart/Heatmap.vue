@@ -15,16 +15,18 @@ const init = (data: Activity[]) => {
       itemSelector: '#cal-heatmap',
       domain: {
         type: 'month',
+        sort: 'desc',
+        padding: [0, 5, 0, 0],
         gutter,
-        label: { text: 'MMM', position: 'top', textAlign: 'start' }
+        label: { text: 'YYYY/M', position: 'top', textAlign: 'start' }
       },
-      subDomain: { type: 'ghDay', radius: 2, width: cellSize, height: cellSize, gutter, label: 'D' },
+      subDomain: { type: 'day', radius: 2, width: cellSize, height: cellSize, gutter, label: 'D' },
       date: {
         start: dateFactory().subtract(11, 'month').toDate()
       },
       verticalOrientation: false,
       data: {
-        source: data.map(a => ({ date: dateFactory(a.id).format('YYYY-MM-DD'), value: a.records?.length ?? 0 })).filter(v => v.value > 0),
+        source: data.filter(a => a.total > 0).map(a => ({ date: dateFactory(a.id).format('YYYY-MM-DD'), value: a.total ?? 0 })),
         x: 'date',
         y: 'value'
       },
@@ -32,8 +34,8 @@ const init = (data: Activity[]) => {
         // 重みづけ
         color: {
           type: 'threshold',
-          range: ['#b0f5e5', '#35f2c6', '#0fbdb4', '#077485'],
-          domain: [2, 4, 6]
+          scheme: 'oranges',
+          domain: [1, 200, 400, 600, 800, 1000] // kcal
         }
       }
     },
@@ -42,7 +44,7 @@ const init = (data: Activity[]) => {
         Tooltip,
         {
           text: function (_date: any, value: any, _dayjsDate: any) {
-            return dateFactory(_date).format('YYYY/MM/DD(ddd)') +  (value ? `: ${value}回` : '')
+            return value ? `${value} kcal` : ''
           }
         }
       ]

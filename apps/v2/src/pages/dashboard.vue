@@ -63,7 +63,7 @@ definePageMeta({
     <ChartTimelineChart ref="chart" />
 
     <div class="p-4 border-t">
-      <div>運動回数</div>
+      <div>消費エネルギー</div>
       <ChartHeatmap ref="heatmap" />
     </div>
   </div>
