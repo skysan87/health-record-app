@@ -3,6 +3,8 @@ import { ActivityStore } from '@/composables/useActivityStore'
 import { HealthStore } from '@/composables/useHealthStore'
 import { HealthGoalType } from "@health-record/core/value-object"
 import { LayoutKey } from '~~/.nuxt/types/layouts'
+import { calcGoalCaloriePerDay } from '@health-record/core/util/CalcUtil'
+import { fixFloat } from '@health-record/core/util/NumberUtil'
 
 const { initActivity, totalCalorie } = inject('activity') as ActivityStore
 const { healthlist, latestData, goal, range, initHealth, recordWeight, recordHeight, setGoalActivity, setGoalWeight, setGoalWeightRange } = inject('health') as HealthStore
@@ -20,6 +22,25 @@ const selectedMenu = ref<menu>(menu.Activity)
 const notAchievedGoal = computed(() => {
   const goal = healthlist.value?.goal?.[HealthGoalType.ACTIVITY] ?? 0
   return totalCalorie.value < goal
+})
+
+const goalCaloriePerDay = computed(() => {
+  if (!healthlist.value?.goalWeightRange.startWeight
+    || !healthlist.value?.goalWeightRange.startDate
+    || !healthlist.value?.goalWeightRange.endWeight
+    || !healthlist.value?.goalWeightRange.endDate
+  ) {
+    return ''
+  }
+
+  const value = calcGoalCaloriePerDay(
+    healthlist.value?.goalWeightRange.startWeight,
+    healthlist.value?.goalWeightRange.startDate,
+    healthlist.value?.goalWeightRange.endWeight,
+    healthlist.value?.goalWeightRange.endDate
+  )
+
+  return `${fixFloat(value)} kcal/日`
 })
 
 definePageMeta({
@@ -113,6 +134,10 @@ onMounted(async () => await init())
             :value="{ start: range?.startDate, end: range?.endDate }"
             :update="setGoalWeightRange"
           />
+        </div>
+        <div class="pb-1 flex items-center">
+          <span class="p-2 w-1/4">目標消費カロリー</span>
+          <span class="p-2 w-3/4">{{ goalCaloriePerDay }}</span>
         </div>
       </div>
 
