@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { ActivityStore } from '@/composables/useActivityStore'
 import { HealthStore } from '@/composables/useHealthStore'
-import { HealthGoalType } from "@health-record/core/value-object"
+import { HealthGoalType, HealthType } from "@health-record/core/value-object"
 import { LayoutKey } from '~~/.nuxt/types/layouts'
 import { calcGoalCaloriePerDay } from '@health-record/core/util/CalcUtil'
 import { fixFloat } from '@health-record/core/util/NumberUtil'
@@ -133,6 +133,8 @@ onMounted(async () => await init())
             key="goal-period"
             :value="{ start: range?.startDate, end: range?.endDate }"
             :update="setGoalWeightRange"
+            :start-text="range?.startWeight > 0 ? `${range?.startWeight}kg` : ''"
+            :end-text="range?.endWeight > 0 ? `${range?.endWeight}kg` : ''"
           />
         </div>
         <div class="pb-1 flex items-center">
