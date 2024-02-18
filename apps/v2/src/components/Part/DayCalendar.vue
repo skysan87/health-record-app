@@ -41,13 +41,16 @@ watch(dateString, () => {
         {{ date }}
       </div>
     </div>
+    <div class="text">
+      <slot />
+    </div>
   </div>
 </template>
 
 <style scoped>
 .daily-calendar {
   width: 54px;
-  height: 68px;
+  height: 83px;
   box-sizing: border-box;
   text-align: center;
 }
@@ -82,5 +85,13 @@ watch(dateString, () => {
   background-color: #fff;
   font-size: 28px;
   line-height: normal;
+}
+
+.text {
+  width: 100%;
+  height: 15px;
+  color: black;
+  background-color: #fff;
+  font-size: 10px;
 }
 </style>
