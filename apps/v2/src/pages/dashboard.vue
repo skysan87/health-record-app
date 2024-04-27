@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import { useChart } from '@/composables/useChart'
-import type { LayoutKey } from '~~/.nuxt/types/layouts'
-import { HealthStore } from '@/composables/useHealthStore'
-import { ActivityStore } from '@/composables/useActivityStore'
+import type { LayoutKey } from '#build/types/layouts'
+import { type HealthStore } from '@/composables/useHealthStore'
+import { type ActivityStore } from '@/composables/useActivityStore'
 import Heatmap from '@/components/Chart/Heatmap.vue'
 
 const { chart, selectedRange, init, viewReset, viewPreview, viewNext } = useChart()

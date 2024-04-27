@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import MenuDialog from '@/components/Activity/MenuDialog.vue'
-import { ActivityStore } from '~/composables/useActivityStore'
 
 const { activitylist, input, activityOther, menulist, records, onChangeActivity, calcKcal, recordActivity, updateMenu, clearInput } = inject('activity') as ActivityStore
 const dialog = ref<InstanceType<typeof MenuDialog>>()

@@ -62,16 +62,16 @@ const handleLogout = async () => {
                 </div>
               </div>
 
-              <nuxt-link to="/">
+              <RouterLink to="/" replace>
                 <div class="py-1 px-5 cursor-pointer hover:bg-blue-700 hover:opacity-75" @click.left="close">
                   # ヘルスケア
                 </div>
-              </nuxt-link>
-              <nuxt-link to="/dashboard">
+              </RouterLink>
+              <RouterLink to="/dashboard" replace>
                 <div class="py-1 px-5 cursor-pointer hover:bg-blue-700 hover:opacity-75" @click.left="close">
                   # ダッシュボード
                 </div>
-              </nuxt-link>
+              </RouterLink>
             </div>
           </div>
         </div>

@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import { dateFactory } from '@health-record/core/util/DateUtil';
-import { useAuth } from '~/composables/useAuth'
 
 const { logout, getUserName } = useAuth()
 const config = useRuntimeConfig()
@@ -52,17 +51,17 @@ const handleLogout = async () => {
               </div>
             </div>
 
-            <nuxt-link to="/">
+            <RouterLink to="/" replace>
               <div class="py-1 px-5 cursor-pointer hover:bg-blue-700 hover:opacity-75">
                 # ヘルスケア
               </div>
-            </nuxt-link>
+            </RouterLink>
 
-            <nuxt-link to="/dashboard">
+            <RouterLink to="/dashboard" replace>
               <div class="py-1 px-5 cursor-pointer hover:bg-blue-700 hover:opacity-75">
                 # ダッシュボード
               </div>
-            </nuxt-link>
+            </RouterLink>
           </div>
         </div>
       </div>
