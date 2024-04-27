@@ -1,7 +1,6 @@
 import { firestore } from "../AppSetting"
-import { ITransaction, ITransactionScope } from "@health-record/core/repository"
-import { Transaction } from 'firebase/firestore'
-import { runTransaction } from 'firebase/firestore'
+import type { ITransaction, ITransactionScope } from "@health-record/core/repository"
+import { runTransaction, type Transaction } from 'firebase/firestore'
 
 class FirestoreTransactoinScope implements ITransactionScope {
   value: Transaction | null = null

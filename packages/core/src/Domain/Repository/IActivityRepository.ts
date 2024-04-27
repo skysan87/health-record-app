@@ -1,6 +1,6 @@
-import { Activity } from "../Model/Activity"
-import { UserId, DateNumber, Record } from "../ValueObject"
-import { IRepositoryBase } from "./IRepositoryBase";
+import type { Activity } from "../Model/Activity"
+import type { UserId, DateNumber, Record } from "../ValueObject"
+import type { IRepositoryBase } from "./IRepositoryBase"
 
 export interface IActivityRepository extends IRepositoryBase {
   get(userId: UserId, dateNumber: DateNumber): Promise<Activity | null>

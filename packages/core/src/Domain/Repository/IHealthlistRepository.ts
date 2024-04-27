@@ -1,6 +1,6 @@
-import { Healthlist } from "../Model/Healthlist";
-import { UserId } from "../ValueObject";
-import { IRepositoryBase } from "./IRepositoryBase";
+import type { Healthlist } from "../Model/Healthlist"
+import type { UserId } from "../ValueObject"
+import type { IRepositoryBase } from "./IRepositoryBase"
 
 export interface IHealthlistRepository extends IRepositoryBase {
   get(userId: UserId): Promise<Healthlist | null>

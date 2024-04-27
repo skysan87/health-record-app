@@ -1,5 +1,5 @@
-import { GoalWeightRange, HealthGoalType, HealthType } from "@health-record/core/value-object"
-import { FieldValue } from 'firebase/firestore'
+import type { GoalWeightRange, HealthGoalType, HealthType } from "@health-record/core/value-object"
+import type { FieldValue } from 'firebase/firestore'
 
 export type HealthlistEntity = {
   latest?: {

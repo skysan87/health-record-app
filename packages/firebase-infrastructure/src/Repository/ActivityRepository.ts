@@ -1,11 +1,11 @@
 import {
-  CollectionReference, DocumentData, DocumentSnapshot, arrayUnion, collection, doc, getDoc, serverTimestamp, setDoc, updateDoc
+  CollectionReference, type DocumentData, DocumentSnapshot, arrayUnion, collection, doc, getDoc, serverTimestamp, setDoc, updateDoc
   , query, limit, getDocs, orderBy
 } from "firebase/firestore"
-import { Activity } from "@health-record/core/model"
-import { IActivityRepository } from "@health-record/core/repository"
-import { UserId, DateNumber, Record } from "@health-record/core/value-object"
-import { ActivityEntity } from "../Entity/ActivityEntity"
+import type { Activity } from "@health-record/core/model"
+import type { IActivityRepository } from "@health-record/core/repository"
+import type { UserId, DateNumber, Record } from "@health-record/core/value-object"
+import type { ActivityEntity } from "../Entity/ActivityEntity"
 import { firestore } from "../AppSetting"
 import { scope } from "./Transaction"
 

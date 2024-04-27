@@ -1,4 +1,4 @@
-import { Healthlist } from "@health-record/core/model"
+import { type Healthlist } from "@health-record/core/model"
 import type { HealthUseCase } from "@health-record/core/usecase"
 import { HealthGoalType, HealthType } from "@health-record/core/value-object"
 

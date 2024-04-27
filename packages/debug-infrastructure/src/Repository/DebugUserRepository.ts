@@ -1,6 +1,6 @@
-import { User } from "@health-record/core/model";
-import { IUserRepository } from "@health-record/core/repository";
-import { DisplayName, Mail, UserId } from "@health-record/core/value-object";
+import type { User } from "@health-record/core/model"
+import type { IUserRepository } from "@health-record/core/repository"
+import type { DisplayName, Mail, UserId } from "@health-record/core/value-object"
 
 export class DebugUserRepository implements IUserRepository {
 

@@ -1,6 +1,6 @@
 import type { Activitylist } from "@health-record/core/model"
-import { UserId } from "@health-record/core/value-object"
-import { IActivitylistRepository } from "@health-record/core/repository"
+import type { UserId } from "@health-record/core/value-object"
+import type { IActivitylistRepository } from "@health-record/core/repository"
 
 export class DebugActivitylistRepository implements IActivitylistRepository {
 

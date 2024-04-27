@@ -1,5 +1,5 @@
 import type { Health } from "../Model"
-import { IBehavior } from "./IBehavior"
+import type { IBehavior } from "./IBehavior"
 
 export class HealthBehavior implements IBehavior<Health> {
 

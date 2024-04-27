@@ -1,4 +1,4 @@
-import { Nominal, HealthType, HealthGoalType, GoalWeightRange, UserId } from "../ValueObject"
+import type { Nominal, HealthType, HealthGoalType, GoalWeightRange, UserId } from "../ValueObject"
 
 export type Healthlist = Nominal<{
   id: UserId

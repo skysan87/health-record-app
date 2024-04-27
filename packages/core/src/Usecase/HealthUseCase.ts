@@ -1,14 +1,14 @@
-import { Health } from "../Domain/Model/Health";
-import { User } from "../Domain/Model/User";
-import { IHealthRepository } from "../Domain/Repository/IHealthRepository";
-import { IHealthlistRepository } from "../Domain/Repository/IHealthlistRepository";
-import { IUserRepository } from "../Domain/Repository/IUserRepository";
-import { ITransaction } from "../Domain/Repository/ITransaction";
-import { HealthGoalType, HealthType } from "../Domain/ValueObject";
-import { Healthlist } from "../Domain/Model/Healthlist";
-import { HealthlistBehavior } from "../Domain/Behavior/HealthlistBehavior";
-import { HealthBehavior } from "../Domain/Behavior/HealthBehavior";
-import { dateFactory } from "../Util/DateUtil";
+import type { Health } from "../Domain/Model/Health"
+import type { User } from "../Domain/Model/User"
+import type { IHealthRepository } from "../Domain/Repository/IHealthRepository"
+import type { IHealthlistRepository } from "../Domain/Repository/IHealthlistRepository"
+import type { IUserRepository } from "../Domain/Repository/IUserRepository"
+import type { ITransaction } from "../Domain/Repository/ITransaction"
+import type { HealthGoalType, HealthType } from "../Domain/ValueObject"
+import type { Healthlist } from "../Domain/Model/Healthlist"
+import { HealthlistBehavior } from "../Domain/Behavior/HealthlistBehavior"
+import { HealthBehavior } from "../Domain/Behavior/HealthBehavior"
+import { dateFactory } from "../Util/DateUtil"
 
 // NOTE: 小規模なソースコードなので、ドメイン知識単位にUseCaseをまとめる
 export class HealthUseCase {

@@ -1,6 +1,6 @@
-import { Health } from "@health-record/core/model";
-import { IHealthRepository } from "@health-record/core/repository";
-import { UserId } from "@health-record/core/value-object";
+import type { Health } from "@health-record/core/model"
+import type { IHealthRepository } from "@health-record/core/repository"
+import type { UserId } from "@health-record/core/value-object"
 
 export class DebugHealthRepository implements IHealthRepository {
 

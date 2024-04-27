@@ -1,5 +1,5 @@
-import { User } from "../Model/User";
-import { IRepositoryBase } from "./IRepositoryBase";
+import type { User } from "../Model/User"
+import type { IRepositoryBase } from "./IRepositoryBase"
 
 export interface IUserRepository extends IRepositoryBase {
   authenticated(): Promise<boolean>

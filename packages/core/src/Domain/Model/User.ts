@@ -1,4 +1,4 @@
-import { DisplayName, UserId, Mail, Nominal } from "../ValueObject"
+import type { DisplayName, UserId, Mail, Nominal } from "../ValueObject"
 
 export type User = Nominal<{
   id: UserId
