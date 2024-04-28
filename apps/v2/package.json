@@ -11,6 +11,7 @@
     "preview": "nuxt preview",
     "dev:clean": "nuxi cleanup",
     "type-check": "tsc -noEmit",
+    "type-check:vue": "cross-env APP_MODE=dev-inmemory nuxi typecheck",
     "generate-pwa-assets": "pwa-assets-generator --preset minimal-2023 src/public/icon.svg"
   },
   "devDependencies": {

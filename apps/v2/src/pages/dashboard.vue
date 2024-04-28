@@ -22,7 +22,7 @@ watch(selectedRange, viewReset)
 
 onMounted(async () => {
   const getActivity = async () => {
-    heatmap.value.init(await getHistory())
+    heatmap.value?.init(await getHistory())
   }
 
   await Promise.all([

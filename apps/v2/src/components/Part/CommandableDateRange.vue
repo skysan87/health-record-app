@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { DatePicker } from 'v-calendar'
 
-type Range = { start?: Date | null, end?: Date | null }
+type Range = { start: Date | null, end: Date | null }
 
 interface Props {
   value: Range
@@ -58,6 +58,7 @@ const initRange = () => {
 <template>
   <div class="inline-block p-1">
     <div class="flex flex-row">
+      <!-- @vue-ignore -->
       <DatePicker v-model.range="newInputValue" class="flex-1" :attributes="calenderAttributes">
         <template #default="{ inputValue, togglePopover }">
           <div class="flex justify-center items-center" style="height: 68px; width: 224px">

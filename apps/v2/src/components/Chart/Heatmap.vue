@@ -1,13 +1,12 @@
 <script setup lang="ts">
 import type { Activity } from '@health-record/core/model'
 import { dateFactory } from '@health-record/core/util/DateUtil'
-import CalHeatmap from 'cal-heatmap'
-import Tooltip from 'cal-heatmap/plugins/Tooltip'
-import 'cal-heatmap/cal-heatmap.css'
+
+const { $heatmap, $tooltip } = useNuxtApp()
 
 const cellSize = 17
 const gutter = 2
-const heatmap = new CalHeatmap()
+const heatmap = $heatmap()
 
 const init = (data: Activity[]) => {
   heatmap.paint(
@@ -41,7 +40,7 @@ const init = (data: Activity[]) => {
     },
     [
       [
-        Tooltip,
+        $tooltip,
         {
           text: function (_date: any, value: any, _dayjsDate: any) {
             return value ? `${value} kcal` : ''

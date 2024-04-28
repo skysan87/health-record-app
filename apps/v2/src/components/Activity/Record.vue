@@ -5,7 +5,7 @@ const { activitylist, input, activityOther, menulist, records, onChangeActivity,
 const dialog = ref<InstanceType<typeof MenuDialog>>()
 
 const open = async () => {
-  const { isSuccess, data } = await dialog.value?.openAsync(activitylist.value.menu)
+  const { isSuccess, data } = await dialog.value?.openAsync(activitylist.value!.menu)!
   if (isSuccess) {
     await updateMenu(data)
     clearInput()
@@ -20,7 +20,7 @@ const open = async () => {
     <div class="flex flex-row">
       <div class="flex-1">
         <span>運動メニュー</span>
-        <div v-for="m in menulist" :key="m.label" class="flex items-center">
+        <div v-for="(m, index) in menulist" :key="index" class="flex items-center">
           <label class="ml-2">
             <input v-model="input.selectedActivity" type="radio" :value="m" @change="onChangeActivity">
             <span class="ml-2">{{ m.label }}</span>
