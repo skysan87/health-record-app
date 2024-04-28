@@ -1,6 +1,6 @@
 import type { Healthlist } from "../Model/Healthlist"
-import { HealthType, HealthGoalType, GoalWeightRange } from "../ValueObject"
-import { IBehavior } from "./IBehavior"
+import { HealthType, HealthGoalType } from "../ValueObject"
+import type { IBehavior } from "./IBehavior"
 
 export class HealthlistBehavior implements IBehavior<Healthlist> {
 
@@ -51,7 +51,7 @@ export class HealthlistBehavior implements IBehavior<Healthlist> {
         endWeight: input.goalWeightRange?.endWeight ?? 0,
         startDate: input.goalWeightRange?.startDate ?? null,
         endDate: input.goalWeightRange?.endDate ?? null
-      } ,
+      },
       createdAt: input.createdAt ?? null,
       updatedAt: input.updatedAt ?? null
     } as Healthlist

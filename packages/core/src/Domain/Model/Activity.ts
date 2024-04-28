@@ -1,4 +1,4 @@
-import { Record, Nominal, DateNumber } from "../ValueObject"
+import type { Record, Nominal, DateNumber } from "../ValueObject"
 
 export type Activity = Nominal<{
   id: DateNumber

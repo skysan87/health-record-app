@@ -15,6 +15,9 @@ $ devbox shell
 (devbox) $ node -v
 (devbox) $ pnpm -v
 
+# package アップデート
+(devbox) $ pnpm -r update
+
 # devboxの終了
 (devbox) $ exit
 ```

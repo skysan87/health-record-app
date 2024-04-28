@@ -1,7 +1,6 @@
 import type { Activity } from "@health-record/core/model"
-import { UserId, DateNumber, Record } from "@health-record/core/value-object"
-import { IActivityRepository } from "@health-record/core/repository"
-import { dateFactory } from "@health-record/core/util/DateUtil"
+import type { UserId, DateNumber, Record } from "@health-record/core/value-object"
+import type { IActivityRepository } from "@health-record/core/repository"
 
 export class DebugActivityRepository implements IActivityRepository {
 

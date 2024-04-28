@@ -1,14 +1,14 @@
-import { ActivitylistBehavior } from "../Domain/Behavior/ActivitylistBehavior";
-import { ActivityBehavior } from "../Domain/Behavior/ActivityBehavior";
-import { Activity } from "../Domain/Model/Activity";
-import { Activitylist } from "../Domain/Model/Activitylist";
-import { User } from "../Domain/Model/User";
-import { IActivityRepository } from "../Domain/Repository/IActivityRepository";
-import { IActivitylistRepository } from "../Domain/Repository/IActivitylistRepository";
-import { ITransaction } from "../Domain/Repository/ITransaction";
-import { IUserRepository } from "../Domain/Repository/IUserRepository";
-import { DateNumber, Menu, Record } from "../Domain/ValueObject";
-import { dateFactory } from "../Util/DateUtil";
+import { ActivitylistBehavior } from "../Domain/Behavior/ActivitylistBehavior"
+import { ActivityBehavior } from "../Domain/Behavior/ActivityBehavior"
+import type { Activity } from "../Domain/Model/Activity"
+import type { Activitylist } from "../Domain/Model/Activitylist"
+import type { User } from "../Domain/Model/User"
+import type { IActivityRepository } from "../Domain/Repository/IActivityRepository"
+import type { IActivitylistRepository } from "../Domain/Repository/IActivitylistRepository"
+import type { ITransaction } from "../Domain/Repository/ITransaction"
+import type { IUserRepository } from "../Domain/Repository/IUserRepository"
+import type { DateNumber, Menu, Record } from "../Domain/ValueObject"
+import { dateFactory } from "../Util/DateUtil"
 
 export class ActivityUseCase {
   constructor(

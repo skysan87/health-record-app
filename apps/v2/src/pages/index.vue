@@ -1,8 +1,8 @@
 <script setup lang="ts">
-import { ActivityStore } from '@/composables/useActivityStore'
-import { HealthStore } from '@/composables/useHealthStore'
+import { type ActivityStore } from '@/composables/useActivityStore'
+import { type HealthStore } from '@/composables/useHealthStore'
 import { HealthGoalType, HealthType } from "@health-record/core/value-object"
-import { LayoutKey } from '~~/.nuxt/types/layouts'
+import type { LayoutKey } from '#build/types/layouts'
 import { calcGoalCaloriePerDay } from '@health-record/core/util/CalcUtil'
 import { fixFloat } from '@health-record/core/util/NumberUtil'
 

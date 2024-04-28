@@ -1,4 +1,4 @@
-import { ITransaction, ITransactionScope } from "@health-record/core/repository";
+import type { ITransaction, ITransactionScope } from "@health-record/core/repository"
 
 class DebugTransactionScope implements ITransactionScope {
   value: Object = {}

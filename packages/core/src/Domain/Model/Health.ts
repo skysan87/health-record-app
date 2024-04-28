@@ -1,4 +1,4 @@
-import { HealthType, Nominal } from "../ValueObject"
+import type { HealthType, Nominal } from "../ValueObject"
 
 export type Health = Nominal<{
   /** random */

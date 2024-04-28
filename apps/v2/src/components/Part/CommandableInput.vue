@@ -18,7 +18,7 @@ const props = withDefaults(defineProps<Props>(), {
 
 const disabled = ref(false)
 const errorMessage = ref('')
-const newInputValue = ref<string | number | Date>(props.value)
+const newInputValue = ref<string | number | Date | null>(props.value)
 
 const { $toast } = useNuxtApp()
 
@@ -31,7 +31,7 @@ const clickHandler = async () => {
       // NOTE: バリデーションはcallbackで実行し、エラーの場合は例外を投げる
       await props.update(newInputValue.value)
     }
-  } catch (err) {
+  } catch (err: any) {
     console.error(err)
     $toast.error('コマンド実行に失敗しました')
     newInputValue.value = props.value

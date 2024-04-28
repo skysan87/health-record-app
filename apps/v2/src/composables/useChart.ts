@@ -1,9 +1,9 @@
 import type { Health, Healthlist } from "@health-record/core/model"
 import type { HealthUseCase } from "@health-record/core/usecase"
 import { HealthType } from "@health-record/core/value-object"
-import TimelineChart from '~/components/Chart/TimelineChart.vue'
 import { dateDiff, dateFactory } from '@health-record/core/util/DateUtil'
-import type { SeriesObject, SeriesPrimitiveValue } from 'chartist'
+import type { SeriesObject, SeriesPrimitiveValue } from "chartist"
+import type { ChartTimelineChart } from "#build/components"
 
 type Point = {
   x: Date
@@ -19,7 +19,7 @@ export const useChart = () => {
 
   const records = ref<Point[]>([])
   const currentPage = ref<number>(0)
-  const chart = ref<InstanceType<typeof TimelineChart>>()
+  const chart = ref<InstanceType<typeof ChartTimelineChart>>()
   const selectedRange = ref(DEFAULT_PER_PAGE)
 
   const loadRecords = async () => {
@@ -45,11 +45,11 @@ export const useChart = () => {
     let startWeight: number | null = null
     let endWeight: number | null = null
     if (targets.length >= 2) {
-      const firstIndex = records.value.findIndex(v => v.x === targets[0].x)
+      const firstIndex = records.value.findIndex((v: Point) => v.x === targets[0].x)
       if (firstIndex > 0) {
         startWeight = records.value[firstIndex - 1].y
       }
-      const lastIndex = records.value.findIndex(v => v.x === targets[targets.length - 1].x)
+      const lastIndex = records.value.findIndex((v: Point) => v.x === targets[targets.length - 1].x)
       if (lastIndex < targets.length - 1) {
         endWeight = records.value[lastIndex + 1].y
       }
@@ -64,7 +64,7 @@ export const useChart = () => {
   }
 
   const updateData = (): void => {
-    chart.value.update(calcSeries())
+    chart.value?.update(calcSeries())
   }
 
   /**
@@ -164,7 +164,7 @@ export const useChart = () => {
       _healthlist = healthlist
       try {
         await loadRecords()
-        chart.value.init(calcSeries())
+        chart.value?.init(calcSeries())
       } catch (error) {
         console.error(error)
         $toast.error('読み込みに失敗しました')

@@ -1,8 +1,8 @@
-import { collection, getDoc, setDoc, updateDoc, doc, serverTimestamp, DocumentSnapshot, DocumentData } from 'firebase/firestore'
+import { collection, getDoc, setDoc, updateDoc, doc, serverTimestamp, DocumentSnapshot, type DocumentData } from 'firebase/firestore'
 import type { Healthlist } from "@health-record/core/model"
-import { IHealthlistRepository } from "@health-record/core/repository"
-import { UserId } from "@health-record/core/value-object"
-import { HealthlistEntity } from "../Entity/HealthlistEntity"
+import type { IHealthlistRepository } from "@health-record/core/repository"
+import type { UserId } from "@health-record/core/value-object"
+import type { HealthlistEntity } from "../Entity/HealthlistEntity"
 import { firestore } from "../AppSetting"
 import { scope } from "./Transaction"
 

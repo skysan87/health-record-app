@@ -1,7 +1,7 @@
-import { setPersistence, browserLocalPersistence, signInWithPopup, GoogleAuthProvider, signOut, onAuthStateChanged, UserCredential, User } from "firebase/auth"
-import { User as UserModel } from "@health-record/core/model"
-import { IUserRepository } from "@health-record/core/repository"
-import { DisplayName, Mail, UserId } from "@health-record/core/value-object"
+import { setPersistence, browserLocalPersistence, signInWithPopup, GoogleAuthProvider, signOut, onAuthStateChanged, type UserCredential, type User } from "firebase/auth"
+import type { User as UserModel } from "@health-record/core/model"
+import type { IUserRepository } from "@health-record/core/repository"
+import type { DisplayName, Mail, UserId } from "@health-record/core/value-object"
 import { auth } from "../AppSetting"
 
 export class UserRepository implements IUserRepository {

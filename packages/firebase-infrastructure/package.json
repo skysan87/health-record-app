@@ -20,11 +20,11 @@
   "license": "ISC",
   "dependencies": {
     "@health-record/core": "workspace:*",
-    "firebase": "^10.3.1"
+    "firebase": "^10.11.1"
   },
   "devDependencies": {
-    "firebase-tools": "^12.5.3",
-    "ts-node": "^10.9.1",
-    "typescript": "^5.0.4"
+    "firebase-tools": "^13.7.5",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.4.5"
   }
 }

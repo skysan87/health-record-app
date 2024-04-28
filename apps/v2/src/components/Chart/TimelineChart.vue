@@ -1,13 +1,13 @@
 <script setup lang="ts">
 import 'chartist/dist/index.css'
-import { LineChart, FixedScaleAxis, Interpolation } from 'chartist'
+import { FixedScaleAxis, Interpolation, LineChart, type AllSeriesTypes, type SeriesObject, type SeriesPrimitiveValue } from 'chartist'
 import { dateFactory } from '@health-record/core/util/DateUtil'
 
-let chart: LineChart = null
+let chart: LineChart | null = null
 
-const init = (series) => {
-  const serirsOptions = {}
-  series.forEach((s) => {
+const init = (series: SeriesObject<SeriesPrimitiveValue>[]) => {
+  const serirsOptions: any = {}
+  series.forEach((s: any) => {
     serirsOptions[`${s.name}`] = {
       lineSmooth: Interpolation.cardinal({ tension: 0.1 }),
       showPoint: false
@@ -33,8 +33,8 @@ const init = (series) => {
   )
 }
 
-const update = (series) => {
-  chart.update({ series })
+const update = (series: AllSeriesTypes) => {
+  chart?.update({ series })
 }
 
 defineExpose({
