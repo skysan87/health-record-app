@@ -20,7 +20,7 @@ export const useActivityStore = () => {
   const total = ref<number>(0)
   const records = ref<Record[]>([])
 
-  const usecase: ActivityUseCase = $activity()
+  const usecase: ActivityUseCase = $activity
   const input = reactive<Input>({
     selectedActivity: null,
     valueKcal: null,

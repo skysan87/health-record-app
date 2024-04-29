@@ -3,24 +3,15 @@ import { DebugActivityRepository } from '@health-record/debug-infrastructure/rep
 import { DebugActivitylistRepository } from '@health-record/debug-infrastructure/repository/DebugActivitylistRepository'
 import { DebugHealthRepository } from '@health-record/debug-infrastructure/repository/DebugHealthRepository'
 import { DebugHealthlistRepository } from '@health-record/debug-infrastructure/repository/DebugHealthlistRepository'
-import { DebugTransaction } from '@health-record/debug-infrastructure/repository/DebugTransaction'
+import { InMemoryTransaction } from '@health-record/debug-infrastructure/repository/DebugTransaction'
 import { DebugUserRepository } from '@health-record/debug-infrastructure/repository/DebugUserRepository'
-
-// @ts-ignore #appのaliasが有効にならない(tsconfig.json)
-declare module '#app' {
-  interface NuxtApp {
-    $activity(): ActivityUseCase,
-    $health(): HealthUseCase
-    $auth(): AuthenticateUseCase
-  }
-}
 
 export default defineNuxtPlugin(() => {
 
   console.log('install debug-infrastructure')
 
   const userRepo = new DebugUserRepository()
-  const transaction = new DebugTransaction()
+  const transaction = new InMemoryTransaction()
   const activity = new ActivityUseCase(
     new DebugActivityRepository()
     , new DebugActivitylistRepository()
@@ -37,9 +28,9 @@ export default defineNuxtPlugin(() => {
 
   return {
     provide: {
-      activity: () => activity,
-      health: () => health,
-      auth: () => auth
+      activity: activity,
+      health: health,
+      auth: auth
     }
   }
 })

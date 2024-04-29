@@ -1,9 +1,8 @@
 import type { Healthlist } from "../Model/Healthlist"
-import type { UserId } from "../ValueObject"
-import type { IRepositoryBase } from "./IRepositoryBase"
+import type { ITransactionScope } from "./ITransaction"
 
-export interface IHealthlistRepository extends IRepositoryBase {
-  get(userId: UserId): Promise<Healthlist | null>
-  save(userId: UserId, data: Partial<Healthlist>): Promise<void>
-  update(params: Partial<Healthlist>, userId: UserId): Promise<void>
+export interface IHealthlistRepository {
+  get(scope: ITransactionScope): Promise<Healthlist | null>
+  save(scope: ITransactionScope, data: Partial<Healthlist>): Promise<void>
+  update(scope: ITransactionScope, params: Partial<Healthlist>): Promise<void>
 }

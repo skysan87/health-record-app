@@ -1,5 +1,5 @@
 import {
-  CollectionReference, type DocumentData, DocumentSnapshot, arrayUnion, collection, doc, getDoc, serverTimestamp, setDoc, updateDoc
+  CollectionReference, type DocumentData, DocumentSnapshot, arrayUnion, collection, doc
   , query, limit, getDocs, orderBy
 } from "firebase/firestore"
 import type { Activity } from "@health-record/core/model"
@@ -7,7 +7,7 @@ import type { IActivityRepository } from "@health-record/core/repository"
 import type { UserId, DateNumber, Record } from "@health-record/core/value-object"
 import type { ActivityEntity } from "../Entity/ActivityEntity"
 import { firestore } from "../AppSetting"
-import { scope } from "./Transaction"
+import { FirestoreTransactoinScope as Scope } from "../Repository/Transaction"
 
 export class ActivityRepository implements IActivityRepository {
 
@@ -15,26 +15,20 @@ export class ActivityRepository implements IActivityRepository {
     return collection(firestore, 'activity', userId, 'records')
   }
 
-  public async get(userId: UserId, dateNumber: DateNumber): Promise<Activity | null> {
-    const docRef = doc(this.getRef(userId), dateNumber)
-    let activityDoc: DocumentSnapshot
+  public async get(scope: Scope, dateNumber: DateNumber): Promise<Activity | null> {
+    const docRef = doc(this.getRef(scope.userId), dateNumber)
+    const snapshot: DocumentSnapshot = await scope.get(docRef)
 
-    if (scope.hasTransaction) {
-      activityDoc = await scope.value!.get(docRef)
-    } else {
-      activityDoc = await getDoc(docRef)
-    }
-
-    if (!activityDoc.exists()) {
+    if (!snapshot.exists()) {
       return null
     }
 
-    return this.convert(dateNumber, activityDoc.data())
+    return this.convert(dateNumber, snapshot.data())
   }
 
-  public async getList(userId: UserId): Promise<Activity[]> {
+  public async getList(scope: Scope): Promise<Activity[]> {
     // Tips: documentIdで降順ソートはできない
-    const q = query(this.getRef(userId)
+    const q = query(this.getRef(scope.userId)
       , orderBy('createdAt', 'desc')
       , limit(366) // 過去1年分取得(うるう年対応)
     )
@@ -47,58 +41,32 @@ export class ActivityRepository implements IActivityRepository {
     return result
   }
 
-  public async save(userId: UserId, dateNumber: DateNumber, data: Partial<Activity>): Promise<void> {
-    const docRef = doc(this.getRef(userId), dateNumber)
-
+  public async save(scope: Scope, dateNumber: DateNumber, data: Partial<Activity>): Promise<void> {
+    const docRef = doc(this.getRef(scope.userId), dateNumber)
     const newData: ActivityEntity = {
       total: data.total,
       records: data.records,
-      createdAt: serverTimestamp(),
-      updatedAt: serverTimestamp()
     }
-
-    if (scope.hasTransaction) {
-      // NOTE: promiseはない
-      scope.value?.set(docRef, newData)
-    } else {
-      await setDoc(docRef, newData)
-    }
+    await scope.save(docRef, newData)
   }
 
-  public async update(params: Partial<Activity>, userId: UserId, dateNumber: DateNumber): Promise<void> {
-    const docRef = doc(this.getRef(userId), dateNumber)
+  public async update(scope: Scope, params: Partial<Activity>, dateNumber: DateNumber): Promise<void> {
+    const docRef = doc(this.getRef(scope.userId), dateNumber)
 
     const newData: ActivityEntity = {
       total: params.total ?? undefined,
-      records: params.records ?? undefined,
-      updatedAt: serverTimestamp()
+      records: params.records ?? undefined
     }
-
-    const updateParams = Object.fromEntries(Object.entries(newData).filter(([, v]) => v !== undefined))
-
-    if (scope.hasTransaction) {
-      // NOTE: promiseはない
-      scope.value?.update(docRef, updateParams)
-    } else {
-      await updateDoc(docRef, updateParams)
-    }
+    await scope.update(docRef, newData)
   }
 
-  public async addRecord(params: Partial<Activity>, record: Record, userId: UserId, dateNumber: DateNumber): Promise<void> {
-    const docRef = doc(this.getRef(userId), dateNumber)
-
+  public async addRecord(scope: Scope, params: Partial<Activity>, record: Record, dateNumber: DateNumber): Promise<void> {
+    const docRef = doc(this.getRef(scope.userId), dateNumber)
     const updateData: ActivityEntity = {
       total: params.total,
-      records: arrayUnion(record),
-      updatedAt: serverTimestamp()
+      records: arrayUnion(record)
     }
-
-    if (scope.hasTransaction) {
-      // NOTE: promiseはない
-      scope.value?.update(docRef, updateData)
-    } else {
-      await updateDoc(docRef, updateData)
-    }
+    await scope.update(docRef, updateData)
   }
 
   private convert(dateNumber: DateNumber, data: DocumentData): Activity {

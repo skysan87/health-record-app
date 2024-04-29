@@ -6,15 +6,6 @@ import { HealthRepository } from '@health-record/firebase-infrastructure/reposit
 import { HealthlistRepository } from '@health-record/firebase-infrastructure/repository/HealthlistRepository'
 import { Firestoreransaction } from '@health-record/firebase-infrastructure/repository/Transaction'
 
-// @ts-ignore #appのaliasが有効にならない(tsconfig.json)
-declare module '#app' {
-  interface NuxtApp {
-    $activity(): ActivityUseCase,
-    $health(): HealthUseCase
-    $auth(): AuthenticateUseCase
-  }
-}
-
 export default defineNuxtPlugin(() => {
 
   console.log('install firebase-prod-infrastructure')

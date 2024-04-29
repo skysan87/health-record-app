@@ -4,7 +4,7 @@ import type { IHealthRepository } from "@health-record/core/repository"
 import type { UserId } from "@health-record/core/value-object"
 import type { HealthEntity } from "../Entity/HealthEntity"
 import { firestore } from "../AppSetting"
-import { scope } from "./Transaction"
+import { FirestoreTransactoinScope as Scope } from "../Repository/Transaction"
 
 export class HealthRepository implements IHealthRepository {
 
@@ -12,9 +12,9 @@ export class HealthRepository implements IHealthRepository {
     return collection(firestore, 'health', userId, 'records')
   }
 
-  public async get(userId: UserId): Promise<Health[]> {
+  public async get(scope: Scope): Promise<Health[]> {
     // NOTE: where句がある場合、indexが必要になるため全て取得する
-    const q = query(this.getRef(userId)
+    const q = query(this.getRef(scope.userId)
       , orderBy('createdAt', 'desc')
       , limit(100)
     )
@@ -28,23 +28,16 @@ export class HealthRepository implements IHealthRepository {
     return result.reverse()
   }
 
-  async save(params: Partial<Health>, userId: UserId): Promise<void> {
+  async save(scope: Scope, params: Partial<Health>): Promise<void> {
+    const docRef = doc(this.getRef(scope.userId))
     const newData: HealthEntity = {
       year: params.year,
       month: params.month,
       date: params.date,
       type: params.type,
-      value: params.value,
-      createdAt: serverTimestamp(),
-      updatedAt: serverTimestamp()
+      value: params.value
     }
-
-    const docRef = doc(this.getRef(userId))
-    if (scope.hasTransaction) {
-      scope.value?.set(docRef, newData)
-    } else {
-      await setDoc(docRef, newData)
-    }
+    await scope.save(docRef, newData)
   }
 
   private convert(id: string, data: DocumentData): Health {
