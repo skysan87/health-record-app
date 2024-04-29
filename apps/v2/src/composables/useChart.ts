@@ -38,7 +38,6 @@ export const useChart = () => {
   const getVisibleData = (): Point[] => {
     const { start, end } = getPageRange()
     const targets: Point[] = records.value.filter((v: Point) => {
-      console.log(v)
       return v.x.getTime() > start.getTime() && v.x.getTime() < end.getTime()
     })
 

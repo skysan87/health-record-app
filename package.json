@@ -12,7 +12,10 @@
   "scripts": {
     "nuxt:dev:inmemory": "pnpm --filter @health-record/web run dev:inmemory",
     "nuxt:dev:session": "pnpm --filter @health-record/web run dev:session",
-    "nuxt:build": "pnpm --filter @health-record/web run release-build"
+    "nuxt:build": "pnpm --filter @health-record/web run release-build",
+    "nuxt:emulator": "pnpm run \"/^emulator:.*/\"",
+    "emulator:run": "pnpm -F @health-record/firebase-infrastructure run start-emulator",
+    "emulator:serve": "pnpm -F @health-record/web run dev:emulator"
   },
   "keywords": [],
   "author": "",

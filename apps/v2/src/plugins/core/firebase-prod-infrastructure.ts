@@ -28,9 +28,9 @@ export default defineNuxtPlugin(() => {
 
   return {
     provide: {
-      activity: () => activity,
-      health: () => health,
-      auth: () => auth
+      activity: activity,
+      health: health,
+      auth: auth
     }
   }
 })
