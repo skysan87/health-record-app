@@ -10,7 +10,7 @@
   "scripts": {
     "clean": "rm -rf build tsconfig.tsbuildinfo",
     "build": "tsc --incremental",
-    "type-chcek": "tsc -noEmit"
+    "type-check": "tsc -noEmit"
   },
   "keywords": [],
   "author": "",
