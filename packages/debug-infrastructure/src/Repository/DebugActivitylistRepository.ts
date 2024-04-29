@@ -1,34 +1,45 @@
 import type { Activitylist } from "@health-record/core/model"
-import { UserId } from "@health-record/core/value-object"
-import { IActivitylistRepository } from "@health-record/core/repository"
+import type { IActivitylistRepository } from "@health-record/core/repository"
+import { AbstractStorage as Scope } from "../Storage/AbstractStorage"
 
 export class DebugActivitylistRepository implements IActivitylistRepository {
 
-  private memory: Map<UserId, Activitylist> = new Map<UserId, Activitylist>()
+  private static readonly KEY: string = 'ACTIVITY_LIST'
 
-  get(userId: UserId): Promise<Activitylist | null> {
+  get(scope: Scope): Promise<Activitylist | null> {
     return new Promise(resolve => {
-      const data = this.memory.get(userId) ?? null
+      const data: Activitylist | null = scope.get(DebugActivitylistRepository.KEY)
+      if (data) {
+        data.createdAt = new Date(data.createdAt)
+        data.updatedAt = new Date(data.updatedAt)
+      }
       resolve(structuredClone(data))
     })
   }
 
-  save(userId: UserId, data: Partial<Activitylist>): Promise<void> {
+  save(scope: Scope, data: Partial<Activitylist>): Promise<void> {
     return new Promise(resolve => {
-      const data = { id: userId } as Activitylist
-      this.memory.set(userId, data)
+      const timestamp = new Date()
+      const _data = {
+        id: scope.userId,
+        ...data,
+        createdAt: timestamp,
+        updatedAt: timestamp
+      } as Activitylist
+      scope.save(DebugActivitylistRepository.KEY, _data)
       resolve()
     })
   }
 
-  update(params: {}, userId: UserId): Promise<void> {
+  update(scope: Scope, params: {}): Promise<void> {
     return new Promise(resolve => {
-      const data = this.memory.get(userId) ?? {} as Activitylist
+      const data = scope.get(DebugActivitylistRepository.KEY) ?? {} as Activitylist
       const clone = {
         ...data,
-        ...params // 更新された値
+        ...params, // 更新された値
+        updatedAt: new Date()
       } as Activitylist
-      this.memory.set(userId, clone)
+      scope.save(DebugActivitylistRepository.KEY, clone)
       resolve()
     })
   }

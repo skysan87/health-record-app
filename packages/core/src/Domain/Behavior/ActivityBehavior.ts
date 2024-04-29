@@ -1,8 +1,8 @@
-import { Activity } from "../Model"
-import { Record } from "../ValueObject"
-import { IBehavior } from "./IBehavior"
+import { type Activity } from "../Model"
+import type { Record } from "../ValueObject"
+import type { IBehavior } from "./IBehavior"
 
-export class ActivityBehavior implements IBehavior<Activity>{
+export class ActivityBehavior implements IBehavior<Activity> {
 
   constructor(private _activity: Activity) { }
 

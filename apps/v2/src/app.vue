@@ -5,7 +5,9 @@ provide('health', useHealthStore())
 
 <template>
   <div>
+    <NuxtPwaManifest />
     <NuxtLayout>
+      <NuxtLoadingIndicator />
       <NuxtPage />
     </NuxtLayout>
   </div>

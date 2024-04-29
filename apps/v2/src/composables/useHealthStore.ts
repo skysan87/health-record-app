@@ -1,4 +1,4 @@
-import { Healthlist } from "@health-record/core/model"
+import { type Healthlist } from "@health-record/core/model"
 import type { HealthUseCase } from "@health-record/core/usecase"
 import { HealthGoalType, HealthType } from "@health-record/core/value-object"
 
@@ -6,7 +6,7 @@ export type HealthStore = ReturnType<typeof useHealthStore>
 
 export const useHealthStore = () => {
   const { $health } = useNuxtApp()
-  const usecase: HealthUseCase = $health()
+  const usecase: HealthUseCase = $health
   const healthlist = ref<Healthlist>()
 
   return {

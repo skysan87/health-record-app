@@ -4,9 +4,9 @@
   "compilerOptions": {
     "moduleResolution": "Bundler",
     "types": [
-      "@types/node",
       "@nuxt/types",
-      "@types/cal-heatmap"
+      "@types/cal-heatmap",
+      "./types.d.ts"
     ]
   }
 }

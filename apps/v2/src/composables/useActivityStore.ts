@@ -1,7 +1,7 @@
 import type { Activity, Activitylist } from "@health-record/core/model"
 import type { ActivityUseCase } from "@health-record/core/usecase"
 import { dateFactory } from "@health-record/core/util/DateUtil"
-import { Menu, Record, validRecord } from "@health-record/core/value-object"
+import { type Menu, type Record, validRecord } from "@health-record/core/value-object"
 
 type Input = {
   selectedActivity: Menu | null
@@ -17,10 +17,10 @@ export const useActivityStore = () => {
 
   const activity = ref<Activity>()
   const activitylist = ref<Activitylist>()
-  const total = ref(0)
+  const total = ref<number>(0)
   const records = ref<Record[]>([])
 
-  const usecase: ActivityUseCase = $activity()
+  const usecase: ActivityUseCase = $activity
   const input = reactive<Input>({
     selectedActivity: null,
     valueKcal: null,

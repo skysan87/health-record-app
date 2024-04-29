@@ -1,5 +1,5 @@
-import { Activitylist } from "../Model"
-import { IBehavior } from "./IBehavior"
+import type { Activitylist } from "../Model"
+import type { IBehavior } from "./IBehavior"
 
 export class ActivitylistBehavior implements IBehavior<Activitylist> {
 

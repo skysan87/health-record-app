@@ -1,24 +1,37 @@
-import { Health } from "@health-record/core/model";
-import { IHealthRepository } from "@health-record/core/repository";
-import { UserId } from "@health-record/core/value-object";
+import type { Health } from "@health-record/core/model"
+import type { IHealthRepository } from "@health-record/core/repository"
+import type { AbstractStorage as Scope } from "../Storage/AbstractStorage"
 
 export class DebugHealthRepository implements IHealthRepository {
 
-  private memory: Array<Health> = new Array<Health>()
+  private static readonly KEY: string = 'HEALTH'
 
-  get(userId: UserId): Promise<Health[]> {
-    return new Promise(resolve => {
-      resolve(structuredClone(this.memory))
+  private getData(scope: Scope): Health[] {
+    const data: Health[] = scope.get(DebugHealthRepository.KEY) ?? []
+    return data.map((d: Health) => {
+      return {
+        ...d,
+        createdAt: new Date(d.createdAt),
+        updatedAt: new Date(d.updatedAt)
+      }
     })
   }
 
-  save(params: Health, userId: UserId): Promise<void> {
+  get(scope: Scope): Promise<Health[]> {
+    return Promise.resolve(this.getData(scope))
+  }
+
+  save(scope: Scope, params: Health): Promise<void> {
     return new Promise(resolve => {
       const timestamp = new Date()
       params.id = Date.now().toString()
       params.createdAt = timestamp
       params.updatedAt = timestamp
-      this.memory.push(params)
+
+      const lists = this.getData(scope)
+      lists.push(params)
+      scope.save(DebugHealthRepository.KEY, lists)
+
       resolve()
     })
   }

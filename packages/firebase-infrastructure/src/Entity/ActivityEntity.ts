@@ -1,5 +1,5 @@
-import { Record } from "@health-record/core/value-object"
-import { FieldValue } from "firebase/firestore"
+import type { Record } from "@health-record/core/value-object"
+import type { FieldValue } from "firebase/firestore"
 
 export type ActivityEntity = {
   total?: number

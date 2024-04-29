@@ -1,64 +1,40 @@
-import { DocumentData, DocumentSnapshot, collection, doc, getDoc, serverTimestamp, setDoc, updateDoc } from "firebase/firestore"
-import { Activitylist } from "@health-record/core/model"
-import { IActivitylistRepository } from "@health-record/core/repository"
-import { UserId } from "@health-record/core/value-object"
-import { ActivitylistEntity } from "../Entity/ActivitylistEntity"
+import { type DocumentData, DocumentSnapshot, collection, doc } from "firebase/firestore"
+import type { Activitylist } from "@health-record/core/model"
+import type { IActivitylistRepository } from "@health-record/core/repository"
+import type { UserId } from "@health-record/core/value-object"
+import type { ActivitylistEntity } from "../Entity/ActivitylistEntity"
 import { firestore } from "../AppSetting"
-import { scope } from "./Transaction"
+import { FirestoreTransactoinScope as Scope } from "../Repository/Transaction"
 
 export class ActivitylistRepository implements IActivitylistRepository {
 
   rootRef = collection(firestore, 'activity')
 
-  public async get(userId: UserId): Promise<Activitylist | null> {
-    const docRef = doc(this.rootRef, userId)
-    let activityDoc: DocumentSnapshot
+  public async get(scope: Scope): Promise<Activitylist | null> {
+    const docRef = doc(this.rootRef, scope.userId)
+    const snapshot: DocumentSnapshot = await scope.get(docRef)
 
-    if (scope.hasTransaction) {
-      activityDoc = await scope.value!.get(docRef)
-    } else {
-      activityDoc = await getDoc(docRef)
-    }
-
-    if (!activityDoc.exists()) {
+    if (!snapshot.exists()) {
       return null
     }
 
-    return this.convert(userId, activityDoc.data())
+    return this.convert(scope.userId, snapshot.data())
   }
 
-  public async save(userId: UserId, data: Partial<Activitylist>): Promise<void> {
-    const docRef = doc(this.rootRef, userId)
+  public async save(scope: Scope, data: Partial<Activitylist>): Promise<void> {
+    const docRef = doc(this.rootRef, scope.userId)
     const newData: ActivitylistEntity = {
       menu: data.menu,
-      createdAt: serverTimestamp(),
-      updatedAt: serverTimestamp()
     }
-
-    if (scope.hasTransaction) {
-      // NOTE: promiseはない
-      scope.value?.set(docRef, newData)
-    } else {
-      await setDoc(docRef, newData)
-    }
+    await scope.save(docRef, newData)
   }
 
-  public async update(param: Partial<Activitylist>, userId: UserId): Promise<void> {
-    const docRef = doc(this.rootRef, userId)
+  public async update(scope: Scope, param: Partial<Activitylist>): Promise<void> {
+    const docRef = doc(this.rootRef, scope.userId)
     const newData: ActivitylistEntity = {
       menu: param.menu ?? undefined,
-      createdAt: serverTimestamp(),
-      updatedAt: serverTimestamp()
     }
-
-    const updateParams = Object.fromEntries(Object.entries(newData).filter(([, v]) => v !== undefined))
-
-    if (scope.hasTransaction) {
-      // NOTE: promiseはない
-      scope.value?.update(docRef, updateParams)
-    } else {
-      await updateDoc(docRef, updateParams)
-    }
+    await scope.update(docRef, newData)
   }
 
   private convert(userId: UserId, data: DocumentData): Activitylist {

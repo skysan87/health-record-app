@@ -10,6 +10,7 @@ console.log('ENV: ', process.env.APP_MODE)
  */
 const coreEnv = {
   'dev-inmemory': '@/plugins/core/debug-infrastructure',
+  'dev-session': '@/plugins/core//session-storage-infrastructure',
   'dev-emulator': '@/plugins/core/firebase-local-infrastructure',
   'production': '@/plugins/core/firebase-prod-infrastructure'
 }
@@ -18,11 +19,13 @@ const coreEnv = {
 export default defineNuxtConfig({
   srcDir: 'src',
   ssr: false,
+  // TIPS: pluginsを読み込み中に表示するローディング
+  spaLoadingTemplate: true,
   // NOTE: .envで上書き可能
   runtimeConfig: {
     public: {
       appVersion: packageInfo.version,
-      rootPath: '/'
+      rootPath: '/form'
     }
   },
   app: {
@@ -34,14 +37,18 @@ export default defineNuxtConfig({
         { hid: 'robots', name: 'robots', content: 'noindex' }
       ],
       link: [
-        { rel: 'icon', type: 'image/svg+xml', href: '/favicon.svg' }
+        { rel: 'icon', href: '/favicon.ico', sizes: "48x48" },
+        { rel: 'icon', type: 'image/svg+xml', href: '/favicon.svg', sizes: "any" },
+        { rel: 'apple-touch-icon', href: '/apple-touch-icon-180x180.png' }
       ]
     }
   },
 
+  // TIPS: 記載順に読み込まれる
   plugins: [
     // @ts-ignore
-    { src: coreEnv[process.env.APP_MODE], mode: 'client' }
+    { src: coreEnv[process.env.APP_MODE], mode: 'client' },
+    { src: '@/plugins/app/auth', mode: 'client' },
   ],
 
   postcss: {
@@ -51,7 +58,7 @@ export default defineNuxtConfig({
   },
   modules: [
     '@nuxtjs/device',
-    '@kevinmarrec/nuxt-pwa'
+    '@vite-pwa/nuxt'
   ],
   dir: {
     layouts: "layouts",
@@ -73,21 +80,50 @@ export default defineNuxtConfig({
     strict: true
   },
   pwa: {
-    meta: {
-      // iOSでスプラッシュ画面表示
-      mobileAppIOS: true,
-      nativeUI: true
-    },
+    registerType: 'autoUpdate',
     manifest: {
       name: 'health-record-app',
       short_name: 'health-record',
+      display: 'standalone',
       lang: 'ja',
-      theme_color: 'indigo'
+      theme_color: 'indigo',
+      icons: [
+        {
+          "src": "pwa-64x64.png",
+          "sizes": "64x64",
+          "type": "image/png"
+        },
+        {
+          "src": "pwa-192x192.png",
+          "sizes": "192x192",
+          "type": "image/png"
+        },
+        {
+          "src": "pwa-512x512.png",
+          "sizes": "512x512",
+          "type": "image/png"
+        },
+        {
+          "src": "maskable-icon-512x512.png",
+          "sizes": "512x512",
+          "type": "image/png",
+          "purpose": "maskable"
+        }
+      ]
     },
     workbox: {
-      // local実行時にinstallを有効にする場合: true
-      // キャッシュが残るので注意
-      enabled: false
+      navigateFallback: '/',
+      cleanupOutdatedCaches: true,
+      globPatterns: ['**/*.{js,css,html,png,svg,ico,vue,ts}'],
+    },
+    client: {
+      installPrompt: true
+    },
+    devOptions: {
+      enabled: true, // true: ローカルでPWAインストール可
+      suppressWarnings: true,
+      // navigateFallbackAllowlist: [/^\/$/],
+      type: 'module'
     }
   }
 })

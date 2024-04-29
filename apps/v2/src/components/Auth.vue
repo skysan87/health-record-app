@@ -10,10 +10,10 @@ const isLogin = ref(false)
 
 onMounted(async () => {
   // ログイン後リダイレクト時
-  const loginSucceeded = await checkLogin()
+  const loginSucceeded = checkLogin()
   if (loginSucceeded) {
     isLogin.value = true
-    navigateTo(config.public.rootPath)
+    navigateTo(config.public.rootPath, { replace: true })
   }
   isMounted.value = true
 })
@@ -22,7 +22,7 @@ const doLogin = async () => {
   isClicked.value = true
   await login((_user) => {
     isLogin.value = true
-    navigateTo(config.public.rootPath)
+    navigateTo(config.public.rootPath, { replace: true })
   }, (error) => {
     isLogin.value = false
     throw showError(error)

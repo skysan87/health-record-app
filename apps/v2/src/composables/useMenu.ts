@@ -1,4 +1,4 @@
-import { Menu, validMenu } from "@health-record/core/value-object"
+import { type Menu, validMenu } from "@health-record/core/value-object"
 import { fixFloat } from '@health-record/core/util/NumberUtil'
 
 export const useMenu = () => {

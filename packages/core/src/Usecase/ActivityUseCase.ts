@@ -1,14 +1,14 @@
-import { ActivitylistBehavior } from "../Domain/Behavior/ActivitylistBehavior";
-import { ActivityBehavior } from "../Domain/Behavior/ActivityBehavior";
-import { Activity } from "../Domain/Model/Activity";
-import { Activitylist } from "../Domain/Model/Activitylist";
-import { User } from "../Domain/Model/User";
-import { IActivityRepository } from "../Domain/Repository/IActivityRepository";
-import { IActivitylistRepository } from "../Domain/Repository/IActivitylistRepository";
-import { ITransaction } from "../Domain/Repository/ITransaction";
-import { IUserRepository } from "../Domain/Repository/IUserRepository";
-import { DateNumber, Menu, Record } from "../Domain/ValueObject";
-import { dateFactory } from "../Util/DateUtil";
+import { ActivitylistBehavior } from "../Domain/Behavior/ActivitylistBehavior"
+import { ActivityBehavior } from "../Domain/Behavior/ActivityBehavior"
+import type { Activity } from "../Domain/Model/Activity"
+import type { Activitylist } from "../Domain/Model/Activitylist"
+import type { User } from "../Domain/Model/User"
+import type { IActivityRepository } from "../Domain/Repository/IActivityRepository"
+import type { IActivitylistRepository } from "../Domain/Repository/IActivitylistRepository"
+import type { ITransaction } from "../Domain/Repository/ITransaction"
+import type { IUserRepository } from "../Domain/Repository/IUserRepository"
+import type { DateNumber, Menu, Record } from "../Domain/ValueObject"
+import { dateFactory } from "../Util/DateUtil"
 
 export class ActivityUseCase {
   constructor(
@@ -19,51 +19,62 @@ export class ActivityUseCase {
   ) { }
 
   public async init(): Promise<[Activitylist, Activity]> {
+    let activitylist: Activitylist, activity: Activity
+
     const user: User = await this.userRepo.get()
     const dateNumber: DateNumber = dateFactory().getDateNumber().toString() as DateNumber
 
-    let list = await this.activitylistRepo.get(user.id)
-    if (!list) {
-      list = new ActivitylistBehavior({ id: user.id } as Activitylist).format()
-      await this.activitylistRepo.save(user.id, list)
-    }
+    await this.transaction.run(user.id, async (scope) => {
+      let list = await this.activitylistRepo.get(scope)
+      if (!list) {
+        list = new ActivitylistBehavior({ id: user.id } as Activitylist).format()
+        await this.activitylistRepo.save(scope, list)
+      }
+      activitylist = new ActivitylistBehavior(list).format()
 
-    let activity = await this.activityRepo.get(user.id, dateNumber)
-    if (!activity) {
-      activity = new ActivityBehavior({ id: dateNumber } as Activity).format()
-      await this.activityRepo.save(user.id, dateNumber, activity)
-    }
-    return [
-      new ActivitylistBehavior(list).format(),
-      new ActivityBehavior(activity).format()
-    ]
+      let _activity = await this.activityRepo.get(scope, dateNumber)
+      if (!_activity) {
+        _activity = new ActivityBehavior({ id: dateNumber } as Activity).format()
+        await this.activityRepo.save(scope, dateNumber, _activity)
+      }
+      activity = new ActivityBehavior(_activity).format()
+    })
+
+
+    return [activitylist!, activity!]
   }
 
   public async updateMenu(menu: Menu[]): Promise<Activitylist> {
+    let result: Activitylist
+
     const user: User = await this.userRepo.get()
-    const list = await this.activitylistRepo.get(user.id)
-    if (!list) {
-      throw new Error('activity does not exist.')
-    }
-    return await new ActivitylistBehavior(list).actionAsync(async behavir => {
-      await this.activitylistRepo.update({ menu }, user.id)
-      behavir.update({ menu } as Activitylist)
+    await this.transaction.run(user.id, async (scope) => {
+      const list = await this.activitylistRepo.get(scope)
+      if (!list) {
+        throw new Error('activity does not exist.')
+      }
+
+      result = await new ActivitylistBehavior(list).actionAsync(async behavir => {
+        await this.activitylistRepo.update(scope, { menu })
+        behavir.update({ menu } as Activitylist)
+      })
     })
+    return result!
   }
 
   public async addRecord(record: Record): Promise<Activity> {
     let result: Activity
+    const user: User = await this.userRepo.get()
 
-    await this.transaction.run(async () => {
-      const user: User = await this.userRepo.get()
+    await this.transaction.run(user.id, async (scope) => {
       const dateNumber: DateNumber = dateFactory().getDateNumber().toString() as DateNumber
-      const activity = await this.activityRepo.get(user.id, dateNumber)
+      const activity = await this.activityRepo.get(scope, dateNumber)
       if (!activity) {
         throw new Error('activity does not exist.')
       }
       result = await new ActivityBehavior(activity).actionAsync(async behavior => {
         behavior.addRecord(record)
-        await this.activityRepo.addRecord({ total: behavior.get('total') }, record, user.id, dateNumber)
+        await this.activityRepo.addRecord(scope, { total: behavior.get('total') }, record, dateNumber)
       })
     })
 
@@ -71,7 +82,12 @@ export class ActivityUseCase {
   }
 
   public async getActivityHistory(): Promise<Activity[]> {
+    let result: Activity[]
+
     const user: User = await this.userRepo.get()
-    return this.activityRepo.getList(user.id)
+    await this.transaction.run(user.id, async (scope) => {
+      result = await this.activityRepo.getList(scope)
+    })
+    return result!
   }
 }

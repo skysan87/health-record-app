@@ -1,11 +1,11 @@
-import { Activity } from "../Model/Activity"
-import { UserId, DateNumber, Record } from "../ValueObject"
-import { IRepositoryBase } from "./IRepositoryBase";
+import type { Activity } from "../Model/Activity"
+import type { DateNumber, Record } from "../ValueObject"
+import type { ITransactionScope } from "./ITransaction"
 
-export interface IActivityRepository extends IRepositoryBase {
-  get(userId: UserId, dateNumber: DateNumber): Promise<Activity | null>
-  getList(userId: UserId): Promise<Activity[]>
-  save(userId: UserId, dateNumber: DateNumber, data: Partial<Activity>): Promise<void>
-  update(params: Partial<Activity>, userId: UserId, dateNumber: DateNumber): Promise<void>
-  addRecord(params: Partial<Activity>, record: Record, userId: UserId, dateNumber: DateNumber): Promise<void>
+export interface IActivityRepository {
+  get(scope: ITransactionScope, dateNumber: DateNumber): Promise<Activity | null>
+  getList(scope: ITransactionScope): Promise<Activity[]>
+  save(scope: ITransactionScope, dateNumber: DateNumber, data: Partial<Activity>): Promise<void>
+  update(scope: ITransactionScope, params: Partial<Activity>, dateNumber: DateNumber): Promise<void>
+  addRecord(scope: ITransactionScope, params: Partial<Activity>, record: Record, dateNumber: DateNumber): Promise<void>
 }

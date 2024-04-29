@@ -5,7 +5,7 @@
   "private": true,
   "exports": {
     ".": "./src/index.ts",
-    "./model":  "./src/Domain/Model/index.ts",
+    "./model": "./src/Domain/Model/index.ts",
     "./value-object": "./src/Domain/ValueObject/index.ts",
     "./repository": "./src/Domain/Repository/index.ts",
     "./usecase": "./src/Usecase/index.ts",
@@ -16,17 +16,15 @@
     "clean": "rm -rf build tsconfig.tsbuildinfo",
     "build": "tsc --incremental",
     "start:dev": "tsc -w --incremental",
-    "test": "ts-node test/test.ts",
-    "type-chcek": "tsc -noEmit"
+    "type-check": "tsc -noEmit"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "devDependencies": {
-    "ts-node": "^10.9.1",
-    "typescript": "^5.0.4"
+    "typescript": "^5.4.5"
   },
   "dependencies": {
-    "dayjs": "^1.11.7"
+    "dayjs": "^1.11.10"
   }
 }

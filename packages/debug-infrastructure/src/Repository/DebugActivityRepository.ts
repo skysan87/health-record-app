@@ -1,62 +1,86 @@
 import type { Activity } from "@health-record/core/model"
-import { UserId, DateNumber, Record } from "@health-record/core/value-object"
-import { IActivityRepository } from "@health-record/core/repository"
-import { dateFactory } from "@health-record/core/util/DateUtil"
+import type { DateNumber, Record } from "@health-record/core/value-object"
+import type { IActivityRepository } from "@health-record/core/repository"
+import type { AbstractStorage as Scope } from "../Storage/AbstractStorage"
 
 export class DebugActivityRepository implements IActivityRepository {
 
-  private memory: Map<DateNumber, Activity> = new Map<DateNumber, Activity>()
+  private static readonly KEY: string = 'ACTIVITY'
 
-  constructor() { }
-
-  get(userId: UserId, dateNumber: DateNumber): Promise<Activity | null> {
-    return new Promise(resolve => {
-      const data = this.memory.get(dateNumber) ?? null
-      resolve(structuredClone(data))
+  private getData(scope: Scope): Activity[] {
+    const data: Activity[] = scope.get(DebugActivityRepository.KEY) ?? []
+    return data.map((d: Activity) => {
+      return {
+        ...d,
+        records: d.records.map(r => ({ ...r, timestamp: new Date(r.timestamp) })),
+        createdAt: new Date(d.createdAt),
+        updatedAt: new Date(d.updatedAt)
+      }
     })
   }
 
-  getList(userId: UserId): Promise<Activity[]> {
+  get(scope: Scope, dateNumber: DateNumber): Promise<Activity | null> {
     return new Promise(resolve => {
-      const result: Activity[] = []
-      this.memory.forEach((v, k, m) => {
-        result.push(v)
-      })
-      resolve(result)
+      const data = this.getData(scope)
+      resolve(structuredClone(data.find(h => h.id === dateNumber) ?? null))
     })
   }
 
-  save(userId: UserId, dateNumber: DateNumber, data: Partial<Activity>): Promise<void> {
-    return new Promise(resolve => {
-      const data = { id: dateNumber } as Activity
-      this.memory.set(dateNumber, data)
-      resolve()
-    })
+  getList(scope: Scope): Promise<Activity[]> {
+    return Promise.resolve(this.getData(scope))
   }
 
-  update(params: Partial<Activity>, userId: UserId, dateNumber: DateNumber): Promise<void> {
+  save(scope: Scope, dateNumber: DateNumber, data: Partial<Activity>): Promise<void> {
     return new Promise(resolve => {
-      const data = this.memory.get(dateNumber) ?? {} as Activity
-      const clone = {
+      const timestamp = new Date()
+      const _data = {
+        id: dateNumber,
         ...data,
-        ...params // 更新された値
+        createdAt: timestamp,
+        updatedAt: timestamp
       } as Activity
-      this.memory.set(dateNumber, clone)
+
+      const memory = this.getData(scope)
+      memory.push(_data)
+      scope.save(DebugActivityRepository.KEY, memory)
+
       resolve()
     })
   }
 
-  addRecord(params: Partial<Activity>, newRecord: Record, userId: UserId, dateNumber: DateNumber): Promise<void> {
+  update(scope: Scope, params: Partial<Activity>, dateNumber: DateNumber): Promise<void> {
     return new Promise(resolve => {
-      const data = this.memory.get(dateNumber) ?? {} as Activity
-      const records = data.records ?? []
-      records.push(newRecord)
+      const memory = this.getData(scope)
+      const index = memory.findIndex(h => h.id === dateNumber)
+
       const clone = {
-        ...data,
+        ...memory[index],
         ...params, // 更新された値
-        records
+        updatedAt: new Date()
       } as Activity
-      this.memory.set(dateNumber, clone)
+      memory[index] = clone
+      scope.save(DebugActivityRepository.KEY, memory)
+
+      resolve()
+    })
+  }
+
+  async addRecord(scope: Scope, params: Partial<Activity>, newRecord: Record, dateNumber: DateNumber): Promise<void> {
+    return new Promise(resolve => {
+      const memory = this.getData(scope)
+      const index = memory.findIndex(h => h.id === dateNumber)
+      const records = memory[index].records ?? []
+      records.push(newRecord)
+
+      const clone = {
+        ...memory[index],
+        ...params, // 更新された値
+        records,
+        updatedAt: new Date()
+      } as Activity
+      memory[index] = clone
+      scope.save(DebugActivityRepository.KEY, memory)
+
       resolve()
     })
   }
