@@ -12,7 +12,7 @@ const userName = await getUserName()
 
 const handleLogout = async () => {
   await logout(() => {
-    navigateTo('login')
+    navigateTo('login', { replace: true })
   })
 }
 </script>

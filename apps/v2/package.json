@@ -7,6 +7,7 @@
     "build": "cross-env APP_MODE=production nuxt build",
     "dev:emulator": "cross-env APP_MODE=dev-emulator nuxt dev",
     "dev:inmemory": "cross-env APP_MODE=dev-inmemory nuxt dev",
+    "dev:session": "cross-env APP_MODE=dev-session nuxt dev",
     "dev:build": "cross-env APP_MODE=dev-inmemory nuxt build",
     "preview": "nuxt preview",
     "dev:clean": "nuxi cleanup",

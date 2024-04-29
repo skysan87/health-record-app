@@ -11,6 +11,7 @@
   },
   "scripts": {
     "nuxt:dev:inmemory": "pnpm --filter @health-record/web run dev:inmemory",
+    "nuxt:dev:session": "pnpm --filter @health-record/web run dev:session",
     "nuxt:build": "pnpm --filter @health-record/web run release-build"
   },
   "keywords": [],

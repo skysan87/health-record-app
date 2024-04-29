@@ -10,6 +10,7 @@ console.log('ENV: ', process.env.APP_MODE)
  */
 const coreEnv = {
   'dev-inmemory': '@/plugins/core/debug-infrastructure',
+  'dev-session': '@/plugins/core//session-storage-infrastructure',
   'dev-emulator': '@/plugins/core/firebase-local-infrastructure',
   'production': '@/plugins/core/firebase-prod-infrastructure'
 }
@@ -18,11 +19,13 @@ const coreEnv = {
 export default defineNuxtConfig({
   srcDir: 'src',
   ssr: false,
+  // TIPS: pluginsを読み込み中に表示するローディング
+  spaLoadingTemplate: true,
   // NOTE: .envで上書き可能
   runtimeConfig: {
     public: {
       appVersion: packageInfo.version,
-      rootPath: '/'
+      rootPath: '/form'
     }
   },
   app: {
@@ -41,9 +44,11 @@ export default defineNuxtConfig({
     }
   },
 
+  // TIPS: 記載順に読み込まれる
   plugins: [
     // @ts-ignore
-    { src: coreEnv[process.env.APP_MODE], mode: 'client' }
+    { src: coreEnv[process.env.APP_MODE], mode: 'client' },
+    { src: '@/plugins/app/auth', mode: 'client' },
   ],
 
   postcss: {

@@ -7,6 +7,10 @@ export const useAuth = () => {
   const usecase: AuthenticateUseCase = $auth
 
   return {
+    init: async () => {
+      await usecase.initalize()
+      console.log('init Auth')
+    },
     login: async (onSuccess = (credential: User) => { }, onError = (error: NuxtError) => { }) => {
       try {
         const user = await usecase.login()
@@ -15,13 +19,8 @@ export const useAuth = () => {
         onError(createError(error as NuxtError))
       }
     },
-    checkLogin: async (): Promise<boolean> => {
-      try {
-        return await usecase.checkLogin()
-      } catch (error) {
-        console.log(error)
-        return false
-      }
+    checkLogin: (): boolean => {
+      return usecase.authenticated()
     },
     logout: async (onSuccess = () => { }, onError = (error: NuxtError) => { }) => {
       try {

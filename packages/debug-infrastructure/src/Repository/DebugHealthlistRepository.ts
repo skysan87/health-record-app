@@ -12,6 +12,12 @@ export class DebugHealthlistRepository implements IHealthlistRepository {
       if (data) {
         data.createdAt = new Date(data.createdAt)
         data.updatedAt = new Date(data.updatedAt)
+        if (data.goalWeightRange.startDate) {
+          data.goalWeightRange.startDate = new Date(data.goalWeightRange.startDate)
+        }
+        if (data.goalWeightRange.endDate) {
+          data.goalWeightRange.endDate = new Date(data.goalWeightRange.endDate)
+        }
       }
       resolve(structuredClone(data))
     })
