@@ -1,8 +1,10 @@
+import type { UserId } from "../ValueObject"
+
 export interface ITransactionScope {
-  value: any
+  get userId(): UserId
 }
 
 export interface ITransaction {
   // NOTE: 実装でITransactionScopeを指定するオブジェクトのフラグ管理をする
-  run(callback: () => Promise<void>): Promise<void>
+  run(userId: UserId, callback: (scope: ITransactionScope) => Promise<void>): Promise<void>
 }

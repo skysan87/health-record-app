@@ -22,9 +22,5 @@
     "node_modules",
     "build",
     "test"
-  ],
-  "ts-node": {
-    "esm": true,
-    "experimentalSpecifierResolution": "node"
-  }
+  ]
 }

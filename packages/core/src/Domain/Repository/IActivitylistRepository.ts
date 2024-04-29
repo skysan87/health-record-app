@@ -1,9 +1,8 @@
 import type { Activitylist } from "../Model/Activitylist"
-import type { UserId } from "../ValueObject"
-import type { IRepositoryBase } from "./IRepositoryBase"
+import type { ITransactionScope } from "./ITransaction"
 
-export interface IActivitylistRepository extends IRepositoryBase {
-  get(userId: UserId): Promise<Activitylist | null>
-  save(userId: UserId, data: Partial<Activitylist>): Promise<void>
-  update(param: {}, userId: UserId): Promise<void>
+export interface IActivitylistRepository {
+  get(scope: ITransactionScope): Promise<Activitylist | null>
+  save(scope: ITransactionScope, data: Partial<Activitylist>): Promise<void>
+  update(scope: ITransactionScope, param: {}): Promise<void>
 }

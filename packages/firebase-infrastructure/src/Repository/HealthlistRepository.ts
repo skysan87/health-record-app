@@ -1,68 +1,44 @@
-import { collection, getDoc, setDoc, updateDoc, doc, serverTimestamp, DocumentSnapshot, type DocumentData } from 'firebase/firestore'
+import { collection, doc, DocumentSnapshot, type DocumentData } from 'firebase/firestore'
 import type { Healthlist } from "@health-record/core/model"
 import type { IHealthlistRepository } from "@health-record/core/repository"
 import type { UserId } from "@health-record/core/value-object"
 import type { HealthlistEntity } from "../Entity/HealthlistEntity"
 import { firestore } from "../AppSetting"
-import { scope } from "./Transaction"
+import { FirestoreTransactoinScope as Scope } from "../Repository/Transaction"
 
 export class HealthlistRepository implements IHealthlistRepository {
 
   rootRef = collection(firestore, 'health')
 
-  public async get(userId: UserId): Promise<Healthlist | null> {
-    const docRef = doc(this.rootRef, userId)
-    let healthDoc: DocumentSnapshot
+  public async get(scope: Scope): Promise<Healthlist | null> {
+    const docRef = doc(this.rootRef, scope.userId)
+    let snapshot: DocumentSnapshot = await scope.get(docRef)
 
-    if (scope.hasTransaction) {
-      healthDoc = await scope.value!.get(docRef)
-    } else {
-      healthDoc = await getDoc(docRef)
-    }
-
-    if (!healthDoc.exists()) {
+    if (!snapshot.exists()) {
       return null
     }
 
-    return this.convert(userId, healthDoc.data())
+    return this.convert(scope.userId, snapshot.data())
   }
 
-  public async save(userId: UserId, data: Partial<Healthlist>): Promise<void> {
-    const docRef = doc(this.rootRef, userId)
+  public async save(scope: Scope, data: Partial<Healthlist>): Promise<void> {
+    const docRef = doc(this.rootRef, scope.userId)
     const newData: HealthlistEntity = {
       latest: data.latest,
       goal: data.goal,
-      goalWeightRange: data.goalWeightRange,
-      createdAt: serverTimestamp(),
-      updatedAt: serverTimestamp()
+      goalWeightRange: data.goalWeightRange
     }
-
-    if (scope.hasTransaction) {
-      // NOTE: promiseはない
-      scope.value?.set(docRef, newData)
-    } else {
-      await setDoc(docRef, newData)
-    }
+    await scope.save(docRef, newData)
   }
 
-  public async update(params: Partial<Healthlist>, userId: UserId): Promise<void> {
-    const docRef = doc(this.rootRef, userId)
+  public async update(scope: Scope, params: Partial<Healthlist>): Promise<void> {
+    const docRef = doc(this.rootRef, scope.userId)
     const newData: HealthlistEntity = {
       latest: params.latest ?? undefined,
       goal: params.goal ?? undefined,
-      goalWeightRange: params.goalWeightRange ?? undefined,
-      updatedAt: serverTimestamp()
+      goalWeightRange: params.goalWeightRange ?? undefined
     }
-
-    // undefinedな項目を削除し、更新したい項目のみ取得
-    const updateParams = Object.fromEntries(Object.entries(newData).filter(([, v]) => v !== undefined))
-
-    if (scope.hasTransaction) {
-      // NOTE: promiseはない
-      scope.value?.update(docRef, updateParams)
-    } else {
-      await updateDoc(docRef, updateParams)
-    }
+    await scope.update(docRef, newData)
   }
 
   private convert(userId: UserId, data: DocumentData): Healthlist {

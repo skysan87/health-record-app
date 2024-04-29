@@ -3,15 +3,15 @@ import { DebugActivityRepository } from '@health-record/debug-infrastructure/rep
 import { DebugActivitylistRepository } from '@health-record/debug-infrastructure/repository/DebugActivitylistRepository'
 import { DebugHealthRepository } from '@health-record/debug-infrastructure/repository/DebugHealthRepository'
 import { DebugHealthlistRepository } from '@health-record/debug-infrastructure/repository/DebugHealthlistRepository'
-import { InMemoryTransaction } from '@health-record/debug-infrastructure/repository/DebugTransaction'
-import { DebugUserRepository } from '@health-record/debug-infrastructure/repository/DebugUserRepository'
+import { SessionStorageTransaction } from '@health-record/debug-infrastructure/repository/DebugTransaction'
+import { SessionUserRepository } from '@health-record/debug-infrastructure/repository/SessionUserRepository'
 
 export default defineNuxtPlugin(() => {
 
-  console.log('install debug-infrastructure')
+  console.log('install session-storage-infrastructure')
 
-  const userRepo = new DebugUserRepository(false)
-  const transaction = new InMemoryTransaction()
+  const userRepo = new SessionUserRepository()
+  const transaction = new SessionStorageTransaction()
   const activity = new ActivityUseCase(
     new DebugActivityRepository()
     , new DebugActivitylistRepository()

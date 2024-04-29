@@ -1,34 +1,51 @@
 import type { Healthlist } from "@health-record/core/model"
 import type { IHealthlistRepository } from "@health-record/core/repository"
-import type { UserId } from "@health-record/core/value-object"
+import type { AbstractStorage as Scope } from "../Storage/AbstractStorage"
 
 export class DebugHealthlistRepository implements IHealthlistRepository {
 
-  private memory: Map<UserId, Healthlist> = new Map<UserId, Healthlist>()
+  private static readonly KEY: string = 'HEALTH_LIST'
 
-  get(userId: UserId): Promise<Healthlist | null> {
+  get(scope: Scope): Promise<Healthlist | null> {
     return new Promise(resolve => {
-      const data = this.memory.get(userId) ?? null
+      const data: Healthlist | null = scope.get(DebugHealthlistRepository.KEY)
+      if (data) {
+        data.createdAt = new Date(data.createdAt)
+        data.updatedAt = new Date(data.updatedAt)
+        if (data.goalWeightRange.startDate) {
+          data.goalWeightRange.startDate = new Date(data.goalWeightRange.startDate)
+        }
+        if (data.goalWeightRange.endDate) {
+          data.goalWeightRange.endDate = new Date(data.goalWeightRange.endDate)
+        }
+      }
       resolve(structuredClone(data))
     })
   }
 
-  save(userId: UserId, data: Partial<Healthlist>): Promise<void> {
+  save(scope: Scope, data: Partial<Healthlist>): Promise<void> {
     return new Promise(resolve => {
-      const newData = { ...data, id: userId } as Healthlist
-      this.memory.set(userId, newData)
+      const timestamp = new Date()
+      const _data = {
+        id: scope.userId,
+        ...data,
+        createdAt: timestamp,
+        updatedAt: timestamp
+      } as Healthlist
+      scope.save(DebugHealthlistRepository.KEY, _data)
       resolve()
     })
   }
 
-  update(params: Partial<Healthlist>, userId: UserId): Promise<void> {
+  update(scope: Scope, params: Partial<Healthlist>): Promise<void> {
     return new Promise(resolve => {
-      const data = this.memory.get(userId) ?? {} as Healthlist
+      const data = scope.get(DebugHealthlistRepository.KEY) ?? {} as Healthlist
       const clone = {
         ...data,
-        ...params // 更新された値
+        ...params, // 更新された値
+        updatedAt: new Date()
       } as Healthlist
-      this.memory.set(userId, clone)
+      scope.save(DebugHealthlistRepository.KEY, clone)
       resolve()
     })
   }

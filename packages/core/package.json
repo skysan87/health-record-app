@@ -16,14 +16,12 @@
     "clean": "rm -rf build tsconfig.tsbuildinfo",
     "build": "tsc --incremental",
     "start:dev": "tsc -w --incremental",
-    "test": "ts-node test/test.ts",
-    "type-chcek": "tsc -noEmit"
+    "type-check": "tsc -noEmit"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "devDependencies": {
-    "ts-node": "^10.9.2",
     "typescript": "^5.4.5"
   },
   "dependencies": {

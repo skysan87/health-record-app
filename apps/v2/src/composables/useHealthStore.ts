@@ -6,7 +6,7 @@ export type HealthStore = ReturnType<typeof useHealthStore>
 
 export const useHealthStore = () => {
   const { $health } = useNuxtApp()
-  const usecase: HealthUseCase = $health()
+  const usecase: HealthUseCase = $health
   const healthlist = ref<Healthlist>()
 
   return {

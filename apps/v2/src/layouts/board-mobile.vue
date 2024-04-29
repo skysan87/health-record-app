@@ -17,7 +17,7 @@ const userName = await getUserName()
 
 const handleLogout = async () => {
   await logout(() => {
-    navigateTo('login')
+    navigateTo('login', { replace: true })
   })
 }
 </script>
@@ -62,7 +62,7 @@ const handleLogout = async () => {
                 </div>
               </div>
 
-              <RouterLink to="/" replace>
+              <RouterLink to="/form" replace>
                 <div class="py-1 px-5 cursor-pointer hover:bg-blue-700 hover:opacity-75" @click.left="close">
                   # ヘルスケア
                 </div>

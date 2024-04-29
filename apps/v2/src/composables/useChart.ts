@@ -14,7 +14,7 @@ const DEFAULT_PER_PAGE = 30
 
 export const useChart = () => {
   const { $health, $toast } = useNuxtApp()
-  const usecase: HealthUseCase = $health()
+  const usecase: HealthUseCase = $health
   let _healthlist: Healthlist
 
   const records = ref<Point[]>([])
