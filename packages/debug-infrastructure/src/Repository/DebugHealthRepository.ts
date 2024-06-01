@@ -1,39 +1,29 @@
 import type { Health } from "@health-record/core/model"
-import type { IHealthRepository } from "@health-record/core/repository"
-import type { AbstractStorage as Scope } from "../Storage/AbstractStorage"
+import type { IHealthRepository, ITransactionScope as Scope } from "@health-record/core/repository"
 
 export class DebugHealthRepository implements IHealthRepository {
 
   private static readonly KEY: string = 'HEALTH'
 
-  private getData(scope: Scope): Health[] {
-    const data: Health[] = scope.get(DebugHealthRepository.KEY) ?? []
-    return data.map((d: Health) => {
-      return {
-        ...d,
-        createdAt: new Date(d.createdAt),
-        updatedAt: new Date(d.updatedAt)
-      }
-    })
+  public async get(scope: Scope): Promise<Health[]> {
+    const data = (await scope.get(DebugHealthRepository.KEY))
+      .map((d: Health) => {
+        return {
+          ...d,
+          createdAt: new Date(d.createdAt),
+          updatedAt: new Date(d.updatedAt)
+        }
+      }) as Health[]
+      return data
   }
 
-  get(scope: Scope): Promise<Health[]> {
-    return Promise.resolve(this.getData(scope))
-  }
+  public async save(scope: Scope, params: Health): Promise<void> {
+    const timestamp = new Date()
+    params.id = Date.now().toString()
+    params.createdAt = timestamp
+    params.updatedAt = timestamp
 
-  save(scope: Scope, params: Health): Promise<void> {
-    return new Promise(resolve => {
-      const timestamp = new Date()
-      params.id = Date.now().toString()
-      params.createdAt = timestamp
-      params.updatedAt = timestamp
-
-      const lists = this.getData(scope)
-      lists.push(params)
-      scope.save(DebugHealthRepository.KEY, lists)
-
-      resolve()
-    })
+    await scope.create(DebugHealthRepository.KEY, params)
   }
 
 }

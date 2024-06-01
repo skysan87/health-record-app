@@ -2,6 +2,10 @@ import type { UserId } from "../ValueObject"
 
 export interface ITransactionScope {
   get userId(): UserId
+  get(...params: any): Promise<any>
+  create(...params: any): Promise<void>
+  update(...params: any): Promise<void>
+  delete(...params: any): Promise<void>
 }
 
 export interface ITransaction {

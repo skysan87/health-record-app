@@ -28,7 +28,7 @@ export class HealthlistRepository implements IHealthlistRepository {
       goal: data.goal,
       goalWeightRange: data.goalWeightRange
     }
-    await scope.save(docRef, newData)
+    await scope.create(docRef, newData)
   }
 
   public async update(scope: Scope, params: Partial<Healthlist>): Promise<void> {

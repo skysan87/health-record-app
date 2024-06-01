@@ -11,8 +11,6 @@ export class SessionUserRepository implements IUserRepository {
 
   private isInitalized: boolean = false
 
-  private scope = new SessionStorage('' as UserId)
-
   public authenticated(): boolean {
     if (!this.isInitalized) {
       return false
@@ -25,7 +23,7 @@ export class SessionUserRepository implements IUserRepository {
    */
   public async initalize(): Promise<void> {
     await this.sleep(500)
-    this.user = this.scope.get(SessionUserRepository.KEY) as User
+    this.user = (await SessionStorage.get(SessionUserRepository.KEY))[0] as User
     this.isInitalized = true
   }
 
@@ -33,7 +31,7 @@ export class SessionUserRepository implements IUserRepository {
     if (!this.authenticated()) {
       return Promise.reject('auth error')
     }
-    return Promise.resolve(this.scope.get(SessionUserRepository.KEY) as User)
+    return (await SessionStorage.get(SessionUserRepository.KEY))[0] as User
   }
 
   public getFromCache(): User {
@@ -51,14 +49,14 @@ export class SessionUserRepository implements IUserRepository {
         email: 'dummy@sample.com' as Mail,
         displayName: 'dummy user' as DisplayName
       } as User
-      this.scope.save(SessionUserRepository.KEY, this.user)
+      await SessionStorage.create(SessionUserRepository.KEY, this.user)
       resolve(this.user)
     })
   }
 
   public async logout(): Promise<void> {
     await this.sleep(800)
-    this.scope.delete(SessionUserRepository.KEY)
+    await SessionStorage.delete(SessionUserRepository.KEY, this.user?.id)
     this.user = null
   }
 

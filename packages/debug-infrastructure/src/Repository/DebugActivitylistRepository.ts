@@ -1,46 +1,36 @@
 import type { Activitylist } from "@health-record/core/model"
-import type { IActivitylistRepository } from "@health-record/core/repository"
-import { AbstractStorage as Scope } from "../Storage/AbstractStorage"
+import type { IActivitylistRepository, ITransactionScope as Scope } from "@health-record/core/repository"
 
 export class DebugActivitylistRepository implements IActivitylistRepository {
 
   private static readonly KEY: string = 'ACTIVITY_LIST'
 
-  get(scope: Scope): Promise<Activitylist | null> {
-    return new Promise(resolve => {
-      const data: Activitylist | null = scope.get(DebugActivitylistRepository.KEY)
-      if (data) {
-        data.createdAt = new Date(data.createdAt)
-        data.updatedAt = new Date(data.updatedAt)
-      }
-      resolve(structuredClone(data))
-    })
+  public async get(scope: Scope): Promise<Activitylist | null> {
+    const rows = await (await scope.get(DebugActivitylistRepository.KEY))
+    const data: Activitylist | null = rows[0] ?? null
+    if (data) {
+      data.createdAt = new Date(data.createdAt)
+      data.updatedAt = new Date(data.updatedAt)
+    }
+    return data
   }
 
-  save(scope: Scope, data: Partial<Activitylist>): Promise<void> {
-    return new Promise(resolve => {
-      const timestamp = new Date()
-      const _data = {
-        id: scope.userId,
-        ...data,
-        createdAt: timestamp,
-        updatedAt: timestamp
-      } as Activitylist
-      scope.save(DebugActivitylistRepository.KEY, _data)
-      resolve()
-    })
+  public async save(scope: Scope, data: Partial<Activitylist>): Promise<void> {
+    const timestamp = new Date()
+    const _data = {
+      id: scope.userId,
+      ...data,
+      createdAt: timestamp,
+      updatedAt: timestamp
+    } as Activitylist
+    await scope.create(DebugActivitylistRepository.KEY, _data)
   }
 
-  update(scope: Scope, params: {}): Promise<void> {
-    return new Promise(resolve => {
-      const data = scope.get(DebugActivitylistRepository.KEY) ?? {} as Activitylist
-      const clone = {
-        ...data,
-        ...params, // 更新された値
-        updatedAt: new Date()
-      } as Activitylist
-      scope.save(DebugActivitylistRepository.KEY, clone)
-      resolve()
-    })
+  public async update(scope: Scope, params: {}): Promise<void> {
+    const clone = {
+      ...params, // 更新された値
+      updatedAt: new Date()
+    } as Activitylist
+    await scope.update(DebugActivitylistRepository.KEY, clone, scope.userId)
   }
 }

@@ -47,7 +47,7 @@ export class ActivityRepository implements IActivityRepository {
       total: data.total,
       records: data.records,
     }
-    await scope.save(docRef, newData)
+    await scope.create(docRef, newData)
   }
 
   public async update(scope: Scope, params: Partial<Activity>, dateNumber: DateNumber): Promise<void> {

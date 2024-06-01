@@ -34,7 +34,7 @@ export class FirestoreTransactoinScope implements ITransactionScope {
     }
   }
 
-  public async save(docRef: DocumentReference<any>, data: any) {
+  public async create(docRef: DocumentReference<any>, data: any) {
     data.createdAt = serverTimestamp()
     data.updatedAt = serverTimestamp()
 

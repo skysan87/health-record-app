@@ -26,7 +26,7 @@ export class ActivitylistRepository implements IActivitylistRepository {
     const newData: ActivitylistEntity = {
       menu: data.menu,
     }
-    await scope.save(docRef, newData)
+    await scope.create(docRef, newData)
   }
 
   public async update(scope: Scope, param: Partial<Activitylist>): Promise<void> {
