@@ -32,6 +32,9 @@ export class HealthUseCase {
         await this.healthlistRepo.save(scope, list)
       }
       result = new HealthlistBehavior(list).format()
+
+      // TODO: 取得したデータを保存する
+      this.healthRepo.sync(scope)
     })
 
     return result!
