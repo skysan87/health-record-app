@@ -1,0 +1,19 @@
+{
+  "name": "@health-record/local-db",
+  "version": "1.0.0",
+  "description": "",
+  "private": true,
+  "exports": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "typescript": "^5.4.5"
+  },
+  "dependencies": {
+    "@sqlite.org/sqlite-wasm": "3.46.0-build2"
+  }
+}
