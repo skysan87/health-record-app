@@ -1,6 +1,7 @@
 import { type Healthlist } from "@health-record/core/model"
 import type { HealthUseCase } from "@health-record/core/usecase"
 import { HealthGoalType, HealthType } from "@health-record/core/value-object"
+import {isFloat } from "@health-record/core/util/NumberUtil"
 
 export type HealthStore = ReturnType<typeof useHealthStore>
 
@@ -18,25 +19,25 @@ export const useHealthStore = () => {
       healthlist.value = await usecase.init()
     },
     recordWeight: async (inputValue: number): Promise<void> => {
-      if (!inputValue) {
+      if (!isFloat(inputValue)) {
         throw new Error('validation error')
       }
       healthlist.value = await usecase.addRecord(HealthType.WEIGHT, inputValue)
     },
     recordHeight: async (inputValue: number): Promise<void> => {
-      if (!inputValue) {
+      if (!isFloat(inputValue)) {
         throw new Error('validation error')
       }
       healthlist.value = await usecase.addRecord(HealthType.HEIGHT, inputValue)
     },
     setGoalActivity: async (inputValue: number): Promise<void> => {
-      if (!inputValue) {
+      if (!isFloat(inputValue)) {
         throw new Error('validation error')
       }
       healthlist.value = await usecase.updateGoal(HealthGoalType.ACTIVITY, inputValue)
     },
     setGoalWeight: async (inputValue: number): Promise<void> => {
-      if (!inputValue) {
+      if (!isFloat(inputValue)) {
         throw new Error('validation error')
       }
       healthlist.value = await usecase.updateGoal(HealthGoalType.WEIGHT, inputValue)
