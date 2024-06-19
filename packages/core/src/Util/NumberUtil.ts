@@ -5,7 +5,7 @@
  * @param {Number} defaultValue
  * @returns {Number} 小数点以下第2位まで
  */
-export function fixFloat (value: string | number, defaultValue: number = 0): number {
+export function fixFloat(value: string | number, defaultValue: number = 0): number {
   if (!value) {
     return defaultValue
   }
@@ -16,4 +16,10 @@ export function fixFloat (value: string | number, defaultValue: number = 0): num
   }
   // TODO: 指数表記`1e+32`などに未対応
   return parseFloat(parseFloat(value as string).toFixed(2))
+}
+
+export function isFloat(value: string | number): boolean {
+  if (!value) return false
+  const regex = new RegExp(/^\d+\.?\d+$/)
+  return regex.test(String(value))
 }

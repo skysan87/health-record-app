@@ -6,10 +6,24 @@ export const useAuth = () => {
   const { $auth } = useNuxtApp()
   const usecase: AuthenticateUseCase = $auth
 
+  const initialized = useState<boolean>('authenticated', () => false)
+
   return {
+    initialized: readonly(initialized),
     init: async () => {
-      await usecase.initalize()
+      initialized.value = await usecase.initalize()
       console.log('init Auth')
+    },
+    waitForInit: async () => {
+      if (initialized.value) return
+      const retryCount =  10
+      const wait = (ms: number) => new Promise(resolve => setTimeout(resolve, ms))
+      for (let index = 0; index < retryCount; index++) {
+        await wait(300)
+        if (initialized.value) {
+          return
+        }
+      }
     },
     login: async (onSuccess = (credential: User) => { }, onError = (error: NuxtError) => { }) => {
       try {

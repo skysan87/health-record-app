@@ -55,7 +55,7 @@ const open = async () => {
           @input="calcKcal">
       </div>
       <div>
-        <span>消費エネルギー</span>
+        <span>消費エネルギー(kcal)</span>
         <span class="output-text">{{ input.valueKcal ?? 0 }}</span>
       </div>
 
