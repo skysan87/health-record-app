@@ -24,6 +24,7 @@ export class ActivityUseCase {
     const user: User = await this.userRepo.get()
     const dateNumber: DateNumber = dateFactory().getDateNumber().toString() as DateNumber
 
+    // NOTE: FirebaseError: Firestore transactions require all reads to be executed before all writes.
     await this.transaction.run(user.id, async (scope) => {
       let list = await this.activitylistRepo.get(scope)
       if (!list) {
@@ -31,7 +32,9 @@ export class ActivityUseCase {
         await this.activitylistRepo.save(scope, list)
       }
       activitylist = new ActivitylistBehavior(list).format()
+    })
 
+    await this.transaction.run(user.id, async (scope) => {
       let _activity = await this.activityRepo.get(scope, dateNumber)
       if (!_activity) {
         _activity = new ActivityBehavior({ id: dateNumber } as Activity).format()
@@ -39,7 +42,6 @@ export class ActivityUseCase {
       }
       activity = new ActivityBehavior(_activity).format()
     })
-
 
     return [activitylist!, activity!]
   }

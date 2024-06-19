@@ -32,6 +32,7 @@ onMounted(async () => {
 })
 
 definePageMeta({
+  middleware: ['auth'],
   layout: computed<LayoutKey>(() => {
     const { isMobile } = useDevice()
     return isMobile ? 'board-mobile' : 'board'
